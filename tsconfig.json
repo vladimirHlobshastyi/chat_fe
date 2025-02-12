@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "paths": {
+      "@utils/*": [
+        "src/utils/*"
+      ],
+      "@ui/*": [
+        "src/ui/*"
+      ],
+      "@forms/*": [
+        "src/forms/*"
+      ],
+      "@features/*": [
+        "src/features/*"
+      ]
+    }
+  }
+}
