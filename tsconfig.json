@@ -15,6 +15,12 @@
       "@features/*": [
         "src/features/*"
       ]
-    }
+    },
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "types": [
+      "vite/client"
+    ],
+    "strictNullChecks": true
   }
 }
