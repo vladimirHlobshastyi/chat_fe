@@ -28,7 +28,7 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
           {...register('username', validators.username)}
         />
         {errors.username && (
-          <span className='text-error text-sm'>{errors.username.message}</span>
+          <span className='errorText text-sm'>{errors.username.message}</span>
         )}
       </div>
 
@@ -43,11 +43,11 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
           {...register('password', validators.password)}
         />
         {errors.password && (
-          <span className='text-error text-sm'>{errors.password.message}</span>
+          <span className='errorText text-sm'>{errors.password.message}</span>
         )}
       </div>
 
-      {errorMessage && <span className='text-error'>{errorMessage}</span>}
+      {errorMessage && <span className='errorText'>{errorMessage}</span>}
 
       <button disabled={!isDirty} className='mt-3' type='submit'>
         Submit
