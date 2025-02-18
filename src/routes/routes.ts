@@ -5,7 +5,7 @@ import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Users from '../pages/admin/Users';
 import Gifts from '../pages/admin/Gifts';
-import Currency from '../pages/admin/Currency';
+import Tariffs from '../pages/admin/Tariffs';
 import Transactions from '../pages/admin/Transactions';
 import Dialogs from '../pages/admin/Dialogs';
 
@@ -39,10 +39,10 @@ const giftsRoute = createRoute({
   component: Gifts,
 });
 
-const currencyRoute = createRoute({
+const tariffsRoute = createRoute({
   getParentRoute: () => adminRootRoute,
-  path: '/currency',
-  component: Currency,
+  path: '/tariffs',
+  component: Tariffs,
 });
 
 const transactionsRoute = createRoute({
@@ -63,7 +63,7 @@ export const routeTree = rootRoute.addChildren([
   adminRootRoute.addChildren([
     usersRoute,
     giftsRoute,
-    currencyRoute,
+    tariffsRoute,
     transactionsRoute,
     dialogsRoute,
   ]),
