@@ -48,14 +48,12 @@ export const useUsers = () => {
     error,
     isFetching,
     page,
-    setPage,
-    sort,
-    handleSort,
-    getSortIcon,
-    handleHeaderClick,
     hasMore,
     createUser,
     updateUser,
     deleteUser,
+    setPage,
+    getSortIcon,
+    handleHeaderClick,
   };
 };

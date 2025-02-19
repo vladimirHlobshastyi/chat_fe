@@ -1,4 +1,6 @@
 import { useUsers } from './~useUsers';
+import { SortField } from './~Users.types';
+import { USERS_TABLE_HEADER } from './~Users.data';
 
 export const Users = () => {
   const {
@@ -7,13 +9,13 @@ export const Users = () => {
     error,
     isFetching,
     page,
-    setPage,
-    getSortIcon,
-    handleHeaderClick,
     hasMore,
     createUser,
     updateUser,
     deleteUser,
+    setPage,
+    getSortIcon,
+    handleHeaderClick,
   } = useUsers();
 
   if (isLoading) return <div>Loading...</div>;
@@ -35,56 +37,61 @@ export const Users = () => {
         <table className='min-w-full bg-white'>
           <thead>
             <tr>
-              <th className='tableHeader' onClick={handleHeaderClick('role')}>
-                Role {getSortIcon('role')}
-              </th>
-              <th className='tableHeader' onClick={handleHeaderClick('name')}>
-                Name {getSortIcon('name')}
-              </th>
-              <th className='tableHeader'>Geo</th>
-              <th
-                className='tableHeader'
-                onClick={handleHeaderClick('isVerified')}
-              >
-                Is Verified {getSortIcon('isVerified')}
-              </th>
-              <th className='tableHeader'>Telegram ID</th>
-              <th className='tableHeader'>Is Banned</th>
-              <th
-                className='tableHeader'
-                onClick={handleHeaderClick('createdAt')}
-              >
-                Created At {getSortIcon('createdAt')}
-              </th>
-              <th className='tableHeader'>Updated At</th>
-              <th className='tableHeader'>Actions</th>
+              {USERS_TABLE_HEADER.map((header) => (
+                <th
+                  key={header.key}
+                  className={`tableHeader ${header.width}`}
+                  onClick={
+                    header.sortable
+                      ? handleHeaderClick(header.key as SortField)
+                      : undefined
+                  }
+                >
+                  {header.title}
+                  {header.sortable && getSortIcon(header.key as SortField)}
+                </th>
+              ))}
+              <th className='tableHeader w-32'>Actions</th>
             </tr>
           </thead>
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td colSpan={9} className='tableCell text-center'>
+                <td
+                  colSpan={USERS_TABLE_HEADER.length + 1}
+                  className='tableCell text-center'
+                >
                   No users..
                 </td>
               </tr>
             ) : (
               users.map((user) => (
                 <tr key={user.id}>
-                  <td className='tableCell'>{user.role}</td>
-                  <td className='tableCell'>{user.name}</td>
-                  <td className='tableCell'>{user.geo}</td>
-                  <td className='tableCell'>
+                  <td className={`tableCell ${USERS_TABLE_HEADER[0].width}`}>
+                    {user.role}
+                  </td>
+                  <td className={`tableCell ${USERS_TABLE_HEADER[1].width}`}>
+                    {user.name}
+                  </td>
+                  <td className={`tableCell ${USERS_TABLE_HEADER[2].width}`}>
+                    {user.geo}
+                  </td>
+                  <td className={`tableCell ${USERS_TABLE_HEADER[3].width}`}>
                     {user.isVerified ? 'Yes' : 'No'}
                   </td>
-                  <td className='tableCell'>{user.telegramId}</td>
-                  <td className='tableCell'>{user.isBanned ? 'Yes' : 'No'}</td>
-                  <td className='tableCell'>
+                  <td className={`tableCell ${USERS_TABLE_HEADER[4].width}`}>
+                    {user.telegramId}
+                  </td>
+                  <td className={`tableCell ${USERS_TABLE_HEADER[5].width}`}>
+                    {user.isBanned ? 'Yes' : 'No'}
+                  </td>
+                  <td className={`tableCell ${USERS_TABLE_HEADER[6].width}`}>
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
-                  <td className='tableCell'>
+                  <td className={`tableCell ${USERS_TABLE_HEADER[7].width}`}>
                     {new Date(user.updatedAt).toLocaleDateString()}
                   </td>
-                  <td className='tableCell'>
+                  <td className='tableCell w-32'>
                     <button
                       className='actionButtonEdit'
                       onClick={() =>

@@ -5,3 +5,10 @@ export interface SortState {
   field: SortField;
   order: SortOrder;
 }
+
+export interface UsersTableHeader {
+  key: string;
+  title: string;
+  width: string;
+  sortable?: boolean;
+}
