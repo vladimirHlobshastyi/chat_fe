@@ -28,6 +28,14 @@ export default defineConfig({
       { find: '@utils', replacement: path.resolve(__dirname, 'src/utils') },
       { find: '@routes', replacement: path.resolve(__dirname, 'src/routes') },
       { find: '@hooks', replacement: path.resolve(__dirname, 'src/hooks') },
+      {
+        find: '@features',
+        replacement: path.resolve(__dirname, 'src/features'),
+      },
+      {
+        find: '@providers',
+        replacement: path.resolve(__dirname, 'src/providers'),
+      },
     ],
   },
 });

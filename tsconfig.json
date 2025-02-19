@@ -4,35 +4,41 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ],
       "@api/*": [
-        "src/api/*"
-      ],
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@pages/*": [
-        "src/pages/*"
-      ],
-      "@layouts/*": [
-        "src/layouts/*"
-      ],
-      "@types/*": [
-        "src/types/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ],
-      "@routes/*": [
-        "src/routes/*"
-      ],
-      "@hooks/*": [
-        "src/hooks/*"
+        "./src/api/*"
       ],
       "@queries/*": [
-        "src/api/queries/*"
-      ]
+        "./src/api/queries/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@pages/*": [
+        "./src/pages/*"
+      ],
+      "@layouts/*": [
+        "./src/layouts/*"
+      ],
+      "@types/*": [
+        "./src/types/*"
+      ],
+      "@utils/*": [
+        "./src/utils/*"
+      ],
+      "@routes/*": [
+        "./src/routes/*"
+      ],
+      "@hooks/*": [
+        "./src/hooks/*"
+      ],
+      "@features/*": [
+        "./src/features/*"
+      ],
+      "@providers/*": [
+        "./src/providers/*"
+      ],
     },
     "moduleResolution": "bundler",
     "module": "ESNext",
