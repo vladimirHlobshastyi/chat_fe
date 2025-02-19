@@ -1,6 +1,7 @@
+import RootLayout from '@/layouts/RootLayout';
 import { createRootRoute } from '@tanstack/react-router';
-import RootLayout from '../layouts/RootLayout';
 
 export const Route = createRootRoute({
+  notFoundComponent: () => <>Not found</>,
   component: RootLayout,
 });

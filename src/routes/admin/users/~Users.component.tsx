@@ -1,49 +1,23 @@
-import { useState } from 'react';
-import {
-  useUsersQuery,
-  useCreateUserMutation,
-  useUpdateUserMutation,
-  useDeleteUserMutation,
-} from '@api/users/hooks';
+import { useUsers } from './~useUsers';
 
-type SortField = 'role' | 'name' | 'createdAt' | 'isVerified';
-type SortOrder = 'asc' | 'desc';
-
-const Users = () => {
-  const [page, setPage] = useState(0);
-  const [sort, setSort] = useState<{ field: SortField; order: SortOrder }>({
-    field: 'createdAt',
-    order: 'desc',
-  });
-
-  const { data, error, isLoading, isFetching } = useUsersQuery({
-    limit: 20,
-    offset: page * 20,
-  });
-
-  const createUser = useCreateUserMutation();
-  const updateUser = useUpdateUserMutation();
-  const deleteUser = useDeleteUserMutation();
-
-  const handleSort = (field: SortField) => {
-    setSort((prev) => ({
-      field,
-      order: prev.field === field && prev.order === 'asc' ? 'desc' : 'asc',
-    }));
-  };
-
-  const getSortIcon = (field: SortField) => {
-    if (sort.field !== field) return;
-    return sort.order === 'asc' ? '↑' : '↓';
-  };
-
-  const handleHeaderClick = (field: SortField) => () => handleSort(field);
+export const Users = () => {
+  const {
+    users,
+    isLoading,
+    error,
+    isFetching,
+    page,
+    setPage,
+    getSortIcon,
+    handleHeaderClick,
+    hasMore,
+    createUser,
+    updateUser,
+    deleteUser,
+  } = useUsers();
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading users</div>;
-
-  const users = data ?? [];
-  const hasMore = users.length === 20;
 
   return (
     <div className='container mx-auto p-4 flex flex-col h-[calc(100vh-2rem)]'>
