@@ -3,6 +3,7 @@ import { SortField } from './~Users.types';
 import { USERS_TABLE_HEADER } from './~Users.data';
 import AddNewUserModal from '@/features/Admin/Users/AddNewUserModal';
 import EditUserModal from '@/features/Admin/Users/EditUserModal';
+import { cn } from '@/utils/styles';
 
 export const Users = () => {
   const {
@@ -32,7 +33,7 @@ export const Users = () => {
   if (error) return <div>Error loading users</div>;
 
   return (
-    <div className='container mx-auto p-4 flex flex-col h-[calc(100vh-2rem)]'>
+    <div className='container mx-auto p-4 flex flex-col h-full'>
       <div className='flex justify-between items-center mb-4'>
         <h1 className='text-2xl font-bold'>Users</h1>
         <button
@@ -61,7 +62,7 @@ export const Users = () => {
                   {header.sortable && getSortIcon(header.key as SortField)}
                 </th>
               ))}
-              <th className='tableHeader w-32'>Actions</th>
+              <th className='tableHeader min-w-48'>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -77,31 +78,31 @@ export const Users = () => {
             ) : (
               users.map((user) => (
                 <tr key={user.id}>
-                  <td className={`tableCell ${USERS_TABLE_HEADER[0].width}`}>
+                  <td className={cn('tableCell', USERS_TABLE_HEADER[0].width)}>
                     {user.role}
                   </td>
-                  <td className={`tableCell ${USERS_TABLE_HEADER[1].width}`}>
+                  <td className={cn('tableCell', USERS_TABLE_HEADER[1].width)}>
                     {user.name}
                   </td>
-                  <td className={`tableCell ${USERS_TABLE_HEADER[2].width}`}>
+                  <td className={cn('tableCell', USERS_TABLE_HEADER[2].width)}>
                     {user.geo}
                   </td>
-                  <td className={`tableCell ${USERS_TABLE_HEADER[3].width}`}>
+                  <td className={cn('tableCell', USERS_TABLE_HEADER[3].width)}>
                     {user.isVerified ? 'Yes' : 'No'}
                   </td>
-                  <td className={`tableCell ${USERS_TABLE_HEADER[4].width}`}>
+                  <td className={cn('tableCell', USERS_TABLE_HEADER[4].width)}>
                     {user.telegramId}
                   </td>
-                  <td className={`tableCell ${USERS_TABLE_HEADER[5].width}`}>
+                  <td className={cn('tableCell', USERS_TABLE_HEADER[5].width)}>
                     {user.isBanned ? 'Yes' : 'No'}
                   </td>
-                  <td className={`tableCell ${USERS_TABLE_HEADER[6].width}`}>
+                  <td className={cn('tableCell', USERS_TABLE_HEADER[6].width)}>
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
-                  <td className={`tableCell ${USERS_TABLE_HEADER[7].width}`}>
+                  <td className={cn('tableCell', USERS_TABLE_HEADER[7].width)}>
                     {new Date(user.updatedAt).toLocaleDateString()}
                   </td>
-                  <td className='tableCell w-32'>
+                  <td className='tableCell min-w-32 flex justify-center gap-5'>
                     <button
                       className='actionButtonEdit'
                       onClick={() => setSelectedUser(user)}

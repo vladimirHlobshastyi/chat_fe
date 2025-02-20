@@ -18,6 +18,7 @@ import { Route as AdminTransactionsRouteImport } from './routes/admin/transactio
 import { Route as AdminTariffsRouteImport } from './routes/admin/tariffs/route'
 import { Route as AdminGiftsRouteImport } from './routes/admin/gifts/route'
 import { Route as AdminDialogsRouteImport } from './routes/admin/dialogs/route'
+import { Route as AdminChattersRouteImport } from './routes/admin/chatters/route'
 
 // Create/Update Routes
 
@@ -63,6 +64,12 @@ const AdminDialogsRouteRoute = AdminDialogsRouteImport.update({
   getParentRoute: () => AdminRouteRoute,
 } as any)
 
+const AdminChattersRouteRoute = AdminChattersRouteImport.update({
+  id: '/chatters',
+  path: '/chatters',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -80,6 +87,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRoute
+    }
+    '/admin/chatters': {
+      id: '/admin/chatters'
+      path: '/chatters'
+      fullPath: '/admin/chatters'
+      preLoaderRoute: typeof AdminChattersRouteImport
+      parentRoute: typeof AdminRouteImport
     }
     '/admin/dialogs': {
       id: '/admin/dialogs'
@@ -122,6 +136,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AdminRouteRouteChildren {
+  AdminChattersRouteRoute: typeof AdminChattersRouteRoute
   AdminDialogsRouteRoute: typeof AdminDialogsRouteRoute
   AdminGiftsRouteRoute: typeof AdminGiftsRouteRoute
   AdminTariffsRouteRoute: typeof AdminTariffsRouteRoute
@@ -130,6 +145,7 @@ interface AdminRouteRouteChildren {
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminChattersRouteRoute: AdminChattersRouteRoute,
   AdminDialogsRouteRoute: AdminDialogsRouteRoute,
   AdminGiftsRouteRoute: AdminGiftsRouteRoute,
   AdminTariffsRouteRoute: AdminTariffsRouteRoute,
@@ -144,6 +160,7 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRouteRoute
+  '/admin/chatters': typeof AdminChattersRouteRoute
   '/admin/dialogs': typeof AdminDialogsRouteRoute
   '/admin/gifts': typeof AdminGiftsRouteRoute
   '/admin/tariffs': typeof AdminTariffsRouteRoute
@@ -154,6 +171,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRouteRoute
+  '/admin/chatters': typeof AdminChattersRouteRoute
   '/admin/dialogs': typeof AdminDialogsRouteRoute
   '/admin/gifts': typeof AdminGiftsRouteRoute
   '/admin/tariffs': typeof AdminTariffsRouteRoute
@@ -165,6 +183,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRouteRoute
+  '/admin/chatters': typeof AdminChattersRouteRoute
   '/admin/dialogs': typeof AdminDialogsRouteRoute
   '/admin/gifts': typeof AdminGiftsRouteRoute
   '/admin/tariffs': typeof AdminTariffsRouteRoute
@@ -177,6 +196,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/admin'
     | '/login'
+    | '/admin/chatters'
     | '/admin/dialogs'
     | '/admin/gifts'
     | '/admin/tariffs'
@@ -186,6 +206,7 @@ export interface FileRouteTypes {
   to:
     | '/admin'
     | '/login'
+    | '/admin/chatters'
     | '/admin/dialogs'
     | '/admin/gifts'
     | '/admin/tariffs'
@@ -195,6 +216,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/admin'
     | '/login'
+    | '/admin/chatters'
     | '/admin/dialogs'
     | '/admin/gifts'
     | '/admin/tariffs'
@@ -230,6 +252,7 @@ export const routeTree = rootRoute
     "/admin": {
       "filePath": "admin/route.tsx",
       "children": [
+        "/admin/chatters",
         "/admin/dialogs",
         "/admin/gifts",
         "/admin/tariffs",
@@ -239,6 +262,10 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login/route.tsx"
+    },
+    "/admin/chatters": {
+      "filePath": "admin/chatters/route.tsx",
+      "parent": "/admin"
     },
     "/admin/dialogs": {
       "filePath": "admin/dialogs/route.tsx",
