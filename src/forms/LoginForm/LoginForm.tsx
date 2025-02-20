@@ -15,8 +15,8 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h3 className='text-xl font-semibold mb-2'>Log in</h3>
+    <form onSubmit={handleSubmit(onSubmit)} className='p-6'>
+      <h3 className='formTitle'>Log in</h3>
 
       <div className='w-full flex flex-col gap-1'>
         <label htmlFor='username' className='text-sm font-medium'>
@@ -49,7 +49,7 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
 
       {errorMessage && <span className='errorText'>{errorMessage}</span>}
 
-      <button disabled={!isDirty} className='mt-3' type='submit'>
+      <button disabled={!isDirty} className='mt-3 w-full' type='submit'>
         Submit
       </button>
     </form>
