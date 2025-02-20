@@ -68,7 +68,11 @@ const EditUserForm = ({
           <label htmlFor='geo' className='text-sm font-medium'>
             Geo
           </label>
-          <input className='styledInput' id='geo' {...register('geo')} />
+          <input
+            className='styledInput'
+            id='geo'
+            {...register('geo', validators.geo)}
+          />
           {errors.geo && (
             <span className='errorText'>{errors.geo.message}</span>
           )}

@@ -1,6 +1,8 @@
 import { useUsers } from './~useUsers';
 import { SortField } from './~Users.types';
 import { USERS_TABLE_HEADER } from './~Users.data';
+import AddNewUserModal from '@/features/Admin/Users/AddNewUserModal';
+import EditUserModal from '@/features/Admin/Users/EditUserModal';
 
 export const Users = () => {
   const {
@@ -10,12 +12,20 @@ export const Users = () => {
     isFetching,
     page,
     hasMore,
-    createUser,
-    updateUser,
-    deleteUser,
+    isAddModalOpen,
+    selectedUser,
+    addNewUserError,
+    editUserError,
+    onDeleteUser,
     setPage,
     getSortIcon,
     handleHeaderClick,
+    handleCreateUser,
+    handleUpdateUser,
+    setIsAddModalOpen,
+    setSelectedUser,
+    onEditUserClose,
+    onAddNewUserClose,
   } = useUsers();
 
   if (isLoading) return <div>Loading...</div>;
@@ -27,7 +37,7 @@ export const Users = () => {
         <h1 className='text-2xl font-bold'>Users</h1>
         <button
           className='actionButton bg-green-500 hover:bg-green-600'
-          onClick={() => createUser.mutate({ name: 'New User', role: 'user' })}
+          onClick={() => setIsAddModalOpen(true)}
         >
           Create User
         </button>
@@ -94,18 +104,13 @@ export const Users = () => {
                   <td className='tableCell w-32'>
                     <button
                       className='actionButtonEdit'
-                      onClick={() =>
-                        updateUser.mutate({
-                          id: user.id,
-                          data: { name: 'Updated User' },
-                        })
-                      }
+                      onClick={() => setSelectedUser(user)}
                     >
                       Edit
                     </button>
                     <button
                       className='actionButtonDelete'
-                      onClick={() => deleteUser.mutate(user.id)}
+                      onClick={() => onDeleteUser(user.id)}
                     >
                       Delete
                     </button>
@@ -134,6 +139,25 @@ export const Users = () => {
           Next
         </button>
       </div>
+
+      {isAddModalOpen && (
+        <AddNewUserModal
+          isOpen={isAddModalOpen}
+          onClose={onAddNewUserClose}
+          onSubmit={handleCreateUser}
+          errorMessage={addNewUserError}
+        />
+      )}
+
+      {selectedUser && (
+        <EditUserModal
+          isOpen={!!selectedUser}
+          currentUser={selectedUser}
+          errorMessage={editUserError}
+          onSubmit={handleUpdateUser}
+          onClose={onEditUserClose}
+        />
+      )}
     </div>
   );
 };
