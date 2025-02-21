@@ -8,6 +8,7 @@ import {
 import { SortField, SortState } from './~Users.types';
 import { User } from '@/types/user';
 import { ITEMS_PER_PAGE } from './~Users.data';
+import { cn } from '@/utils/styles';
 
 export const useUsers = () => {
   const [page, setPage] = useState(0);
@@ -15,7 +16,7 @@ export const useUsers = () => {
     field: 'createdAt',
     order: 'desc',
   });
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | undefined>();
   const [addNewUserError, setAddNewUserError] = useState<string | undefined>();
   const [editUserError, setEditUserError] = useState<string | undefined>();
@@ -40,8 +41,15 @@ export const useUsers = () => {
   };
 
   const getSortIcon = (field: SortField) => {
-    if (sort.field !== field) return;
-    return sort.order === 'asc' ? '↑' : '↓';
+    const isActive = sort.field === field;
+    return (
+      <span
+        className={cn('sortIcon', isActive ? '' : 'sortIconHidden')}
+        aria-hidden='true'
+      >
+        {sort.order === 'asc' ? '↑' : '↓'}
+      </span>
+    );
   };
 
   const handleHeaderClick = (field: SortField) => () => handleSort(field);
@@ -59,7 +67,7 @@ export const useUsers = () => {
   };
 
   const onAddNewUserClose = () => {
-    setIsAddModalOpen(false);
+    setIsAddUserModalOpen(false);
     setAddNewUserError(undefined);
   };
 
@@ -67,7 +75,7 @@ export const useUsers = () => {
     createUser.mutate(data, {
       onSuccess: () => {
         setAddNewUserError(undefined);
-        setIsAddModalOpen(false);
+        setIsAddUserModalOpen(false);
       },
       onError: () => setAddNewUserError('Сan`t create a user, try again later'),
     });
@@ -96,7 +104,7 @@ export const useUsers = () => {
     isFetching,
     page,
     hasMore,
-    isAddModalOpen,
+    isAddUserModalOpen,
     selectedUser,
     addNewUserError,
     editUserError,
@@ -106,7 +114,7 @@ export const useUsers = () => {
     handleHeaderClick,
     handleCreateUser,
     handleUpdateUser,
-    setIsAddModalOpen,
+    setIsAddUserModalOpen,
     setSelectedUser,
     onEditUserClose,
     onAddNewUserClose,
