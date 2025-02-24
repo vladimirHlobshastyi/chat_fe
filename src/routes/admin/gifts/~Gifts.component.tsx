@@ -1,46 +1,34 @@
-import { useGiftsQuery } from '@/api/gifts/hooks';
 import { Gift } from '@/types/gift';
 import { GIFTS_TABLE_HEADER } from './~Gifts.data';
-import { ITEMS_PER_PAGE, SortField, SortState } from './~Gifts.types';
-import { useState } from 'react';
-import { cn } from '@/utils/styles';
+import { SortField } from './~Gifts.types';
+import AddNewGiftModal from '@/features/Admin/Gifts/AddNewGiftModal';
+import EditGiftModal from '@/features/Admin/Gifts/EditGiftModal';
+import { useGifts } from './~useGifts';
 
 const Gifts = () => {
-  const [page, setPage] = useState(0);
-  const [sort, setSort] = useState<SortState>({
-    field: 'createdAt',
-    order: 'desc',
-  });
-
   const {
-    data: gifts,
+    isAddNewGiftModalOpen,
+    addNewGiftError,
+    editGiftError,
+    editInitialProps,
+    gifts,
     isLoading,
     error,
     isFetching,
-  } = useGiftsQuery({ limit: 10, offset: 0 });
-
-  const hasMore = gifts?.length === ITEMS_PER_PAGE;
-
-  const handleSort = (field: SortField) => {
-    setSort((prev) => ({
-      field,
-      order: prev.field === field && prev.order === 'asc' ? 'desc' : 'asc',
-    }));
-  };
-
-  const getSortIcon = (field: SortField) => {
-    const isActive = sort.field === field;
-    return (
-      <span
-        className={cn('sortIcon', isActive ? '' : 'sortIconHidden')}
-        aria-hidden='true'
-      >
-        {sort.order === 'asc' ? '↑' : '↓'}
-      </span>
-    );
-  };
-
-  const handleHeaderClick = (field: SortField) => () => handleSort(field);
+    page,
+    hasMore,
+    selectedGift,
+    setPage,
+    onEditGiftClose,
+    handleHeaderClick,
+    getSortIcon,
+    onDeleteGift,
+    onEditGiftSubmit,
+    onCreateGiftSubmit,
+    onAddNewGiftModalClose,
+    setIsAddNewGiftModalOpen,
+    setSelectedGift,
+  } = useGifts();
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading gifts</div>;
@@ -49,7 +37,10 @@ const Gifts = () => {
     <div className='container mx-auto p-4 flex flex-col h-screen'>
       <div className='flex justify-between items-center mb-4'>
         <h1 className='text-2xl font-bold'>Gifts</h1>
-        <button className='actionButton bg-green-500 hover:bg-green-600'>
+        <button
+          className='actionButton bg-green-500 hover:bg-green-600'
+          onClick={() => setIsAddNewGiftModalOpen(true)}
+        >
           Add new Gift
         </button>
       </div>
@@ -87,7 +78,7 @@ const Gifts = () => {
                 <tr key={gift.id}>
                   <td className='tableCell'>{gift.name}</td>
                   <td className='tableCell'>{gift.price}</td>
-                  <td className='tableCell'>UA</td> {/* TODO Will be changed */}
+                  <td className='tableCell'>UA</td>
                   <td className='tableCell flex justify-center'>
                     <div className='w-12 h-12 relative overflow-hidden rounded-full'>
                       <img
@@ -102,8 +93,18 @@ const Gifts = () => {
                   <td className='tableCell'>{gift.updatedAt}</td>
                   <td className='tableCell min-w-32'>
                     <div className='flex justify-center gap-5'>
-                      <button className='actionButtonEdit'>Edit</button>
-                      <button className='actionButtonDelete'>Delete</button>
+                      <button
+                        className='actionButtonEdit'
+                        onClick={() => setSelectedGift(gift)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className='actionButtonDelete'
+                        onClick={() => onDeleteGift(gift.id)}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -130,6 +131,26 @@ const Gifts = () => {
           Next
         </button>
       </div>
+
+      {editInitialProps && (
+        <EditGiftModal
+          giftUrl={selectedGift?.image}
+          initialProps={editInitialProps}
+          errorMessage={editGiftError}
+          isOpen={!!editInitialProps}
+          onSubmit={onEditGiftSubmit}
+          onClose={onEditGiftClose}
+        />
+      )}
+
+      {isAddNewGiftModalOpen && (
+        <AddNewGiftModal
+          errorMessage={addNewGiftError}
+          isOpen={isAddNewGiftModalOpen}
+          onSubmit={onCreateGiftSubmit}
+          onClose={onAddNewGiftModalClose}
+        />
+      )}
     </div>
   );
 };
