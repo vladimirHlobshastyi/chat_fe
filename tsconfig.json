@@ -1,23 +1,53 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@api/*": [
+        "./src/api/*"
+      ],
+      "@queries/*": [
+        "./src/api/queries/*"
+      ],
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@pages/*": [
+        "./src/pages/*"
+      ],
+      "@layouts/*": [
+        "./src/layouts/*"
+      ],
+      "@types/*": [
+        "./src/types/*"
+      ],
       "@utils/*": [
-        "src/utils/*"
+        "./src/utils/*"
       ],
-      "@ui/*": [
-        "src/ui/*"
+      "@routes/*": [
+        "./src/routes/*"
       ],
-      "@forms/*": [
-        "src/forms/*"
+      "@hooks/*": [
+        "./src/hooks/*"
       ],
       "@features/*": [
-        "src/features/*"
-      ]
+        "./src/features/*"
+      ],
+      "@providers/*": [
+        "./src/providers/*"
+      ],
     },
     "moduleResolution": "bundler",
     "module": "ESNext",
+    "target": "ES2015",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "types": [
       "vite/client"
     ],
