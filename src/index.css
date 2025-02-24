@@ -8,7 +8,16 @@
   }
 
   .tableHeader {
-    @apply tableCell sticky top-0 bg-gray-100 border-b-2 border-gray-200 cursor-pointer hover:bg-gray-200 transition-colors;
+    @apply tableCell sticky top-0 bg-gray-100 border-b-2 border-gray-200 cursor-pointer 
+      hover:bg-gray-200 transition-colors z-10 px-4;
+  }
+
+  .sortIcon {
+    @apply w-4 h-4 text-gray-500 transition-opacity duration-200;
+  }
+
+  .sortIconHidden {
+    @apply opacity-0;
   }
 
   .actionButton {

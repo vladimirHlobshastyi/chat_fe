@@ -13,7 +13,7 @@ export const Users = () => {
     isFetching,
     page,
     hasMore,
-    isAddModalOpen,
+    isAddUserModalOpen,
     selectedUser,
     addNewUserError,
     editUserError,
@@ -23,7 +23,7 @@ export const Users = () => {
     handleHeaderClick,
     handleCreateUser,
     handleUpdateUser,
-    setIsAddModalOpen,
+    setIsAddUserModalOpen,
     setSelectedUser,
     onEditUserClose,
     onAddNewUserClose,
@@ -38,7 +38,7 @@ export const Users = () => {
         <h1 className='text-2xl font-bold'>Users</h1>
         <button
           className='actionButton bg-green-500 hover:bg-green-600'
-          onClick={() => setIsAddModalOpen(true)}
+          onClick={() => setIsAddUserModalOpen(true)}
         >
           Create User
         </button>
@@ -141,9 +141,9 @@ export const Users = () => {
         </button>
       </div>
 
-      {isAddModalOpen && (
+      {isAddUserModalOpen && (
         <AddNewUserModal
-          isOpen={isAddModalOpen}
+          isOpen={isAddUserModalOpen}
           onClose={onAddNewUserClose}
           onSubmit={handleCreateUser}
           errorMessage={addNewUserError}
