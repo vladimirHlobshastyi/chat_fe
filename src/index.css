@@ -16,7 +16,7 @@
   }
 
   .actionButtonEdit {
-    @apply actionButton bg-yellow-500 hover:bg-yellow-600 mr-2;
+    @apply actionButton bg-yellow-500 hover:bg-yellow-600;
   }
 
   .actionButtonDelete {
@@ -41,6 +41,10 @@
 
   .formTitle {
     @apply text-xl font-semibold mb-2;
+  }
+
+  .navLink {
+    @apply mb-2 px-2.5 py-2 rounded-lg hover:bg-neutral-300 hover:text-neutral-50 active:opacity-50;
   }
 }
 
