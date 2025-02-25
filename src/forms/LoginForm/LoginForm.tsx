@@ -9,7 +9,7 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
     formState: { isDirty, errors },
   } = useForm<LoginFormDate>({
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
     },
   });
@@ -19,16 +19,16 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
       <h3 className='formTitle'>Log in</h3>
 
       <div className='w-full flex flex-col gap-1'>
-        <label htmlFor='username' className='text-sm font-medium'>
+        <label htmlFor='email' className='text-sm font-medium'>
           Username
         </label>
         <input
           className='styledInput'
-          id='username'
-          {...register('username', validators.username)}
+          id='email'
+          {...register('email', validators.email)}
         />
-        {errors.username && (
-          <span className='errorText text-sm'>{errors.username.message}</span>
+        {errors.email && (
+          <span className='errorText text-sm'>{errors.email.message}</span>
         )}
       </div>
 
