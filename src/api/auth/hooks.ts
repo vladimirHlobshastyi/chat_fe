@@ -1,15 +1,16 @@
 import { useMutation } from '@tanstack/react-query';
 import { login } from './requests';
+import { useNavigate } from '@tanstack/react-router';
+import { useAuth } from '@/providers/AuthProvider/useAuth';
 
 export const useLoginMutation = () => {
+  const { setIsAuthenticated } = useAuth();
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: login,
-    onSuccess: (response) => {
-      localStorage.setItem('access_token', response.data.session.access_token);
-      localStorage.setItem(
-        'refresh_token',
-        response.data.session.refresh_token,
-      );
+    onSuccess: () => {
+      setIsAuthenticated(true);
+      navigate({ to: '/admin/users' });
     },
     onError: (error) => {
       console.error('Login failed:', error);

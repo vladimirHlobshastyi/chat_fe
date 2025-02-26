@@ -9,8 +9,8 @@ export const validators = {
   password: {
     required: 'Password is required',
     minLength: {
-      value: 4,
-      message: 'Password must be at least 4 letters long.',
+      value: 6,
+      message: 'Password must be at least 6 letters long.',
     },
   },
 };
