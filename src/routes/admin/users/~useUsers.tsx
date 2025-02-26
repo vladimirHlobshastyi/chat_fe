@@ -61,6 +61,7 @@ export const useUsers = () => {
       },
     });
   };
+
   const onEditUserClose = () => {
     setSelectedUser(undefined);
     setEditUserError(undefined);
