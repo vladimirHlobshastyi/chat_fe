@@ -5,6 +5,50 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}', flowbite.content()],
   theme: {
     extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#3641f5',
+          dark: '#465fff',
+        },
+        secondary: {
+          DEFAULT: '#ffffff',
+          dark: '#f9fafb',
+        },
+        red: {
+          DEFAULT: '#ef4444',
+          dark: '#dc2626',
+        },
+        background: {
+          DEFAULT: '#ffffff',
+          dark: '#111827',
+        },
+        text: {
+          DEFAULT: '#FFFFFF',
+          dark: '#344054',
+        },
+        gray: {
+          50: '#F9FAFB',
+          100: '#F3F4F6',
+          200: '#E5E7EB',
+          300: '#D1D5DB',
+          400: '#9CA3AF',
+          500: '#6B7280',
+          600: '#4B5563',
+          700: '#374151',
+          800: '#1F2937',
+          900: '#111827',
+        },
+      },
+      fontFamily: {
+        outfit: ['Outfit', 'sans-serif'],
+      },
+      borderRadius: {
+        xl: '12px',
+        '2xl': '16px',
+      },
+      boxShadow: {
+        'theme-xs': '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+      },
       borderWidth: {
         1: '1px',
       },

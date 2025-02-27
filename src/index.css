@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -72,13 +74,9 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply font-outfit;
 }
 
 form {
   @apply flex flex-col items-center gap-4 w-full bg-white rounded-lg shadow-lg;
-}
-
-button {
-  @apply h-10 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 disabled:bg-gray-300 cursor-pointer;
 }
