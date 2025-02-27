@@ -1,7 +1,11 @@
-import RootLayout from '@/layouts/RootLayout';
-import { createRootRoute } from '@tanstack/react-router';
+import AuthProvider from '@/providers/AuthProvider';
+import { createRootRoute, Outlet } from '@tanstack/react-router';
 
 export const Route = createRootRoute({
   notFoundComponent: () => <>Not found</>,
-  component: RootLayout,
+  component: () => (
+    <AuthProvider>
+      <Outlet />
+    </AuthProvider>
+  ),
 });
