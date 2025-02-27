@@ -9,6 +9,7 @@ export default {
         primary: {
           DEFAULT: '#3641f5',
           dark: '#465fff',
+          light: '#3641F519',
         },
         secondary: {
           DEFAULT: '#ffffff',
@@ -17,6 +18,10 @@ export default {
         red: {
           DEFAULT: '#ef4444',
           dark: '#dc2626',
+          light: '#ffecec',
+        },
+        green: {
+          light: '#12B76A1A',
         },
         background: {
           DEFAULT: '#ffffff',
@@ -25,6 +30,9 @@ export default {
         text: {
           DEFAULT: '#FFFFFF',
           dark: '#344054',
+          disabled: '#d0d5dd',
+          red: '#f04439',
+          green: '#11b86a',
         },
         gray: {
           50: '#F9FAFB',
@@ -45,6 +53,12 @@ export default {
       borderRadius: {
         xl: '12px',
         '2xl': '16px',
+      },
+      borderColor: {
+        lightBlue: '#9cb9ff',
+        red: '#fea29b',
+        green: '#6ce9a7',
+        disabled: '#F3F4F6',
       },
       boxShadow: {
         'theme-xs': '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
