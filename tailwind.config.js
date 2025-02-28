@@ -15,18 +15,17 @@ export default {
           DEFAULT: '#ffffff',
           dark: '#f9fafb',
         },
-        red: {
+        destructive: {
           DEFAULT: '#ef4444',
           dark: '#dc2626',
-          light: '#ffecec',
         },
         background: {
           DEFAULT: '#ffffff',
           dark: '#111827',
         },
         text: {
-          DEFAULT: '#FFFFFF',
-          primary: '#344054', // main text color
+          DEFAULT: '#344054', // main text color
+          primary: '#FFFFFF',
           secondary: '#344055',
           disabled: '#d0d5dd',
           success: '#11b86a',
@@ -40,7 +39,7 @@ export default {
           disabled: '#F3F4F6',
         },
         ring: {
-          focus: '#3641F519',
+          DEFAULT: '#3641F519',
           error: '#ffecec',
           success: '#12B76A1A',
         },
@@ -69,15 +68,7 @@ export default {
       },
       borderWidth: {
         DEFAULT: '1px',
-        radio: '1.25px',
-      },
-      width: {
-        radio: '20px',
-        radioInner: '8px',
-      },
-      height: {
-        radio: '20px',
-        radioInner: '8px',
+        second: '1.25px',
       },
       keyframes: {
         fadeIn: {

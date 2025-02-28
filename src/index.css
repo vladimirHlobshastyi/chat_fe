@@ -6,7 +6,7 @@
 
 @layer components {
   .input-base {
-    @apply w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm shadow-theme-xs border-border text-gray-800 placeholder:text-text-disabled focus:border-border-focus focus:outline-none focus:ring focus:ring-ring-focus;
+    @apply w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm shadow-theme-xs border-border text-gray-800 placeholder:text-text-disabled focus:border-border-focus focus:outline-none focus:ring focus:ring-ring;
   }
   .input-label-base {
     @apply mb-1.5 block font-medium text-gray-700 text-sm;

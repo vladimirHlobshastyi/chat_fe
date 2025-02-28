@@ -10,10 +10,11 @@ const Button = ({
   ...rest
 }: ButtonProps) => {
   const colorStyles = {
-    primary: 'bg-primary text-text hover:bg-primary-dark',
+    primary: 'bg-primary text-text-primary hover:bg-primary-dark',
     secondary:
       'bg-secondary text-text-secondary hover:bg-secondary-dark focus:ring-neutral-300 ring-1 ring-inset ring-gray-300',
-    error: 'bg-red text-text hover:bg-red-dark focus:ring-error-light',
+    error:
+      'bg-destructive text-text-primary hover:bg-destructive-dark focus:ring-error-light',
   };
 
   const variantStyles = disabled

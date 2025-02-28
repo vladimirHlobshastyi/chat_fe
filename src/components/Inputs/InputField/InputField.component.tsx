@@ -16,7 +16,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         <Span
           className={cn(
             'input-label-base',
-            disabled ? 'text-text-disabled' : 'text-text-primary',
+            disabled ? 'text-text-disabled' : 'text-text',
           )}
         >
           {label}

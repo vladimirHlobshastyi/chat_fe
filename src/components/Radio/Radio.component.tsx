@@ -8,7 +8,7 @@ const Radio = ({ label, checked, disabled, onChange, ...rest }: RadioProps) => {
         htmlFor={rest.id}
         className={cn(
           'relative flex items-center gap-3 text-sm font-medium cursor-pointer select-none',
-          checked ? 'text-text-primary' : 'text-gray-500',
+          checked ? 'text-text' : 'text-gray-500',
           disabled && 'cursor-not-allowed text-text-disabled',
         )}
       >
@@ -24,7 +24,7 @@ const Radio = ({ label, checked, disabled, onChange, ...rest }: RadioProps) => {
         />
         <span
           className={cn(
-            'flex items-center justify-center rounded-full transition-colors border border-radio w-radio h-radio',
+            'flex items-center justify-center rounded-full transition-colors border border-second w-5 h-5',
             checked
               ? 'border-primary bg-primary'
               : 'border-border-default bg-transparent',
@@ -33,7 +33,7 @@ const Radio = ({ label, checked, disabled, onChange, ...rest }: RadioProps) => {
         >
           <span
             className={cn(
-              'bg-white rounded-full transition-opacity w-radioInner h-radioInner',
+              'bg-white rounded-full transition-opacity w-2 h-2',
               checked ? 'block' : 'hidden',
             )}
           />
