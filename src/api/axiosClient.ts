@@ -5,13 +5,16 @@ const axiosClient: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      localStorage.removeItem('isAuthenticated');
       window.location.href = '/login';
+      console.warn(error);
     }
     return Promise.reject(error);
   },

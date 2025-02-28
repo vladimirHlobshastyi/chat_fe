@@ -1,16 +1,16 @@
 export const validators = {
-  username: {
-    required: 'Username is required',
+  email: {
+    required: 'Email is required',
     minLength: {
       value: 4,
-      message: 'Username must be at least 4 letters long',
+      message: 'Email must be at least 4 letters long',
     },
   },
   password: {
     required: 'Password is required',
     minLength: {
-      value: 4,
-      message: 'Password must be at least 4 letters long.',
+      value: 6,
+      message: 'Password must be at least 6 letters long.',
     },
   },
 };
