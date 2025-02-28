@@ -30,7 +30,7 @@ const Checkbox = ({
             checked
               ? 'bg-primary border-primary'
               : 'border-border bg-transparent hover:border-primary',
-            disabled && 'cursor-not-allowed opacity-50',
+            disabled && 'cursor-not-allowed bg-transparent border-border',
             className,
           )}
         >
@@ -44,7 +44,7 @@ const Checkbox = ({
             >
               <path
                 d='M11.6666 3.5L5.24992 9.91667L2.33325 7'
-                stroke='white'
+                stroke={disabled ? '#E5E7EB' : '#ffffff'}
                 strokeWidth='1.94437'
                 strokeLinecap='round'
                 strokeLinejoin='round'
