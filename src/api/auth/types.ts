@@ -3,12 +3,5 @@ export type LoginQueryType = {
     email: string;
     password: string;
   };
-  Data: {
-    data: {
-      session: {
-        access_token: string;
-        refresh_token: string;
-      };
-    };
-  };
+  Data: { message: string };
 };
