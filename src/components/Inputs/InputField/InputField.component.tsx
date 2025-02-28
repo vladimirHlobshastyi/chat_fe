@@ -16,7 +16,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         <Span
           className={cn(
             'input-label-base',
-            disabled ? 'text-text-disabled' : 'text-gray-700',
+            disabled ? 'text-text-disabled' : 'text-text-primary',
           )}
         >
           {label}
@@ -26,14 +26,14 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           type='text'
           className={cn(
             'input-base w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm shadow-theme-xs',
-            'border-gray-300 text-gray-800 placeholder:text-text-disabled',
-            'focus:border-lightBlue focus:outline-none focus:ring focus:ring-primary-light',
+            'border-border text-gray-800 placeholder:text-text-disabled',
+            'focus:border-border-focus focus:outline-none focus:ring focus:ring-ring-focus',
             isError &&
-              'border-red focus:border-red focus:outline-none focus:ring focus:ring-red-light',
+              'border-border-error focus:border-border-error focus:ring focus:ring-ring-error',
             isSuccess &&
-              'border-green focus:border-green focus:outline-none focus:ring focus:ring-green-light',
+              'border-border-success focus:border-border-success focus:ring focus:ring-ring-success',
             disabled &&
-              'border-disabled text-text-disabled placeholder:text-gray-300 cursor-not-allowed',
+              'border-border-disabled text-text-disabled placeholder:text-gray-300 cursor-not-allowed',
             className,
           )}
           disabled={disabled}
@@ -44,8 +44,8 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             className={cn(
               'mt-1.5 text-xs',
               disabled && 'text-text-disabled',
-              isSuccess && 'text-text-green',
-              isError && 'text-text-red',
+              isSuccess && 'text-text-success',
+              isError && 'text-text-error',
             )}
           >
             {helperText}

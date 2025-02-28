@@ -12,7 +12,7 @@ const Button = ({
   const colorStyles = {
     primary: 'bg-primary text-text hover:bg-primary-dark',
     secondary:
-      'bg-secondary text-text-dark hover:bg-secondary-dark focus:ring-neutral-300 ring-1 ring-inset ring-gray-300',
+      'bg-secondary text-text-secondary hover:bg-secondary-dark focus:ring-neutral-300 ring-1 ring-inset ring-gray-300',
     error: 'bg-red text-text hover:bg-red-dark focus:ring-error-light',
   };
 
