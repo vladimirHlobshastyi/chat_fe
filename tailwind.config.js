@@ -68,7 +68,16 @@ export default {
         'theme-xs': '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
       },
       borderWidth: {
-        1: '1px',
+        DEFAULT: '1px',
+        radio: '1.25px',
+      },
+      width: {
+        radio: '20px',
+        radioInner: '8px',
+      },
+      height: {
+        radio: '20px',
+        radioInner: '8px',
       },
       keyframes: {
         fadeIn: {

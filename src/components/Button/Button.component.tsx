@@ -17,7 +17,7 @@ const Button = ({
   };
 
   const variantStyles = disabled
-    ? 'disabled-area disabled-text cursor-not-allowed disabled:bg-gray-300 text-gray-50'
+    ? 'disabled-area cursor-not-allowed text-gray-50'
     : colorStyles[color];
 
   return (

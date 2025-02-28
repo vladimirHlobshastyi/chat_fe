@@ -24,6 +24,10 @@
     @apply border-border-disabled text-text-disabled placeholder:text-gray-300 cursor-not-allowed;
   }
 
+  .disabled-area {
+    @apply bg-gray-300;
+  }
+
   .tableCell {
     @apply py-2 px-4 border-b text-center;
   }
