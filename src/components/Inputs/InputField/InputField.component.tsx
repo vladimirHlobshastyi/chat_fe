@@ -25,15 +25,10 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           ref={ref}
           type='text'
           className={cn(
-            'input-base w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm shadow-theme-xs',
-            'border-border text-gray-800 placeholder:text-text-disabled',
-            'focus:border-border-focus focus:outline-none focus:ring focus:ring-ring-focus',
-            isError &&
-              'border-border-error focus:border-border-error focus:ring focus:ring-ring-error',
-            isSuccess &&
-              'border-border-success focus:border-border-success focus:ring focus:ring-ring-success',
-            disabled &&
-              'border-border-disabled text-text-disabled placeholder:text-gray-300 cursor-not-allowed',
+            'input-base',
+            isError && 'input-error',
+            isSuccess && 'input-success',
+            disabled && 'input-disabled',
             className,
           )}
           disabled={disabled}
