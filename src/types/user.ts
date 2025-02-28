@@ -5,6 +5,7 @@ export interface User {
   name: string;
   geo?: string;
   about?: string;
+  email?: string;
   isVerified: boolean;
   telegramId: string;
   isBanned: boolean;

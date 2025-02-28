@@ -11,6 +11,9 @@ const AdminSidebar = () => {
         <Link className='navLink' to='/admin/users'>
           Users Management
         </Link>
+        <Link className='navLink' to='/admin/admins'>
+          Admin Accounts
+        </Link>
         <Link className='navLink' to='/admin/chatters'>
           Chatter Accounts
         </Link>
