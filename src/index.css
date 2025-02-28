@@ -1,8 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer components {
+  .input-base {
+    @apply w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm shadow-theme-xs border-border text-gray-800 placeholder:text-text-disabled focus:border-border-focus focus:outline-none focus:ring focus:ring-ring;
+  }
+  .input-label-base {
+    @apply mb-1.5 block font-medium text-gray-700 text-sm;
+  }
+
+  .input-error {
+    @apply border-border-error focus:border-border-error focus:ring focus:ring-ring-error;
+  }
+
+  .input-success {
+    @apply border-border-success focus:border-border-success focus:ring focus:ring-ring-success;
+  }
+
+  .input-disabled {
+    @apply border-border-disabled text-text-disabled placeholder:text-gray-300 cursor-not-allowed;
+  }
+
+  .disabled-area {
+    @apply bg-gray-300;
+  }
+
   .tableCell {
     @apply py-2 px-4 border-b text-center;
   }
@@ -70,15 +95,11 @@
 }
 
 body {
+  @apply font-outfit;
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 form {
   @apply flex flex-col items-center gap-4 w-full bg-white rounded-lg shadow-lg;
-}
-
-button {
-  @apply h-10 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600 disabled:bg-gray-300 cursor-pointer;
 }
