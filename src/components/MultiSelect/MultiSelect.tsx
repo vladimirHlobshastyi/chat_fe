@@ -47,15 +47,15 @@ const MultiSelect = ({
       <div className='relative w-full'>
         <div
           className={cn(
-            'flex flex-wrap items-center min-h-11 gap-2 px-3 py-1.5 border border-gray-300 rounded-lg cursor-pointer shadow-theme-xs focus:border-border-focus focus:outline-none focus:ring focus:ring-ring',
+            'flex flex-wrap items-center min-h-11 gap-2 pl-4 pr-3 py-1.5 border border-gray-300 overflow-hidden rounded-lg cursor-pointer shadow-theme-xs focus:border-border-focus focus:outline-none focus:ring focus:ring-ring',
             isOpen && 'ring border-border-focus outline-none ring-ring',
           )}
-          onClick={() => setIsOpen(true)}
+          onClick={() => setIsOpen((prev) => !prev)}
         >
           {selected.map((option) => (
             <div
               key={option.value}
-              className='flex items-center justify-between rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-800 border-minimal border-transparent hover:border-gray-200 hover:border-minimal'
+              className='flex items-center justify-between rounded-full bg-gray-100 pl-2 pr-2.5 py-1 text-sm text-gray-800 border-minimal border-transparent hover:border-gray-200 hover:border-minimal'
             >
               {option.label}
               <button
@@ -78,7 +78,6 @@ const MultiSelect = ({
                     fillRule='evenodd'
                     clipRule='evenodd'
                     d='M3.40717 4.46881C3.11428 4.17591 3.11428 3.70104 3.40717 3.40815C3.70006 3.11525 4.17494 3.11525 4.46783 3.40815L6.99943 5.93975L9.53095 3.40822C9.82385 3.11533 10.2987 3.11533 10.5916 3.40822C10.8845 3.70112 10.8845 4.17599 10.5916 4.46888L8.06009 7.00041L10.5916 9.53193C10.8845 9.82482 10.8845 10.2997 10.5916 10.5926C10.2987 10.8855 9.82385 10.8855 9.53095 10.5926L6.99943 8.06107L4.46783 10.5927C4.17494 10.8856 3.70006 10.8856 3.40717 10.5927C3.11428 10.2998 3.11428 9.8249 3.40717 9.53201L5.93877 7.00041L3.40717 4.46881Z'
-                    fill=''
                   />
                 </svg>
               </button>
@@ -88,7 +87,7 @@ const MultiSelect = ({
           <input
             type='text'
             placeholder={!selected.length ? placeholder : ''}
-            className='h-6 p-0 flex-1 border-none outline-none text-sm text-text bg-transparent focus:ring-0 focus:border-transparent placeholder:text-text'
+            className='min-w-20 p-1 flex-1 border-none outline-none text-sm text-text bg-transparent focus:ring-0 focus:border-transparent placeholder:text-text'
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -101,18 +100,18 @@ const MultiSelect = ({
           >
             <svg
               className={cn(
-                'h-5 w-5 ml-auto stroke-current transition-transform',
+                'h-3 w-3 ml-auto stroke-current transition-transform text-gray-500',
                 isOpen && 'rotate-180',
               )}
-              width='20'
-              height='20'
-              viewBox='0 0 20 20'
+              width='12'
+              height='12'
+              viewBox='0 0 10 6'
               fill='none'
               xmlns='http://www.w3.org/2000/svg'
             >
               <path
-                d='M4.79175 7.39551L10.0001 12.6038L15.2084 7.39551'
-                stroke=''
+                d='M1 1L5 5L9 1'
+                stroke='currentColor'
                 strokeWidth='1.5'
                 strokeLinecap='round'
                 strokeLinejoin='round'
