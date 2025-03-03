@@ -24,7 +24,7 @@ export default {
           dark: '#111827',
         },
         text: {
-          DEFAULT: '#344054', // main text color
+          DEFAULT: '#1d2939', // main text color
           primary: '#FFFFFF',
           secondary: '#344055',
           disabled: '#d0d5dd',
@@ -46,9 +46,9 @@ export default {
         gray: {
           50: '#F9FAFB',
           100: '#F3F4F6',
-          200: '#E5E7EB',
+          200: '#e4e7ec',
           300: '#D1D5DB',
-          400: '#9CA3AF',
+          400: '#98a2b3',
           500: '#6B7280',
           600: '#4B5563',
           700: '#374151',
@@ -67,6 +67,7 @@ export default {
         'theme-xs': '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
       },
       borderWidth: {
+        minimal: '0.7px',
         DEFAULT: '1px',
         second: '1.25px',
       },
