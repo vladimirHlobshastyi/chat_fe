@@ -16,14 +16,16 @@ const InputField = ({
 
   return (
     <div className='w-full'>
-      <Span
-        className={cn(
-          'input-label-base',
-          disabled ? 'text-text-disabled' : 'text-text',
-        )}
-      >
-        {label}
-      </Span>
+      {label && (
+        <Span
+          className={cn(
+            'input-label-base',
+            disabled ? 'text-text-disabled' : 'text-text',
+          )}
+        >
+          {label}
+        </Span>
+      )}
       <input
         type='text'
         className={cn(
