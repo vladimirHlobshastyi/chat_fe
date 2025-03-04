@@ -8,6 +8,7 @@ const MultiSelect = ({
   label,
   placeholder = 'Select option',
   options,
+  className,
   selectedValues = [],
   onChange,
 }: MultiSelectProps) => {
@@ -40,10 +41,12 @@ const MultiSelect = ({
   });
 
   return (
-    <div className='w-full' ref={mainRef}>
-      <label className='mb-1.5 block text-sm font-medium text-text'>
-        {label}
-      </label>
+    <div className={cn('w-full', className)} ref={mainRef}>
+      {label && (
+        <label className='mb-1.5 block text-sm font-medium text-text'>
+          {label}
+        </label>
+      )}
       <div className='relative w-full'>
         <div
           className={cn(
