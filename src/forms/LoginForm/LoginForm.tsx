@@ -18,9 +18,12 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='border border-gray-100'>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className='border border-gray-100 bg-background rounded-lg shadow-lg'
+    >
       <div className='w-full border-b border-gray-100'>
-        <H3 className='px-5 py-6'>Log in</H3>
+        <H3 className='px-6 py-5'>Log in</H3>
       </div>
 
       <div className='w-full flex flex-col gap-6 p-6'>
@@ -45,7 +48,7 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
 
         {errorMessage && <span className='errorText'>{errorMessage}</span>}
 
-        <Button className='w-full' disabled={!isDirty} type='submit'>
+        <Button fullScreen disabled={!isDirty} type='submit'>
           Submit
         </Button>
       </div>

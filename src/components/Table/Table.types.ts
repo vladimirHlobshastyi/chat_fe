@@ -1,3 +1,4 @@
+import { SortState } from '@/types/common';
 import { ReactNode } from 'react';
 
 interface TableHeader {
@@ -11,11 +12,6 @@ interface TableData {
   [key: string]: ReactNode;
 }
 
-interface SortState {
-  field: string;
-  direction: 'asc' | 'desc';
-}
-
 export interface TableProps {
   headers: TableHeader[];
   data: TableData[];
@@ -23,6 +19,9 @@ export interface TableProps {
   currentPage?: number;
   totalPages: number;
   totalItems: number;
+  newItemLabel?: string;
+  sortProps?: SortState;
+  onAddNewItem?: () => void;
   onSort?: (sortState: SortState) => void;
   onSearch?: (searchTerm: string) => void;
   onPageChange?: (page: number) => void;

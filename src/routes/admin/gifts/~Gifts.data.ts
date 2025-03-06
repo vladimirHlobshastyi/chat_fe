@@ -1,7 +1,5 @@
 import { GiftsTableHeader } from './~Gifts.types';
 
-export const ITEMS_PER_PAGE = 20;
-
 export const GIFTS_TABLE_HEADER: GiftsTableHeader[] = [
   {
     key: 'name',
@@ -41,6 +39,11 @@ export const GIFTS_TABLE_HEADER: GiftsTableHeader[] = [
   {
     key: 'updatedAt',
     title: 'Updated At',
+    width: 'min-w-14',
+  },
+  {
+    key: 'action',
+    title: 'Action',
     width: 'min-w-14',
   },
 ];

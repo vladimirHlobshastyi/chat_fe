@@ -1,10 +1,16 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {
   AddNewGiftFormData,
   AddNewGiftFormProps,
 } from './AddNewGiftForm.types';
 import { validators } from './AddNewGiftForm.data';
 import { cn } from '@/utils/styles';
+import InputField from '@/components/Inputs/InputField';
+import MultiSelect from '@/components/MultiSelect';
+import { H3, Span } from '@/components/Typography/Typography.component';
+import Checkbox from '@/components/Checkbox';
+import Button from '@/components/Button';
+import { MOCK_GEO_OPTIONS } from '@/common/MOCK';
 
 const AddNewGiftForm = ({
   errorMessage,
@@ -15,6 +21,7 @@ const AddNewGiftForm = ({
     register,
     handleSubmit,
     watch,
+    control,
     formState: { isDirty, errors },
   } = useForm<AddNewGiftFormData>({
     defaultValues: {
@@ -32,49 +39,46 @@ const AddNewGiftForm = ({
   const imageFileUrl = imageFile ? URL.createObjectURL(imageFile) : '';
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='overflow-hidden py-6'>
-      <h3 className='formTitle'>Add New Gift</h3>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className='overflow-hidden border-border border-gray-100'
+    >
+      <div className='w-full border-b border-gray-100'>
+        <H3 className='px-6 py-5'>Add new Gift</H3>
+      </div>
 
-      <div className='w-full flex flex-col gap-4 max-h-[60vh] overflow-auto px-6'>
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='name' className='text-sm font-medium'>
-            Name
-          </label>
-          <input
-            className='styledInput'
-            id='name'
-            {...register('name', validators.name)}
-          />
-          {errors.name && (
-            <span className='errorText'>{errors.name.message}</span>
+      <div className='w-full flex flex-col gap-6 p-6 max-h-[60vh] overflow-auto'>
+        <InputField
+          placeholder='Enter name...'
+          label='Name'
+          error={!!errors?.name}
+          helperText={errors.name?.message}
+          id='name'
+          {...register('name', validators.name)}
+        />
+
+        <Controller
+          name='geo'
+          control={control}
+          render={({ field }) => (
+            <MultiSelect
+              selectedValues={field.value}
+              options={MOCK_GEO_OPTIONS}
+              onChange={(value) => field.onChange(value)}
+              label='Geo'
+            />
           )}
-        </div>
+        />
 
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='geo' className='text-sm font-medium'>
-            Geo
-          </label>
-          <select className='styledInput' id='geo' {...register('geo')}>
-            <option value={'ua'}>Ukraine</option>
-            <option value='fr'>France</option>
-            {/* TODO Will change */}
-          </select>
-        </div>
-
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='price' className='text-sm font-medium'>
-            Price
-          </label>
-          <input
-            type='number'
-            className='styledInput'
-            id='price'
-            {...register('price', validators.price)}
-          />
-          {errors.price && (
-            <span className='errorText'>{errors.price.message}</span>
-          )}
-        </div>
+        <InputField
+          type='number'
+          placeholder='Enter price...'
+          label='Price'
+          error={!!errors?.price}
+          helperText={errors.price?.message}
+          id='price'
+          {...register('price', validators.price)}
+        />
 
         <div
           className={cn(
@@ -89,9 +93,9 @@ const AddNewGiftForm = ({
               alt='Gift'
             />
           ) : (
-            <span className='text-gray-500 min-h-36 flex justify-center items-center'>
+            <Span className='text-gray-500 min-h-36 flex justify-center items-center'>
               Upload Gift image
-            </span>
+            </Span>
           )}
         </div>
 
@@ -105,28 +109,36 @@ const AddNewGiftForm = ({
             className='styledInput'
             id='image'
             {...register('image')}
-          />
+          />{' '}
+          {/* TODO// Will change this upload input */}
           {errors.image && (
-            <span className='errorText'>{errors.image.message}</span>
+            <Span className='errorText'>{errors.image.message}</Span>
           )}
         </div>
 
-        <div className='flex items-center gap-2'>
-          <input type='checkbox' {...register('isActive')} />
-          <span className='text-sm font-medium'>Active</span>
-        </div>
+        <Controller
+          name='isActive'
+          control={control}
+          render={({ field }) => (
+            <Checkbox
+              checked={field.value}
+              onChange={(value) => field.onChange(value)}
+              label='Active'
+            />
+          )}
+        />
 
         {errorMessage && <span className='errorText'>{errorMessage}</span>}
       </div>
 
-      <div className='flex w-full justify-end gap-2 px-6'>
-        <button className='px-4' onClick={onClose}>
+      <div className='flex w-full justify-end gap-2 px-6 pb-6'>
+        <Button color='secondary' onClick={onClose}>
           Close
-        </button>
+        </Button>
 
-        <button className='px-4' disabled={!isDirty} type='submit'>
+        <Button disabled={!isDirty} type='submit'>
           Add Gift
-        </button>
+        </Button>
       </div>
     </form>
   );

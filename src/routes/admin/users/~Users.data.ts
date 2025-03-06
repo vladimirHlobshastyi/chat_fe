@@ -1,7 +1,5 @@
 import { UsersTableHeader } from './~Users.types';
 
-export const ITEMS_PER_PAGE = 20;
-
 export const USERS_TABLE_HEADER: UsersTableHeader[] = [
   {
     key: 'role',
@@ -45,6 +43,11 @@ export const USERS_TABLE_HEADER: UsersTableHeader[] = [
   {
     key: 'updatedAt',
     title: 'Updated At',
+    width: 'min-w-14',
+  },
+  {
+    key: 'action',
+    title: 'Action',
     width: 'min-w-14',
   },
 ];

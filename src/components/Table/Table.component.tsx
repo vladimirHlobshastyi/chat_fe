@@ -3,6 +3,9 @@ import { ITEMS_PER_PAGE } from './Table.data';
 import TablePagination from './TablePagination';
 import { TableProps } from './Table.types';
 import InputField from '../Inputs/InputField';
+import Button from '../Button';
+import { Span } from '../Typography/Typography.component';
+import { SortState } from '@/types/common';
 
 const Table = ({
   headers,
@@ -11,35 +14,32 @@ const Table = ({
   currentPage = 1,
   totalPages,
   totalItems,
+  newItemLabel,
+  sortProps,
+  onAddNewItem,
   onSort,
   onSearch,
   onPageChange,
   onPerPageChange,
 }: TableProps) => {
   const [perPage, setPerPage] = useState(10);
-  const [sortField, setSortField] = useState<string | null>(null);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [sort, setSort] = useState<SortState | undefined>(sortProps);
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSort = (field: string) => {
     const newDirection =
-      sortField === field && sortDirection === 'asc' ? 'desc' : 'asc';
+      sort?.field === field && sort?.direction === 'asc' ? 'desc' : 'asc';
+    const newSort = { field: field, direction: newDirection } as SortState;
 
-    setSortField(field);
-    setSortDirection(newDirection);
-
-    if (onSort) {
-      onSort({ field, direction: newDirection });
-    }
+    setSort(newSort);
+    onSort?.(newSort);
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
 
-    if (onSearch) {
-      onSearch(value);
-    }
+    onSearch?.(value);
   };
 
   const handlePerPageChange = (value: number) => {
@@ -48,7 +48,7 @@ const Table = ({
   };
 
   return (
-    <div className='overflow-hidden rounded-xl border border-gray-200 bg-white pt-4 shadow-lg flex flex-col h-full'>
+    <div className='overflow-hidden rounded-xl border border-gray-200 bg-white pt-4 flex flex-col h-full'>
       <div className='mb-4 flex flex-col gap-2 px-4 sm:flex-row sm:items-center sm:justify-between'>
         <div className='flex items-center gap-3'>
           <span className='text-gray-500'>Show</span>
@@ -84,12 +84,20 @@ const Table = ({
             />
           </svg>
 
-          <InputField
-            className='pl-10 h-11 z-10'
-            placeholder='Search...'
-            value={searchTerm}
-            onChange={handleSearch}
-          />
+          <div className='flex gap-2'>
+            <InputField
+              className='pl-10 h-11 z-10 min-w-80'
+              placeholder='Search...'
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+
+            {newItemLabel && (
+              <Button color='secondary' onClick={onAddNewItem}>
+                <Span>{newItemLabel}</Span>
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       <div className='max-w-full overflow-x-auto flex-grow'>
@@ -98,7 +106,7 @@ const Table = ({
             <thead className='border-t border-gray-200'>
               <tr>
                 {headers.map((header, index) => {
-                  const isCurrentSortField = sortField === header.key;
+                  const isCurrentSortField = sort?.field === header.key;
 
                   return (
                     <th
@@ -115,7 +123,7 @@ const Table = ({
                         {header.sortable && (
                           <span className='flex flex-col gap-0.5'>
                             <svg
-                              className={`${isCurrentSortField && sortDirection === 'asc' ? 'fill-primary-dark' : 'fill-gray-300'}`}
+                              className={`${isCurrentSortField && sort.direction === 'asc' ? 'fill-primary-dark' : 'fill-gray-300'}`}
                               width='8'
                               height='5'
                               viewBox='0 0 8 5'
@@ -128,7 +136,7 @@ const Table = ({
                               ></path>
                             </svg>
                             <svg
-                              className={`${isCurrentSortField && sortDirection === 'desc' ? 'fill-primary-dark' : 'fill-gray-300'}`}
+                              className={`${isCurrentSortField && sort.direction === 'desc' ? 'fill-primary-dark' : 'fill-gray-300'}`}
                               width='8'
                               height='5'
                               viewBox='0 0 8 5'
@@ -150,11 +158,11 @@ const Table = ({
             </thead>
             <tbody className='w-full flex-grow'>
               {isLoading && (
-                <div className='fixed top-0 left-0 w-full h-full bg-gray-800 '>
+                <div className='fixed top-0 left-0 w-full h-full'>
                   Loading...
                 </div>
               )}
-              {/*   //TODO will improve */}
+              {/*   //TODO will improve Loader*/}
               {data.length > 0 ? (
                 data.map((row, rowIndex) => (
                   <tr key={rowIndex} className='border-t border-gray-100'>
@@ -180,7 +188,8 @@ const Table = ({
                   </td>
                 </tr>
               )}
-              {data.length > 0 && data.length < perPage && (
+
+              {data.length > 0 && data.length <= perPage && (
                 <tr className='h-full border-t border-gray-100'>
                   <td colSpan={headers.length + 1}></td>
                 </tr>

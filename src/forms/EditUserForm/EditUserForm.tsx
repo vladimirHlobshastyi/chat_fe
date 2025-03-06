@@ -1,6 +1,13 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { EditUserFormData, EditUserFormProps } from './EditUserForm.types';
 import { validators } from './EditUserForm.data';
+import { H3 } from '@/components/Typography/Typography.component';
+import InputField from '@/components/Inputs/InputField';
+import Select from '@/components/Select';
+import { USER_ROLE_OPTIONS } from '../AddUserForm/AddUserForm.data';
+import Checkbox from '@/components/Checkbox';
+import Button from '@/components/Button';
+import { MOCK_GEO_OPTIONS } from '@/common/MOCK';
 
 const EditUserForm = ({
   currentUser,
@@ -11,6 +18,7 @@ const EditUserForm = ({
   const {
     register,
     handleSubmit,
+    control,
     formState: { isDirty, errors },
   } = useForm<EditUserFormData>({
     defaultValues: {
@@ -25,93 +33,104 @@ const EditUserForm = ({
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='overflow-hidden py-6'>
-      <h3 className='formTitle'>Edit User</h3>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className='overflow-hidden border-border border-gray-100'
+    >
+      <div className='w-full border-b border-gray-100'>
+        <H3 className='px-6 py-5'>Edit User</H3>
+      </div>
 
-      <div className='w-full flex flex-col gap-4 max-h-[60vh] overflow-auto px-6'>
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='name' className='text-sm font-medium'>
-            Name
-          </label>
-          <input
-            className='styledInput'
-            id='name'
-            {...register('name', validators.name)}
-          />
-          {errors.name && (
-            <span className='errorText'>{errors.name.message}</span>
+      <div className='w-full flex flex-col gap-6 p-6 max-h-[60vh] overflow-auto'>
+        <InputField
+          placeholder='Enter name...'
+          label='Name'
+          error={!!errors?.name}
+          helperText={errors.name?.message}
+          id='name'
+          {...register('name', validators.name)}
+        />
+
+        <Controller
+          name='role'
+          control={control}
+          render={({ field }) => (
+            <Select
+              selectedValue={field.value}
+              options={USER_ROLE_OPTIONS}
+              onChange={(value) => field.onChange(value)}
+              label='Role'
+            />
           )}
-        </div>
+        />
 
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='role' className='text-sm font-medium'>
-            Role
-          </label>
-          <select className='styledInput' id='role' {...register('role')}>
-            <option value='user'>User</option>
-            <option value='admin'>Admin</option>
-          </select>
-        </div>
+        <InputField
+          placeholder='Enter telegram Id...'
+          label='Telegram Id'
+          error={!!errors?.telegramId}
+          helperText={errors.telegramId?.message}
+          id='telegramId'
+          {...register('telegramId')}
+        />
 
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='telegramId' className='text-sm font-medium'>
-            Telegram ID
-          </label>
-          <input
-            className='styledInput'
-            id='telegramId'
-            {...register('telegramId')}
-          />
-        </div>
-
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='geo' className='text-sm font-medium'>
-            Geo
-          </label>
-          <input
-            className='styledInput'
-            id='geo'
-            {...register('geo', validators.geo)}
-          />
-          {errors.geo && (
-            <span className='errorText'>{errors.geo.message}</span>
+        <Controller
+          name='geo'
+          control={control}
+          render={({ field }) => (
+            <Select
+              selectedValue={field.value}
+              options={MOCK_GEO_OPTIONS} //TODO will change
+              onChange={(value) => field.onChange(value)}
+              label='Geo'
+            />
           )}
-        </div>
+        />
 
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='about' className='text-sm font-medium'>
-            About
-          </label>
-          <textarea
-            className='styledInput min-h-[100px]'
-            id='about'
-            {...register('about')}
-          />
-        </div>
+        <InputField
+          placeholder='Enter about...'
+          label='About'
+          error={!!errors?.about}
+          helperText={errors.about?.message}
+          id='about'
+          {...register('about')}
+        />
 
         <div className='w-full flex gap-4'>
-          <label className='flex items-center gap-2'>
-            <input type='checkbox' {...register('isVerified')} />
-            <span className='text-sm font-medium'>Verified</span>
-          </label>
+          <Controller
+            name='isVerified'
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                checked={field.value}
+                onChange={() => field.onChange(!field.value)}
+                label='Verified'
+              />
+            )}
+          />
 
-          <label className='flex items-center gap-2'>
-            <input type='checkbox' {...register('isBanned')} />
-            <span className='text-sm font-medium'>Banned</span>
-          </label>
+          <Controller
+            name='isBanned'
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                checked={field.value}
+                onChange={() => field.onChange(!field.value)}
+                label='Banned'
+              />
+            )}
+          />
         </div>
-
         {errorMessage && <span className='errorText'>{errorMessage}</span>}
       </div>
 
-      <div className='flex w-full justify-end gap-2 px-6'>
-        <button className='px-4' onClick={onClose}>
+      <div className='flex w-full justify-end gap-2 px-6 pb-6'>
+        <Button color='secondary' onClick={onClose}>
           Close
-        </button>
+        </Button>
 
-        <button className='px-4' disabled={!isDirty} type='submit'>
+        <Button disabled={!isDirty} type='submit'>
           Save Changes
-        </button>
+        </Button>
       </div>
     </form>
   );

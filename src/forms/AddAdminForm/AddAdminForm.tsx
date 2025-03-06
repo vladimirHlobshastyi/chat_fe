@@ -1,6 +1,10 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { AddAdminFormData, AddAdminFormProps } from './AddAdminForm.types';
 import { validators } from './AddAdminForm.data';
+import Checkbox from '@/components/Checkbox';
+import InputField from '@/components/Inputs/InputField';
+import { H3 } from '@/components/Typography/Typography.component';
+import Button from '@/components/Button';
 
 const AddAdminForm = ({
   onClose,
@@ -10,6 +14,7 @@ const AddAdminForm = ({
   const {
     register,
     handleSubmit,
+    control,
     formState: { isDirty, errors },
   } = useForm<AddAdminFormData>({
     defaultValues: {
@@ -20,55 +25,57 @@ const AddAdminForm = ({
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='overflow-hidden py-6'>
-      <h3 className='formTitle'>Add new Admin</h3>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className='overflow-hidden border-border border-gray-100'
+    >
+      <div className='w-full border-b border-gray-100'>
+        <H3 className='px-6 py-5'>Add new Admin</H3>
+      </div>
 
-      <div className='w-full flex flex-col gap-4 max-h-[60vh] overflow-auto px-6'>
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='name' className='text-sm font-medium'>
-            Name
-          </label>
-          <input
-            className='styledInput'
-            id='name'
-            {...register('name', validators.name)}
-          />
-          {errors.name && (
-            <span className='errorText'>{errors.name.message}</span>
+      <div className='w-full flex flex-col gap-6 p-6 max-h-[60vh] overflow-auto'>
+        <InputField
+          placeholder='Enter name...'
+          label='Name'
+          error={!!errors?.name}
+          helperText={errors.name?.message}
+          id='name'
+          {...register('name', validators.name)}
+        />
+
+        <InputField
+          placeholder='Enter email...'
+          label='Email'
+          type='email'
+          error={!!errors?.email}
+          helperText={errors.email?.message}
+          id='email'
+          {...register('email', validators.email)}
+        />
+
+        <Controller
+          name='isVerified'
+          control={control}
+          render={({ field }) => (
+            <Checkbox
+              checked={field.value}
+              onChange={() => field.onChange(!field.value)}
+              label='Verified'
+            />
           )}
-        </div>
-
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='email' className='text-sm font-medium'>
-            Email
-          </label>
-          <input
-            className='styledInput'
-            id='email'
-            type='email'
-            {...register('email', validators.email)}
-          />
-          {errors.email && (
-            <span className='errorText'>{errors.email.message}</span>
-          )}
-        </div>
-
-        <label className='flex items-center gap-2'>
-          <input type='checkbox' {...register('isVerified')} />
-          <span className='text-sm font-medium'>Verified</span>
-        </label>
+        />
 
         {errorMessage && <span className='errorText'>{errorMessage}</span>}
       </div>
 
-      <div className='flex w-full justify-end gap-2 px-6'>
-        <button className='px-4' onClick={onClose}>
+      <div className='flex w-full justify-end gap-2 px-6 pb-6'>
+        <Button color='secondary' onClick={onClose}>
           Close
-        </button>
+        </Button>
 
-        <button className='px-4' disabled={!isDirty} type='submit'>
+        <Button disabled={!isDirty} type='submit'>
           Add Admin
-        </button>
+        </Button>
       </div>
     </form>
   );

@@ -1,11 +1,8 @@
-interface accessedGeo {
-  id: string;
-  label: string;
-}
+import { Option } from '@/types/common';
 
 export interface AddNewGiftFormData {
   name: string;
-  geo: accessedGeo[];
+  geo: Option[];
   price?: number;
   image?: File;
   isActive: boolean;

@@ -1,9 +1,10 @@
 import { useAdmins } from './~useAdmins';
-import { SortField } from './~Admins.types';
 import { ADMINS_TABLE_HEADER } from './~Admins.data';
 import EditAdminModal from '@/features/Admin/Admins/EditAdminModal';
-import { cn } from '@/utils/styles';
 import AddNewAdminModal from '@/features/Admin/Admins/AddNewAdminModal';
+import { H3 } from '@/components/Typography/Typography.component';
+import Table from '@/components/Table';
+import TableActions from '@/components/Table/TableActions';
 
 export const Admins = () => {
   const {
@@ -12,15 +13,15 @@ export const Admins = () => {
     error,
     isFetching,
     page,
-    hasMore,
     isAddAdminModalOpen,
     selectedAdmin,
     addNewAdminError,
     editAdminError,
+    sort,
+    setSort,
+    setPerPage,
     onDeleteAdmin,
     setPage,
-    getSortIcon,
-    handleHeaderClick,
     handleCreateAdmin,
     handleUpdateAdmin,
     setIsAddAdminModalOpen,
@@ -33,106 +34,45 @@ export const Admins = () => {
   if (error) return <div>Error loading admins</div>;
 
   return (
-    <div className='container mx-auto p-4 flex flex-col h-full'>
-      <div className='flex justify-between items-center mb-4'>
-        <h1 className='text-2xl font-bold'>Admins</h1>
-        <button
-          className='actionButton bg-green-500 hover:bg-green-600'
-          onClick={() => setIsAddAdminModalOpen(true)}
-        >
-          Create Admin
-        </button>
-      </div>
+    <div className='w-full h-full p-6 bg-gray-50'>
+      <div className='w-full h-full container mx-auto rounded-xl overflow-hidden border border-gray-200 bg-white flex flex-col'>
+        <div className='px-5 py-6 border-b border-gray-100'>
+          <H3 className='font-medium text-gray-800'>Admins</H3>
+        </div>
 
-      <div className='flex-grow overflow-auto border rounded-lg'>
-        <table className='min-w-full bg-white'>
-          <thead>
-            <tr>
-              {ADMINS_TABLE_HEADER.map((header) => (
-                <th
-                  key={header.key}
-                  className={`tableHeader ${header.width}`}
-                  onClick={
-                    header.sortable
-                      ? handleHeaderClick(header.key as SortField)
-                      : undefined
-                  }
-                >
-                  {header.title}
-                  {header.sortable && getSortIcon(header.key as SortField)}
-                </th>
-              ))}
-              <th className='tableHeader min-w-48'>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {admins.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={ADMINS_TABLE_HEADER.length + 1}
-                  className='tableCell text-center'
-                >
-                  No admins..
-                </td>
-              </tr>
-            ) : (
-              admins.map((admin) => (
-                <tr key={admin.id}>
-                  <td className={cn('tableCell', ADMINS_TABLE_HEADER[0].width)}>
-                    {admin.role}
-                  </td>
-                  <td className={cn('tableCell', ADMINS_TABLE_HEADER[1].width)}>
-                    {admin.name}
-                  </td>
-                  <td className={cn('tableCell', ADMINS_TABLE_HEADER[2].width)}>
-                    {admin.isVerified ? 'Yes' : 'No'}
-                  </td>
-                  <td className={cn('tableCell', ADMINS_TABLE_HEADER[3].width)}>
-                    {admin.isBanned ? 'Yes' : 'No'}
-                  </td>
-                  <td className={cn('tableCell', ADMINS_TABLE_HEADER[4].width)}>
-                    {new Date(admin.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className={cn('tableCell', ADMINS_TABLE_HEADER[5].width)}>
-                    {new Date(admin.updatedAt).toLocaleDateString()}
-                  </td>
-                  <td className='tableCell min-w-32 flex justify-center gap-5'>
-                    <button
-                      className='actionButtonEdit'
-                      onClick={() => setSelectedAdmin(admin)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className='actionButtonDelete'
-                      onClick={() => onDeleteAdmin(admin.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      <div className='paginationContainer'>
-        <button
-          className='paginationButton'
-          onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-          disabled={page === 0}
-        >
-          Previous
-        </button>
-        <span>Page {page + 1}</span>
-        <button
-          className='paginationButton'
-          onClick={() => setPage((prev) => prev + 1)}
-          disabled={isFetching || !hasMore}
-        >
-          Next
-        </button>
+        <div className='w-full h-full overflow-hidden p-6'>
+          <Table
+            onPerPageChange={setPerPage}
+            headers={ADMINS_TABLE_HEADER}
+            newItemLabel='Add New Admin'
+            onAddNewItem={() => setIsAddAdminModalOpen(true)}
+            onSearch={() => {}} //TODO will change
+            onPageChange={(page) => setPage(page)}
+            onSort={setSort}
+            data={admins.map((admin) => {
+              return {
+                role: admin.role,
+                name: admin.name,
+                email: admin.email,
+                isVerified: admin.isVerified ? 'Yes' : 'No',
+                isBanned: admin.isBanned ? 'Yes' : 'No',
+                createdAt: admin.createdAt,
+                updatedAt: admin.updatedAt,
+                action: (
+                  <TableActions
+                    onDelete={() => onDeleteAdmin(admin.id)}
+                    onEdit={() => setSelectedAdmin(admin)}
+                  />
+                ),
+              };
+            })}
+            sortProps={sort}
+            isLoading={isFetching}
+            totalPages={10} //TODO will change
+            totalItems={1} //TODO will change
+            currentPage={page}
+          />
+        </div>
       </div>
 
       {isAddAdminModalOpen && (

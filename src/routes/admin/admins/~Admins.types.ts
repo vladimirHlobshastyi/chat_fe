@@ -1,11 +1,3 @@
-export type SortField = 'role' | 'name' | 'createdAt' | 'isVerified';
-export type SortOrder = 'asc' | 'desc';
-
-export interface SortState {
-  field: SortField;
-  order: SortOrder;
-}
-
 export interface EditAdminData {
   name: string;
   email: string;

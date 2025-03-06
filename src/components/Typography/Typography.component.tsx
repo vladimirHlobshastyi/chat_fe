@@ -118,9 +118,8 @@ export const Span = ({
 }: TextProps) => {
   return (
     <span
-      className={cn('text-gray-700', weightStyles[weight], className, {
-        ...rest,
-      })}
+      className={cn('text-gray-700', weightStyles[weight], className)}
+      {...rest}
     >
       {children}
     </span>

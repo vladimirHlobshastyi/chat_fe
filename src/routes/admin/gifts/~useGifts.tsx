@@ -5,19 +5,18 @@ import {
   useUpdateGiftMutation,
 } from '@/api/gifts/hooks';
 import { Gift } from '@/types/gift';
-import { ITEMS_PER_PAGE, SortField, SortState } from './~Gifts.types';
 import { useState } from 'react';
 import { AddNewGiftFormData } from '@/forms/AddNewGiftForm/AddNewGiftForm.types';
 import { EditGiftFormData } from '@/forms/EditGiftForm/EditGiftForm.types';
-import { cn } from '@/utils/styles';
+import { SortState } from '@/types/common';
 
 export const useGifts = () => {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [sort, setSort] = useState<SortState>({
     field: 'createdAt',
-    order: 'desc',
+    direction: 'desc',
   });
-
+  const [perPage, setPerPage] = useState(10);
   const [isAddNewGiftModalOpen, setIsAddNewGiftModalOpen] = useState(false);
   const [selectedGift, setSelectedGift] = useState<Gift | undefined>();
   const [addNewGiftError, setAddNewGiftError] = useState<string>('');
@@ -26,7 +25,7 @@ export const useGifts = () => {
   const handleEditGift = (currentGift: Gift): EditGiftFormData => {
     return {
       name: currentGift.name,
-      geo: [{ label: 'UA', id: 'UA' }], //TODO will change
+      geo: [{ label: 'UA', value: 'UA' }], //TODO will change
       price: currentGift.price,
       isActive: currentGift.isActive,
     };
@@ -45,8 +44,8 @@ export const useGifts = () => {
     error,
     isFetching,
   } = useGiftsQuery({
-    limit: ITEMS_PER_PAGE,
-    offset: page * ITEMS_PER_PAGE,
+    limit: perPage,
+    offset: page === 1 ? 0 : page * perPage,
   });
 
   const createGiftMutation = useCreateGiftMutation();
@@ -112,45 +111,22 @@ export const useGifts = () => {
     });
   };
 
-  const hasMore = gifts?.length === ITEMS_PER_PAGE;
-
-  const handleSort = (field: SortField) => {
-    setSort((prev) => ({
-      field,
-      order: prev.field === field && prev.order === 'asc' ? 'desc' : 'asc',
-    }));
-  };
-
-  const getSortIcon = (field: SortField) => {
-    const isActive = sort.field === field;
-    return (
-      <span
-        className={cn('sortIcon', isActive ? '' : 'sortIconHidden')}
-        aria-hidden='true'
-      >
-        {sort.order === 'asc' ? '↑' : '↓'}
-      </span>
-    );
-  };
-
-  const handleHeaderClick = (field: SortField) => () => handleSort(field);
-
   return {
     isAddNewGiftModalOpen,
     addNewGiftError,
     editGiftError,
     editInitialProps,
-    gifts,
+    gifts: gifts || [],
     isLoading,
     error,
     isFetching,
     page,
-    hasMore,
     selectedGift,
+    sort,
+    setPerPage,
+    setSort,
     setPage,
     onEditGiftClose,
-    handleHeaderClick,
-    getSortIcon,
     onDeleteGift,
     onEditGiftSubmit,
     onCreateGiftSubmit,
