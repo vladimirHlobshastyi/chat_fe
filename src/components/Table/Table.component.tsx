@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ITEMS_PER_PAGE } from './Table.data';
 import TablePagination from './TablePagination';
 import { TableProps } from './Table.types';
@@ -17,6 +17,8 @@ const Table = ({
   totalItems,
   newItemLabel,
   sortProps,
+  searchValue = '',
+  inputDelay,
   onAddNewItem,
   onSort,
   onSearch,
@@ -25,7 +27,11 @@ const Table = ({
 }: TableProps) => {
   const [perPage, setPerPage] = useState(10);
   const [sort, setSort] = useState<SortState | undefined>(sortProps);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [isTyped, setIsTyped] = useState(false);
+  const [isPasted, setIsPasted] = useState(false);
+  const [inputValue, setInputValue] = useState('');
+
+  const handleOnPast = () => setIsPasted(true);
 
   const handleSort = (field: string) => {
     const newDirection =
@@ -38,15 +44,38 @@ const Table = ({
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setSearchTerm(value);
-
-    onSearch?.(value);
+    setInputValue(value);
+    setIsTyped(true);
+    onPageChange?.(1);
   };
 
   const handlePerPageChange = (value: number) => {
     setPerPage(value);
     onPerPageChange(value);
+    onPageChange?.(1);
   };
+
+  useEffect(() => {
+    const searchCurrentValue = () => {
+      onSearch?.(inputValue);
+      setIsPasted(false);
+    };
+
+    if (inputDelay && !isPasted && isTyped) {
+      const timeOutSearchValue = setTimeout(() => {
+        setIsTyped(false);
+        searchCurrentValue();
+      }, inputDelay);
+
+      return () => clearTimeout(timeOutSearchValue);
+    } else {
+      searchCurrentValue();
+    }
+  }, [inputValue]);
+
+  useEffect(() => {
+    setInputValue(searchValue);
+  }, [searchValue]);
 
   return (
     <div className='relative overflow-hidden rounded-xl border border-gray-200 bg-white pt-4 flex flex-col h-full'>
@@ -89,7 +118,8 @@ const Table = ({
             <InputField
               className='pl-10 h-11 z-10 min-w-80'
               placeholder='Search...'
-              value={searchTerm}
+              value={inputValue}
+              onPaste={handleOnPast}
               onChange={handleSearch}
             />
 

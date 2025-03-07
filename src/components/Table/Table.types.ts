@@ -21,6 +21,8 @@ export interface TableProps {
   totalItems: number;
   newItemLabel?: string;
   sortProps?: SortState;
+  searchValue?: string;
+  inputDelay?: number;
   onAddNewItem?: () => void;
   onSort?: (sortState: SortState) => void;
   onSearch?: (searchTerm: string) => void;
