@@ -11,7 +11,6 @@ export const Users = () => {
     users,
     isLoading,
     error,
-    isFetching,
     page,
     isAddUserModalOpen,
     selectedUser,
@@ -30,7 +29,6 @@ export const Users = () => {
     onAddNewUserClose,
   } = useUsers();
 
-  if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading users</div>;
 
   return (
@@ -68,7 +66,7 @@ export const Users = () => {
               };
             })}
             sortProps={sort}
-            isLoading={isFetching}
+            isLoading={isLoading}
             totalPages={10} //TODO will change
             totalItems={1} //TODO will change
             currentPage={page}

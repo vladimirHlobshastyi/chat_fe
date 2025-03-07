@@ -7,7 +7,8 @@ import Select from '@/components/Select';
 import { USER_ROLE_OPTIONS } from '../AddUserForm/AddUserForm.data';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
-import { MOCK_GEO_OPTIONS } from '@/common/MOCK';
+import { MOCK_GEO_OPTIONS } from '@/common/mock';
+import TextArea from '@/components/Inputs/TextArea';
 
 const EditUserForm = ({
   currentUser,
@@ -86,7 +87,7 @@ const EditUserForm = ({
           )}
         />
 
-        <InputField
+        <TextArea
           placeholder='Enter about...'
           label='About'
           error={!!errors?.about}

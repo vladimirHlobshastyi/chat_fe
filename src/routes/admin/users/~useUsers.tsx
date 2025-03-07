@@ -77,9 +77,8 @@ export const useUsers = () => {
 
   return {
     users,
-    isLoading,
+    isLoading: isLoading || isFetching,
     error,
-    isFetching,
     page,
     isAddUserModalOpen,
     selectedUser,

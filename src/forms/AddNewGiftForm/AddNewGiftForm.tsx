@@ -10,7 +10,8 @@ import MultiSelect from '@/components/MultiSelect';
 import { H3, Span } from '@/components/Typography/Typography.component';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
-import { MOCK_GEO_OPTIONS } from '@/common/MOCK';
+import { MOCK_GEO_OPTIONS } from '@/common/mock';
+import FileUploader from '@/components/FileUploader';
 
 const AddNewGiftForm = ({
   errorMessage,
@@ -99,22 +100,7 @@ const AddNewGiftForm = ({
           )}
         </div>
 
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='image' className='text-sm font-medium'>
-            Image
-          </label>
-          <input
-            accept='image/svg+xml, image/png, image/jpeg, image/gif, image/webp'
-            type='file'
-            className='styledInput'
-            id='image'
-            {...register('image')}
-          />{' '}
-          {/* TODO// Will change this upload input */}
-          {errors.image && (
-            <Span className='errorText'>{errors.image.message}</Span>
-          )}
-        </div>
+        <FileUploader id='image' label='Image' {...register('image')} />
 
         <Controller
           name='isActive'

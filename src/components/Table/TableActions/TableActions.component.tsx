@@ -2,7 +2,7 @@ import { TableActionsProps } from './TableActions.types';
 
 const TableActions = ({ onEdit, onDelete }: TableActionsProps) => {
   return (
-    <div className='flex w-full items-center gap-2'>
+    <span className='flex w-full items-center gap-2'>
       {onDelete && (
         <button
           className='text-gray-500 hover:text-destructive'
@@ -45,7 +45,7 @@ const TableActions = ({ onEdit, onDelete }: TableActionsProps) => {
           </svg>
         </button>
       )}
-    </div>
+    </span>
   );
 };
 

@@ -16,7 +16,6 @@ const Gifts = () => {
     gifts,
     isLoading,
     error,
-    isFetching,
     page,
     sort,
     selectedGift,
@@ -32,7 +31,6 @@ const Gifts = () => {
     setSelectedGift,
   } = useGifts();
 
-  if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading gifts</div>;
 
   return (
@@ -69,7 +67,7 @@ const Gifts = () => {
               };
             })}
             sortProps={sort}
-            isLoading={isFetching}
+            isLoading={isLoading}
             totalPages={10} //TODO will change
             totalItems={1} //TODO will change
             currentPage={page}

@@ -6,6 +6,7 @@ import InputField from '../Inputs/InputField';
 import Button from '../Button';
 import { Span } from '../Typography/Typography.component';
 import { SortState } from '@/types/common';
+import Loader from '../Loader';
 
 const Table = ({
   headers,
@@ -48,7 +49,7 @@ const Table = ({
   };
 
   return (
-    <div className='overflow-hidden rounded-xl border border-gray-200 bg-white pt-4 flex flex-col h-full'>
+    <div className='relative overflow-hidden rounded-xl border border-gray-200 bg-white pt-4 flex flex-col h-full'>
       <div className='mb-4 flex flex-col gap-2 px-4 sm:flex-row sm:items-center sm:justify-between'>
         <div className='flex items-center gap-3'>
           <span className='text-gray-500'>Show</span>
@@ -102,6 +103,8 @@ const Table = ({
       </div>
       <div className='max-w-full overflow-x-auto flex-grow'>
         <div className='min-w-[1102px] h-full'>
+          {isLoading && <Loader />}
+
           <table className='w-full text-sm text-left text-gray-800 h-full'>
             <thead className='border-t border-gray-200'>
               <tr>
@@ -156,24 +159,17 @@ const Table = ({
                 })}
               </tr>
             </thead>
+
             <tbody className='w-full flex-grow'>
-              {isLoading && (
-                <div className='fixed top-0 left-0 w-full h-full'>
-                  Loading...
-                </div>
-              )}
-              {/*   //TODO will improve Loader*/}
               {data.length > 0 ? (
                 data.map((row, rowIndex) => (
                   <tr key={rowIndex} className='border-t border-gray-100'>
                     {headers.map((header, cellIndex) => (
                       <td
                         key={cellIndex}
-                        className='border-r border-gray-100 px-4 py-[17.5px]'
+                        className='border-r border-gray-100 px-4 py-[17.5px] text-sm text-gray-700'
                       >
-                        <p className='text-sm text-gray-700'>
-                          {row[header.key]}
-                        </p>
+                        {row[header.key]}
                       </td>
                     ))}
                   </tr>

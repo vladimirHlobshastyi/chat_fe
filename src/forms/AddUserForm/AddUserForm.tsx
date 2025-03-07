@@ -6,7 +6,8 @@ import InputField from '@/components/Inputs/InputField';
 import Select from '@/components/Select';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
-import { MOCK_GEO_OPTIONS } from '@/common/MOCK';
+import { MOCK_GEO_OPTIONS } from '@/common/mock';
+import TextArea from '@/components/Inputs/TextArea';
 
 const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
   const {
@@ -80,7 +81,7 @@ const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
           )}
         />
 
-        <InputField
+        <TextArea
           placeholder='Enter about...'
           label='About'
           error={!!errors?.about}

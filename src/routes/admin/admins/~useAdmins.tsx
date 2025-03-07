@@ -93,9 +93,8 @@ export const useAdmins = () => {
 
   return {
     admins,
-    isLoading,
+    isLoading: isLoading || isFetching,
     error,
-    isFetching,
     page,
     hasMore,
     isAddAdminModalOpen,

@@ -11,7 +11,6 @@ export const Admins = () => {
     admins,
     isLoading,
     error,
-    isFetching,
     page,
     isAddAdminModalOpen,
     selectedAdmin,
@@ -30,7 +29,6 @@ export const Admins = () => {
     onAddNewAdminClose,
   } = useAdmins();
 
-  if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error loading admins</div>;
 
   return (
@@ -67,7 +65,7 @@ export const Admins = () => {
               };
             })}
             sortProps={sort}
-            isLoading={isFetching}
+            isLoading={isLoading}
             totalPages={10} //TODO will change
             totalItems={1} //TODO will change
             currentPage={page}
