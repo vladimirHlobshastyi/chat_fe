@@ -45,7 +45,7 @@ export const useGifts = () => {
     isFetching,
   } = useGiftsQuery({
     limit: perPage,
-    offset: page === 1 ? 0 : page * perPage,
+    offset: (page - 1) * perPage,
   });
 
   const createGiftMutation = useCreateGiftMutation();

@@ -22,7 +22,7 @@ export const useUsers = () => {
 
   const { data, error, isLoading, isFetching } = useUsersQuery({
     limit: perPage,
-    offset: page === 1 ? 0 : page * perPage,
+    offset: (page - 1) * perPage,
   });
 
   const users = data || [];

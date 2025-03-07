@@ -69,7 +69,7 @@ const Gifts = () => {
             sortProps={sort}
             isLoading={isLoading}
             totalPages={10} //TODO will change
-            totalItems={1} //TODO will change
+            totalItems={9} //TODO will change
             currentPage={page}
           />
         </div>
