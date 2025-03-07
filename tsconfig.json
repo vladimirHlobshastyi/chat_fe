@@ -39,6 +39,9 @@
       "@providers/*": [
         "./src/providers/*"
       ],
+      "@common/*": [
+        "./src/common/*"
+      ],
     },
     "moduleResolution": "bundler",
     "module": "ESNext",

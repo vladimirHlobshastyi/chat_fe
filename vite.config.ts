@@ -36,6 +36,7 @@ export default defineConfig({
         find: '@providers',
         replacement: path.resolve(__dirname, 'src/providers'),
       },
+      { find: '@common', replacement: path.resolve(__dirname, 'src/common') },
     ],
   },
 });

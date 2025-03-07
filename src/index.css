@@ -33,17 +33,9 @@
       hover:bg-gray-200 transition-colors z-10 px-4;
   }
 
-  .styledInput {
-    @apply w-full h-10 appearance-none border border-neutral-300 rounded-lg px-2 focus:outline-none focus:ring-2 focus:ring-blue-400;
-  } /* Will remove */
-
   .errorText {
     @apply text-sm mt-1 block text-text-error;
   }
-
-  .navLink {
-    @apply mb-2 px-2.5 py-2 rounded-lg hover:bg-neutral-300 hover:text-neutral-50 active:opacity-50;
-  } /* Will remove */
 }
 
 :root {

@@ -46,6 +46,7 @@ export default {
         gray: {
           50: '#F9FAFB',
           100: '#F3F4F6',
+          150: '#f3f4f7',
           200: '#e4e7ec',
           300: '#D1D5DB',
           400: '#98a2b3',
@@ -54,6 +55,9 @@ export default {
           700: '#374151',
           800: '#1F2937',
           900: '#111827',
+        },
+        blue: {
+          50: '#ecf3ff',
         },
       },
       fontFamily: {
