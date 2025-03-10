@@ -13,7 +13,9 @@ axiosClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('isAuthenticated');
-      window.location.href = '/login';
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
       console.warn(error);
     }
     return Promise.reject(error);

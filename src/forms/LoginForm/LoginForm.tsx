@@ -26,7 +26,7 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
         <H3 className='px-6 py-5'>Log in</H3>
       </div>
 
-      <div className='w-full flex flex-col gap-6 p-6'>
+      <div className='w-full flex flex-col gap-y-6 p-6'>
         <InputField
           placeholder='Enter email...'
           label='Email'

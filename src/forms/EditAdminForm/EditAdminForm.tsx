@@ -29,13 +29,13 @@ const EditAdminForm = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='overflow-hidden border-border border-gray-100'
+      className='overflow-hidden border border-gray-100 rounded-lg'
     >
       <div className='w-full border-b border-gray-100'>
         <H3 className='px-6 py-5'>Edit {currentAdmin.name} Admin</H3>
       </div>
 
-      <div className='w-full flex flex-col gap-6 p-6 max-h-[60vh] overflow-auto'>
+      <div className='w-full flex flex-col gap-y-6 px-6 pt-6 max-h-[60vh] overflow-auto'>
         <InputField
           placeholder='Enter name...'
           label='Name'
@@ -83,7 +83,7 @@ const EditAdminForm = ({
         {errorMessage && <span className='errorText'>{errorMessage}</span>}
       </div>
 
-      <div className='flex w-full justify-end gap-2 px-6 pb-6'>
+      <div className='flex w-full justify-end gap-2 p-6'>
         <Button color='secondary' onClick={onClose}>
           Close
         </Button>
