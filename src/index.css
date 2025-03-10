@@ -28,57 +28,13 @@
     @apply bg-gray-300;
   }
 
-  .tableCell {
-    @apply py-2 px-4 border-b text-center;
-  }
-
   .tableHeader {
     @apply tableCell sticky top-0 bg-gray-100 border-b-2 border-gray-200 cursor-pointer 
       hover:bg-gray-200 transition-colors z-10 px-4;
   }
 
-  .sortIcon {
-    @apply w-4 h-4 text-gray-500 transition-opacity duration-200;
-  }
-
-  .sortIconHidden {
-    @apply opacity-0;
-  }
-
-  .actionButton {
-    @apply py-1 px-2 rounded text-white transition-colors;
-  }
-
-  .actionButtonEdit {
-    @apply actionButton bg-yellow-500 hover:bg-yellow-600;
-  }
-
-  .actionButtonDelete {
-    @apply actionButton bg-red-500 hover:bg-red-600;
-  }
-
-  .paginationButton {
-    @apply bg-blue-500 text-white py-2 px-4 rounded disabled:opacity-50 hover:bg-blue-600 transition-colors;
-  }
-
-  .paginationContainer {
-    @apply flex gap-4 items-center justify-end mt-4 py-2;
-  }
-
-  .styledInput {
-    @apply w-full h-10 appearance-none border border-neutral-300 rounded-lg px-2 focus:outline-none focus:ring-2 focus:ring-blue-400;
-  }
-
   .errorText {
-    @apply text-sm mt-1 block text-red-500;
-  }
-
-  .formTitle {
-    @apply text-xl font-semibold mb-2;
-  }
-
-  .navLink {
-    @apply mb-2 px-2.5 py-2 rounded-lg hover:bg-neutral-300 hover:text-neutral-50 active:opacity-50;
+    @apply text-sm mt-1 block text-text-error;
   }
 }
 
@@ -98,8 +54,4 @@ body {
   @apply font-outfit;
   color: var(--foreground);
   background: var(--background);
-}
-
-form {
-  @apply flex flex-col items-center gap-4 w-full bg-white rounded-lg shadow-lg;
 }

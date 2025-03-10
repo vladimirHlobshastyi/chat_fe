@@ -6,6 +6,7 @@ const Button = ({
   children,
   className,
   disabled,
+  fullScreen,
   onClick,
   ...rest
 }: ButtonProps) => {
@@ -25,8 +26,9 @@ const Button = ({
     <button
       disabled={disabled}
       className={cn(
-        'inline-flex h-11 w-fit items-center justify-center rounded-lg px-4 py-3 text-sm font-medium transition shadow-theme-xs duration-150 cursor-pointer',
+        'inline-flex h-11 w-full items-center justify-center rounded-lg px-4 py-3 text-sm font-medium transition shadow-theme-xs duration-150 cursor-pointer',
         variantStyles,
+        !fullScreen && 'max-w-max',
         className,
       )}
       onClick={onClick}

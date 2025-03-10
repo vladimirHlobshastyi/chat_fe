@@ -1,6 +1,10 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { EditAdminFormData, EditAdminFormProps } from './EditAdminForm.types';
 import { validators } from './EditAdminForm.data';
+import InputField from '@/components/Inputs/InputField';
+import Checkbox from '@/components/Checkbox';
+import { H3 } from '@/components/Typography/Typography.component';
+import Button from '@/components/Button';
 
 const EditAdminForm = ({
   currentAdmin,
@@ -11,6 +15,7 @@ const EditAdminForm = ({
   const {
     register,
     handleSubmit,
+    control,
     formState: { isDirty, errors },
   } = useForm<EditAdminFormData>({
     defaultValues: {
@@ -22,57 +27,70 @@ const EditAdminForm = ({
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className='overflow-hidden py-6'>
-      <h3 className='formTitle'>Edit {currentAdmin.name} Admin</h3>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className='overflow-hidden border border-gray-100 rounded-lg'
+    >
+      <div className='w-full border-b border-gray-100'>
+        <H3 className='px-6 py-5'>Edit {currentAdmin.name} Admin</H3>
+      </div>
 
-      <div className='w-full flex flex-col gap-4 max-h-[60vh] overflow-auto px-6'>
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='name' className='text-sm font-medium'>
-            Name
-          </label>
-          <input
-            className='styledInput'
-            id='name'
-            {...register('name', validators.name)}
-          />
-          {errors.name && (
-            <span className='errorText'>{errors.name.message}</span>
-          )}
-        </div>
+      <div className='w-full flex flex-col gap-y-6 px-6 pt-6 max-h-[60vh] overflow-auto'>
+        <InputField
+          placeholder='Enter name...'
+          label='Name'
+          error={!!errors?.name}
+          helperText={errors.name?.message}
+          id='name'
+          {...register('name', validators.name)}
+        />
 
-        <div className='w-full flex flex-col gap-1'>
-          <label htmlFor='email' className='text-sm font-medium'>
-            Email
-          </label>
-          <input className='styledInput' id='email' {...register('email')} />
-          {errors.email && (
-            <span className='errorText'>{errors.email.message}</span>
-          )}
-        </div>
+        <InputField
+          placeholder='Enter email...'
+          type='email'
+          label='Email'
+          error={!!errors?.email}
+          helperText={errors.email?.message}
+          id='email'
+          {...register('email', validators.email)}
+        />
 
         <div className='w-full flex gap-4'>
-          <label className='flex items-center gap-2'>
-            <input type='checkbox' {...register('isVerified')} />
-            <span className='text-sm font-medium'>Verified</span>
-          </label>
+          <Controller
+            name='isVerified'
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                checked={field.value}
+                onChange={() => field.onChange(!field.value)}
+                label='Verified'
+              />
+            )}
+          />
 
-          <label className='flex items-center gap-2'>
-            <input type='checkbox' {...register('isBanned')} />
-            <span className='text-sm font-medium'>Banned</span>
-          </label>
+          <Controller
+            name='isBanned'
+            control={control}
+            render={({ field }) => (
+              <Checkbox
+                checked={field.value}
+                onChange={() => field.onChange(!field.value)}
+                label='Banned'
+              />
+            )}
+          />
         </div>
-
         {errorMessage && <span className='errorText'>{errorMessage}</span>}
       </div>
 
-      <div className='flex w-full justify-end gap-2 px-6'>
-        <button className='px-4' onClick={onClose}>
+      <div className='flex w-full justify-end gap-2 p-6'>
+        <Button color='secondary' onClick={onClose}>
           Close
-        </button>
+        </Button>
 
-        <button className='px-4' disabled={!isDirty} type='submit'>
+        <Button disabled={!isDirty} type='submit'>
           Save Changes
-        </button>
+        </Button>
       </div>
     </form>
   );

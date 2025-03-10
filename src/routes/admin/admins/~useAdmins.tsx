@@ -5,28 +5,28 @@ import {
   useUpdateUserMutation,
   useDeleteUserMutation,
 } from '@api/users/hooks';
-import { EditAdminData, SortField, SortState } from './~Admins.types';
+import { EditAdminData } from './~Admins.types';
 import { User } from '@/types/user';
-import { ITEMS_PER_PAGE } from './~Admins.data';
-import { cn } from '@/utils/styles';
 import { AddAdminFormData } from '@/forms/AddAdminForm/AddAdminForm.types';
+import { SortState } from '@/types/common';
 
 export const useAdmins = () => {
-  const [page, setPage] = useState(0);
-  const [sort, setSort] = useState<SortState>({
-    field: 'createdAt',
-    order: 'desc',
-  });
+  const [page, setPage] = useState(1);
   const [isAddAdminModalOpen, setIsAddAdminModalOpen] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState<User | undefined>();
   const [addNewAdminError, setAddNewAdminError] = useState<
     string | undefined
   >();
   const [editAdminError, setEditAdminError] = useState<string | undefined>();
+  const [sort, setSort] = useState<SortState>({
+    field: 'createdAt',
+    direction: 'desc',
+  });
+  const [perPage, setPerPage] = useState(10);
 
   const { data, error, isLoading, isFetching } = useUsersQuery({
-    limit: ITEMS_PER_PAGE,
-    offset: page * ITEMS_PER_PAGE,
+    limit: perPage,
+    offset: (page - 1) * perPage,
   });
 
   const handledSelectedAdmin = selectedAdmin && {
@@ -37,32 +37,11 @@ export const useAdmins = () => {
   };
 
   const admins = data?.filter((user) => user.role === 'admin') || [];
-  const hasMore = admins.length === ITEMS_PER_PAGE;
+  const hasMore = admins.length === perPage;
 
   const createAdmin = useCreateUserMutation();
   const updateAdmin = useUpdateUserMutation();
   const deleteAdmin = useDeleteUserMutation();
-
-  const handleSort = (field: SortField) => {
-    setSort((prev) => ({
-      field,
-      order: prev.field === field && prev.order === 'asc' ? 'desc' : 'asc',
-    }));
-  };
-
-  const getSortIcon = (field: SortField) => {
-    const isActive = sort.field === field;
-    return (
-      <span
-        className={cn('sortIcon', isActive ? '' : 'sortIconHidden')}
-        aria-hidden='true'
-      >
-        {sort.order === 'asc' ? '↑' : '↓'}
-      </span>
-    );
-  };
-
-  const handleHeaderClick = (field: SortField) => () => handleSort(field);
 
   const onDeleteAdmin = (adminId: string) => {
     deleteAdmin.mutate(adminId, {
@@ -114,19 +93,19 @@ export const useAdmins = () => {
 
   return {
     admins,
-    isLoading,
+    isLoading: isLoading || isFetching,
     error,
-    isFetching,
     page,
     hasMore,
     isAddAdminModalOpen,
     selectedAdmin: handledSelectedAdmin,
     addNewAdminError,
     editAdminError,
+    sort,
+    setSort,
+    setPerPage,
     onDeleteAdmin,
     setPage,
-    getSortIcon,
-    handleHeaderClick,
     handleCreateAdmin,
     handleUpdateAdmin,
     setIsAddAdminModalOpen,

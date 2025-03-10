@@ -1,31 +1,40 @@
-import { Link } from '@tanstack/react-router';
+import { H1, Span } from '@/components/Typography/Typography.component';
+import { Link, useMatchRoute } from '@tanstack/react-router';
+import { MENU_ITEMS } from './AdminSidebar.data';
+import { cn } from '@/utils/styles';
 
 const AdminSidebar = () => {
+  const matchRoute = useMatchRoute();
+
   return (
-    <div className='min-w-60 h-full flex flex-col border-neutral-200 border-r-1'>
-      <h2 className='p-4 bg-neutral-200'>Admin Menu</h2>
-      <nav className='w-full h-full flex flex-col py-6 px-4 overflow-auto'>
-        <Link className='navLink' to='/admin/transactions'>
-          Transactions
-        </Link>
-        <Link className='navLink' to='/admin/users'>
-          Users Management
-        </Link>
-        <Link className='navLink' to='/admin/admins'>
-          Admin Accounts
-        </Link>
-        <Link className='navLink' to='/admin/chatters'>
-          Chatter Accounts
-        </Link>
-        <Link className='navLink' to='/admin/gifts'>
-          Gift Catalog
-        </Link>
-        <Link className='navLink' to='/admin/dialogs'>
-          User Dialogs
-        </Link>
-        <Link className='navLink' to='/admin/tariffs'>
-          Pricing Models
-        </Link>
+    <div className='min-w-60 h-full flex flex-col border-r border-gray-200'>
+      <div className='pt-8 pb-7 px-5 border-b border-gray-200'>
+        <H1>Admin Menu</H1>
+      </div>
+      <nav className='w-full h-full flex flex-col gap-4 p-5 overflow-auto'>
+        {MENU_ITEMS.map(({ title, path }) => {
+          const isActive = !!matchRoute({ to: path });
+
+          return (
+            <Link
+              key={path}
+              to={path}
+              className={cn(
+                'px-2 py-3 rounded-lg text-sm flex items-center',
+                isActive ? 'bg-blue-50 text-primary' : 'hover:bg-gray-150',
+              )}
+            >
+              <Span
+                weight='medium'
+                className={cn(
+                  isActive ? 'text-primary' : 'text-text-secondary',
+                )}
+              >
+                {title}
+              </Span>
+            </Link>
+          );
+        })}
       </nav>
     </div>
   );

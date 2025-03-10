@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AuthContext } from './useAuth';
 import { useNavigate } from '@tanstack/react-router';
+import Loader from '@/components/Loader';
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
@@ -22,7 +23,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [isAuthenticated]);
 
   if (!isReady) {
-    return <>Loading</>; //TODO Will add loader
+    return <Loader />;
   }
 
   return (

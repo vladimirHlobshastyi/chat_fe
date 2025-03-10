@@ -1,7 +1,5 @@
 import { AdminsTableHeader } from './~Admins.types';
 
-export const ITEMS_PER_PAGE = 20;
-
 export const ADMINS_TABLE_HEADER: AdminsTableHeader[] = [
   {
     key: 'role',
@@ -14,6 +12,11 @@ export const ADMINS_TABLE_HEADER: AdminsTableHeader[] = [
     title: 'Name',
     width: 'min-w-33',
     sortable: true,
+  },
+  {
+    key: 'email',
+    title: 'Email',
+    width: 'min-w-33',
   },
   {
     key: 'isVerified',
@@ -35,6 +38,11 @@ export const ADMINS_TABLE_HEADER: AdminsTableHeader[] = [
   {
     key: 'updatedAt',
     title: 'Updated At',
+    width: 'min-w-14',
+  },
+  {
+    key: 'action',
+    title: 'Action',
     width: 'min-w-14',
   },
 ];

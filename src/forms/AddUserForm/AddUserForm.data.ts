@@ -14,3 +14,14 @@ export const validators = {
     },
   },
 };
+
+export const USER_ROLE_OPTIONS = [
+  {
+    value: 'admin',
+    label: 'Admin',
+  },
+  {
+    value: 'user',
+    label: 'User',
+  },
+];
