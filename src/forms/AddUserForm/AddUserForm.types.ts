@@ -1,12 +1,6 @@
-export interface AddUserFormData {
-  name: string;
-  role: 'user' | 'admin';
-  telegramId: string;
-  geo?: string;
-  about?: string;
-  isVerified: boolean;
-  isBanned: boolean;
-}
+import { CreateUserParams } from '@/api/users/types';
+
+export type AddUserFormData = CreateUserParams;
 
 export interface AddUserFormProps {
   onSubmit: (data: AddUserFormData) => void;

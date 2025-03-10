@@ -7,13 +7,15 @@ import {
 } from '@api/users/hooks';
 import { User } from '@/types/user';
 import { SortState } from '@/types/common';
+import { CreateUserParams, UpdateUserParams } from '@/api/users/types';
 
 export const useUsers = () => {
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState<SortState>({
-    field: 'createdAt',
+    field: 'created_at',
     direction: 'desc',
   });
+  const [searchValue, setSearchValue] = useState('');
   const [isAddUserModalOpen, setIsAddUserModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | undefined>();
   const [addNewUserError, setAddNewUserError] = useState<string | undefined>();
@@ -21,11 +23,15 @@ export const useUsers = () => {
   const [perPage, setPerPage] = useState(10);
 
   const { data, error, isLoading, isFetching } = useUsersQuery({
-    limit: perPage,
-    offset: (page - 1) * perPage,
+    page: page,
+    pageSize: perPage,
+    search: searchValue,
+    sortField: sort.field,
+    sortOrder: sort.direction,
   });
 
-  const users = data || [];
+  const users = data?.data || [];
+  const { total, totalPages } = data?.pagination || {};
 
   const createUser = useCreateUserMutation();
   const updateUser = useUpdateUserMutation();
@@ -49,7 +55,7 @@ export const useUsers = () => {
     setAddNewUserError(undefined);
   };
 
-  const handleCreateUser = (data: User) => {
+  const handleCreateUser = (data: CreateUserParams) => {
     createUser.mutate(data, {
       onSuccess: () => {
         setAddNewUserError(undefined);
@@ -59,7 +65,7 @@ export const useUsers = () => {
     });
   };
 
-  const handleUpdateUser = (data: Partial<User>) => {
+  const handleUpdateUser = (data: UpdateUserParams) => {
     if (selectedUser?.id) {
       updateUser.mutate(
         { id: selectedUser.id, data },
@@ -85,6 +91,10 @@ export const useUsers = () => {
     addNewUserError,
     editUserError,
     sort,
+    total,
+    totalPages,
+    searchValue,
+    setSearchValue,
     setSort,
     setPerPage,
     onDeleteUser,

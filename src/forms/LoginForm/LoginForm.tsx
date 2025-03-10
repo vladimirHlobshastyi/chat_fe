@@ -4,8 +4,12 @@ import { validators } from './LoginForm.data';
 import { H3 } from '@/components/Typography/Typography.component';
 import InputField from '@/components/Inputs/InputField';
 import Button from '@/components/Button';
+import { useState } from 'react';
+import Checkbox from '@/components/Checkbox';
 
 const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -42,9 +46,22 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
           error={!!errors?.password}
           helperText={errors.password?.message}
           id='password'
-          type='password'
+          type={showPassword ? 'text' : 'password'}
           {...register('password', validators.password)}
         />
+
+        <div className='flex items-center gap-2'>
+          <Checkbox
+            checked={showPassword}
+            onChange={() => setShowPassword((prev) => !prev)}
+          />
+          <span
+            className='cursor-pointer'
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? 'Hide' : 'Show'}
+          </span>
+        </div>
 
         {errorMessage && <span className='errorText'>{errorMessage}</span>}
 

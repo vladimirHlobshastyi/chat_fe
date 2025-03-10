@@ -1,7 +1,9 @@
 export interface AddAdminFormData {
   name: string;
   email: string;
+  password: string;
   isVerified: boolean;
+  geo: string;
 }
 
 export interface AddAdminFormProps {

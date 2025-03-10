@@ -5,6 +5,7 @@ import EditUserModal from '@/features/Admin/Users/EditUserModal';
 import Table from '@/components/Table/Table.component';
 import TableActions from '@/components/Table/TableActions';
 import { H3 } from '@/components/Typography/Typography.component';
+import { formatISODate } from '@/utils/date';
 
 export const Users = () => {
   const {
@@ -17,6 +18,10 @@ export const Users = () => {
     addNewUserError,
     editUserError,
     sort,
+    total,
+    totalPages,
+    searchValue,
+    setSearchValue,
     setSort,
     setPerPage,
     onDeleteUser,
@@ -44,19 +49,21 @@ export const Users = () => {
             headers={USERS_TABLE_HEADER}
             newItemLabel='Add New User'
             onAddNewItem={() => setIsAddUserModalOpen(true)}
-            onSearch={() => {}} //TODO will change
+            onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
             onSort={setSort}
+            inputDelay={500}
+            searchValue={searchValue}
             data={users.map((user) => {
               return {
                 role: user.role,
                 name: user.name,
                 geo: user.geo,
-                isVerified: user.isVerified ? 'Yes' : 'No',
-                telegramId: user.telegramId,
-                isBanned: user.isBanned ? 'Yes' : 'No',
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
+                is_verified: user.isVerified ? 'Yes' : 'No',
+                telegram_id: user.telegramId,
+                is_banned: user.isBanned ? 'Yes' : 'No',
+                created_at: formatISODate(user.createdAt),
+                updated_at: formatISODate(user.updatedAt),
                 action: (
                   <TableActions
                     onDelete={() => onDeleteUser(user.id)}
@@ -67,8 +74,8 @@ export const Users = () => {
             })}
             sortProps={sort}
             isLoading={isLoading}
-            totalPages={10} //TODO will change
-            totalItems={1} //TODO will change
+            totalPages={totalPages}
+            totalItems={total}
             currentPage={page}
           />
         </div>

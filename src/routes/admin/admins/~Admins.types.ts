@@ -1,7 +1,7 @@
 export interface EditAdminData {
   name: string;
   email: string;
-  isVerified: boolean;
+  //isVerified: boolean;
   isBanned: boolean;
 }
 

@@ -1,9 +1,7 @@
+import { UpdateUserParams } from '@/api/users/types';
 import { User } from '@/types/user';
 
-export type EditUserFormData = Omit<
-  User,
-  'avatarId' | 'updatedAt' | 'createdAt' | 'id' | 'clickId'
->;
+export type EditUserFormData = UpdateUserParams;
 
 export interface EditUserFormProps {
   currentUser: User;

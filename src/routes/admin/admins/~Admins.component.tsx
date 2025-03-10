@@ -5,6 +5,7 @@ import AddNewAdminModal from '@/features/Admin/Admins/AddNewAdminModal';
 import { H3 } from '@/components/Typography/Typography.component';
 import Table from '@/components/Table';
 import TableActions from '@/components/Table/TableActions';
+import { formatISODate } from '@/utils/date';
 
 export const Admins = () => {
   const {
@@ -17,6 +18,10 @@ export const Admins = () => {
     addNewAdminError,
     editAdminError,
     sort,
+    total,
+    totalPages,
+    searchValue,
+    setSearchValue,
     setSort,
     setPerPage,
     onDeleteAdmin,
@@ -44,18 +49,20 @@ export const Admins = () => {
             headers={ADMINS_TABLE_HEADER}
             newItemLabel='Add New Admin'
             onAddNewItem={() => setIsAddAdminModalOpen(true)}
-            onSearch={() => {}} //TODO will change
+            onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
             onSort={setSort}
+            searchValue={searchValue}
+            inputDelay={500}
             data={admins.map((admin) => {
               return {
                 role: admin.role,
                 name: admin.name,
                 email: admin.email,
-                isVerified: admin.isVerified ? 'Yes' : 'No',
-                isBanned: admin.isBanned ? 'Yes' : 'No',
-                createdAt: admin.createdAt,
-                updatedAt: admin.updatedAt,
+                is_verified: admin.isVerified ? 'Yes' : 'No',
+                is_banned: admin.isBanned ? 'Yes' : 'No',
+                created_at: formatISODate(admin.createdAt),
+                updated_at: formatISODate(admin.updatedAt),
                 action: (
                   <TableActions
                     onDelete={() => onDeleteAdmin(admin.id)}
@@ -66,8 +73,8 @@ export const Admins = () => {
             })}
             sortProps={sort}
             isLoading={isLoading}
-            totalPages={10} //TODO will change
-            totalItems={1} //TODO will change
+            totalPages={totalPages}
+            totalItems={total}
             currentPage={page}
           />
         </div>

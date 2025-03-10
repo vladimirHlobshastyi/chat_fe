@@ -21,7 +21,7 @@ const EditAdminForm = ({
     defaultValues: {
       name: currentAdmin.name,
       email: currentAdmin.email,
-      isVerified: currentAdmin.isVerified,
+      //isVerified: currentAdmin.isVerified,
       isBanned: currentAdmin.isBanned,
     },
   });
@@ -56,7 +56,7 @@ const EditAdminForm = ({
         />
 
         <div className='w-full flex gap-4'>
-          <Controller
+          {/*    <Controller
             name='isVerified'
             control={control}
             render={({ field }) => (
@@ -66,7 +66,7 @@ const EditAdminForm = ({
                 label='Verified'
               />
             )}
-          />
+          /> */}
 
           <Controller
             name='isBanned'

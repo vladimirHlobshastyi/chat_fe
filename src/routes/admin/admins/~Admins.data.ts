@@ -5,13 +5,12 @@ export const ADMINS_TABLE_HEADER: AdminsTableHeader[] = [
     key: 'role',
     title: 'Role',
     width: 'min-w-20',
-    sortable: true,
   },
   {
     key: 'name',
     title: 'Name',
     width: 'min-w-33',
-    sortable: true,
+    //sortable: true,
   },
   {
     key: 'email',
@@ -19,26 +18,27 @@ export const ADMINS_TABLE_HEADER: AdminsTableHeader[] = [
     width: 'min-w-33',
   },
   {
-    key: 'isVerified',
+    key: 'is_verified',
     title: 'Verified',
     width: 'min-w-14',
-    sortable: true,
   },
   {
-    key: 'isBanned',
+    key: 'is_banned',
     title: 'Banned',
     width: 'min-w-20',
+    //sortable: true,
   },
   {
-    key: 'createdAt',
+    key: 'created_at',
     title: 'Created At',
     width: 'min-w-14',
-    sortable: true,
+    //sortable: true,
   },
   {
-    key: 'updatedAt',
+    key: 'updated_at',
     title: 'Updated At',
     width: 'min-w-14',
+    //sortable: true,
   },
   {
     key: 'action',

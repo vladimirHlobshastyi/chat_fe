@@ -1,8 +1,8 @@
-import { User } from '@/types/user';
+import { CreateUserParams } from '@/api/users/types';
 
 export interface AddNewUserModalProps {
   isOpen: boolean;
   errorMessage?: string;
   onClose: () => void;
-  onSubmit: (data: User) => void;
+  onSubmit: (data: CreateUserParams) => void;
 }

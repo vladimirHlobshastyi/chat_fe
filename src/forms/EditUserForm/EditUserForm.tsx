@@ -4,11 +4,11 @@ import { validators } from './EditUserForm.data';
 import { H3 } from '@/components/Typography/Typography.component';
 import InputField from '@/components/Inputs/InputField';
 import Select from '@/components/Select';
-import { USER_ROLE_OPTIONS } from '../AddUserForm/AddUserForm.data';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
 import { MOCK_GEO_OPTIONS } from '@/common/mock';
 import TextArea from '@/components/Inputs/TextArea';
+import { USER_ROLE_OPTIONS } from '@/common/options';
 
 const EditUserForm = ({
   currentUser,
@@ -25,11 +25,12 @@ const EditUserForm = ({
     defaultValues: {
       name: currentUser.name,
       role: currentUser.role,
-      telegramId: currentUser.telegramId,
+      //telegramId: currentUser.telegramId,
       geo: currentUser.geo,
       about: currentUser.about,
-      isVerified: currentUser.isVerified,
+      //isVerified: currentUser.isVerified,
       isBanned: currentUser.isBanned,
+      //TODO Add AVATAR
     },
   });
 
@@ -65,14 +66,14 @@ const EditUserForm = ({
           )}
         />
 
-        <InputField
+        {/*  <InputField
           placeholder='Enter telegram Id...'
           label='Telegram Id'
           error={!!errors?.telegramId}
           helperText={errors.telegramId?.message}
           id='telegramId'
           {...register('telegramId')}
-        />
+        /> */}
 
         <Controller
           name='geo'
@@ -97,7 +98,7 @@ const EditUserForm = ({
         />
 
         <div className='w-full flex gap-4'>
-          <Controller
+          {/*  <Controller
             name='isVerified'
             control={control}
             render={({ field }) => (
@@ -107,7 +108,7 @@ const EditUserForm = ({
                 label='Verified'
               />
             )}
-          />
+          /> */}
 
           <Controller
             name='isBanned'

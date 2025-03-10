@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { AddAdminFormData, AddAdminFormProps } from './AddAdminForm.types';
 import { validators } from './AddAdminForm.data';
@@ -5,12 +6,15 @@ import Checkbox from '@/components/Checkbox';
 import InputField from '@/components/Inputs/InputField';
 import { H3 } from '@/components/Typography/Typography.component';
 import Button from '@/components/Button';
+import Select from '@/components/Select';
+import { MOCK_GEO_OPTIONS } from '@/common/mock';
 
 const AddAdminForm = ({
   onClose,
   onSubmit,
   errorMessage,
 }: AddAdminFormProps) => {
+  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -20,7 +24,9 @@ const AddAdminForm = ({
     defaultValues: {
       name: '',
       email: '',
-      isVerified: false,
+      password: '',
+      geo: 'ua',
+      //isVerified: false,
     },
   });
 
@@ -35,6 +41,39 @@ const AddAdminForm = ({
 
       <div className='w-full flex flex-col gap-y-6 px-6 pt-6 max-h-[60vh] overflow-auto'>
         <InputField
+          placeholder='Enter Email...'
+          label='Email'
+          error={!!errors?.email}
+          helperText={errors.email?.message}
+          id='email'
+          type='email'
+          {...register('email', validators.email)}
+        />
+
+        <InputField
+          placeholder='Password Email...'
+          label='Password'
+          error={!!errors?.password}
+          helperText={errors.password?.message}
+          id='password'
+          type={showPassword ? 'text' : 'password'}
+          {...register('password', validators.password)}
+        />
+
+        <div className='flex items-center gap-2'>
+          <Checkbox
+            checked={showPassword}
+            onChange={() => setShowPassword((prev) => !prev)}
+          />
+          <span
+            className='cursor-pointer'
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? 'Hide' : 'Show'}
+          </span>
+        </div>
+
+        <InputField
           placeholder='Enter name...'
           label='Name'
           error={!!errors?.name}
@@ -43,16 +82,20 @@ const AddAdminForm = ({
           {...register('name', validators.name)}
         />
 
-        <InputField
-          placeholder='Enter email...'
-          label='Email'
-          type='email'
-          error={!!errors?.email}
-          helperText={errors.email?.message}
-          id='email'
-          {...register('email', validators.email)}
-        />
+        {/* TODO will Add avatar */}
 
+        <Controller
+          name='geo'
+          control={control}
+          render={({ field }) => (
+            <Select
+              selectedValue={field.value}
+              options={MOCK_GEO_OPTIONS} //TODO will change
+              onChange={(value) => field.onChange(value)}
+              label='Geo'
+            />
+          )}
+        />
         <Controller
           name='isVerified'
           control={control}

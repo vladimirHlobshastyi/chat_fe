@@ -17,8 +17,8 @@ export interface TableProps {
   data: TableData[];
   isLoading?: boolean;
   currentPage?: number;
-  totalPages: number;
-  totalItems: number;
+  totalPages?: number;
+  totalItems?: number;
   newItemLabel?: string;
   sortProps?: SortState;
   searchValue?: string;
