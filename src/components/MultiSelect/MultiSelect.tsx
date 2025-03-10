@@ -50,7 +50,7 @@ const MultiSelect = ({
       <div className='relative w-full'>
         <div
           className={cn(
-            'flex flex-wrap items-center min-h-11 gap-2 pl-4 pr-3 py-1.5 border border-gray-300 overflow-hidden rounded-lg cursor-pointer shadow-theme-xs focus:border-border-focus focus:outline-none focus:ring focus:ring-ring',
+            'flex flex-wrap items-center min-h-11 gap-2 py-1.5 px-3 border border-gray-300 overflow-hidden rounded-lg cursor-pointer shadow-theme-xs focus:border-border-focus focus:outline-none focus:ring focus:ring-ring',
             isOpen && 'ring border-border-focus outline-none ring-ring',
           )}
           onClick={() => setIsOpen((prev) => !prev)}
@@ -87,44 +87,47 @@ const MultiSelect = ({
             </div>
           ))}
 
-          <input
-            type='text'
-            placeholder={!selected.length ? placeholder : ''}
-            className='min-w-20 p-1 flex-1 border-none outline-none text-sm text-text bg-transparent focus:ring-0 focus:border-transparent placeholder:text-text'
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          <div className='flex gap-2 flex-1'>
+            <input
+              type='text'
+              placeholder={!selected.length ? placeholder : ''}
+              className='min-w-20 p-1 flex-1 border-none outline-none text-sm text-text bg-transparent focus:ring-0 focus:border-transparent placeholder:text-text'
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
 
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsOpen((prev) => !prev);
-            }}
-          >
-            <svg
-              className={cn(
-                'h-3 w-3 ml-auto stroke-current transition-transform text-gray-500',
-                isOpen && 'rotate-180',
-              )}
-              width='12'
-              height='12'
-              viewBox='0 0 10 6'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
+            <div
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsOpen((prev) => !prev);
+              }}
+              className='flex items-center'
             >
-              <path
-                d='M1 1L5 5L9 1'
-                stroke='currentColor'
-                strokeWidth='1.5'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-              />
-            </svg>
+              <svg
+                className={cn(
+                  'h-3 w-3 ml-auto stroke-current transition-transform text-gray-500',
+                  isOpen && 'rotate-180',
+                )}
+                width='12'
+                height='12'
+                viewBox='0 0 10 6'
+                fill='none'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  d='M1 1L5 5L9 1'
+                  stroke='currentColor'
+                  strokeWidth='1.5'
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                />
+              </svg>
+            </div>
           </div>
         </div>
 
         {isOpen && (
-          <div className='absolute left-0 top-full mt-2 w-full rounded-lg border border-gray-300 bg-white shadow-sm z-10'>
+          <div className='max-h-60 absolute left-0 top-full mt-2 w-full rounded-lg border border-gray-300 bg-white shadow-sm z-10 overflow-auto'>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
                 <div
