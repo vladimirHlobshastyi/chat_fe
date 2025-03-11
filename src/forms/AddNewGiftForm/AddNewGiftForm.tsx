@@ -11,7 +11,7 @@ import { H3, Span } from '@/components/Typography/Typography.component';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
 import { MOCK_GEO_OPTIONS } from '@/common/mock';
-import FileUploader from '@/components/FileUploader';
+import FileUploaderURL from '@/features/Files/FileUploaderURL';
 
 const AddNewGiftForm = ({
   errorMessage,
@@ -27,17 +27,14 @@ const AddNewGiftForm = ({
   } = useForm<AddNewGiftFormData>({
     defaultValues: {
       name: '',
-      geo: undefined,
+      restrictedCountries: undefined,
       price: undefined,
       image: undefined,
       isActive: false,
     },
   });
 
-  const { image } = watch();
-
-  const imageFile = image?.[0] instanceof File ? image[0] : null;
-  const imageFileUrl = imageFile ? URL.createObjectURL(imageFile) : '';
+  const image = watch('image');
 
   return (
     <form
@@ -59,14 +56,14 @@ const AddNewGiftForm = ({
         />
 
         <Controller
-          name='geo'
+          name='restrictedCountries'
           control={control}
           render={({ field }) => (
             <MultiSelect
               selectedValues={field.value}
               options={MOCK_GEO_OPTIONS}
               onChange={(value) => field.onChange(value)}
-              label='Geo'
+              label='Restricted countries'
             />
           )}
         />
@@ -78,19 +75,19 @@ const AddNewGiftForm = ({
           error={!!errors?.price}
           helperText={errors.price?.message}
           id='price'
-          {...register('price', validators.price)}
+          {...register('price', { ...validators.price, valueAsNumber: true })}
         />
 
         <div
           className={cn(
-            'flex justify-center items-center h-36 w-full rounded-lg bg-gray-200',
+            'flex justify-center items-center h-36 w-full rounded-lg bg-gray-100',
             errors.image ? 'border border-red-500' : '',
           )}
         >
-          {imageFileUrl ? (
+          {image ? (
             <img
-              className='w-full h-full object-contain'
-              src={imageFileUrl}
+              className='w-full h-full object-contain min-h-36 '
+              src={image}
               alt='Gift'
             />
           ) : (
@@ -100,7 +97,19 @@ const AddNewGiftForm = ({
           )}
         </div>
 
-        <FileUploader id='image' label='Image' {...register('image')} />
+        <Controller
+          name='image'
+          control={control}
+          rules={validators.image}
+          render={({ field, fieldState }) => (
+            <FileUploaderURL
+              errorMessage={fieldState.error?.message}
+              onUploadSuccess={(value) => {
+                field.onChange(value, { shouldDirty: true });
+              }}
+            />
+          )}
+        />
 
         <Controller
           name='isActive'

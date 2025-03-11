@@ -6,6 +6,7 @@ import { H3 } from '@/components/Typography/Typography.component';
 import Table from '@/components/Table';
 import TableActions from '@/components/Table/TableActions';
 import TableImage from '@/components/Table/TableImage';
+import { formatISODate } from '@/utils/date';
 
 const Gifts = () => {
   const {
@@ -19,6 +20,10 @@ const Gifts = () => {
     page,
     sort,
     selectedGift,
+    searchValue,
+    total,
+    totalPages,
+    setSearchValue,
     setPerPage,
     setSort,
     setPage,
@@ -46,18 +51,18 @@ const Gifts = () => {
             headers={GIFTS_TABLE_HEADER}
             newItemLabel='Add New Gift'
             onAddNewItem={() => setIsAddNewGiftModalOpen(true)}
-            onSearch={() => {}} //TODO will change
+            onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
             onSort={setSort}
             data={gifts?.map((gift) => {
               return {
+                image: <TableImage src={gift.image} alt={gift.name} />,
                 name: gift.name,
                 price: gift.price,
-                geo: 'US', //Will be change
-                image: <TableImage src={gift.image} alt={gift.name} />,
-                active: gift.isActive ? 'Yes' : 'No',
-                createdAt: gift.createdAt,
-                updatedAt: gift.updatedAt,
+                restricted_countries: gift.restrictedCountries,
+                is_active: gift.isActive ? 'Yes' : 'No',
+                created_at: formatISODate(gift.createdAt),
+                updated_at: formatISODate(gift.updatedAt),
                 action: (
                   <TableActions
                     onDelete={() => onDeleteGift(gift.id)}
@@ -66,14 +71,25 @@ const Gifts = () => {
                 ),
               };
             })}
+            searchValue={searchValue}
+            inputDelay={500}
             sortProps={sort}
             isLoading={isLoading}
-            totalPages={10} //TODO will change
-            totalItems={9} //TODO will change
+            totalPages={totalPages}
+            totalItems={total}
             currentPage={page}
           />
         </div>
       </div>
+
+      {isAddNewGiftModalOpen && (
+        <AddNewGiftModal
+          errorMessage={addNewGiftError}
+          isOpen={isAddNewGiftModalOpen}
+          onSubmit={onCreateGiftSubmit}
+          onClose={onAddNewGiftModalClose}
+        />
+      )}
 
       {editInitialProps && (
         <EditGiftModal
@@ -83,15 +99,6 @@ const Gifts = () => {
           isOpen={!!editInitialProps}
           onSubmit={onEditGiftSubmit}
           onClose={onEditGiftClose}
-        />
-      )}
-
-      {isAddNewGiftModalOpen && (
-        <AddNewGiftModal
-          errorMessage={addNewGiftError}
-          isOpen={isAddNewGiftModalOpen}
-          onSubmit={onCreateGiftSubmit}
-          onClose={onAddNewGiftModalClose}
         />
       )}
     </div>

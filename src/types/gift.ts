@@ -1,7 +1,7 @@
 export interface Gift {
   id: string;
   name: string;
-  geo?: string[];
+  restrictedCountries?: string[];
   price: number;
   image: string;
   isActive: boolean;

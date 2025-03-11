@@ -1,14 +1,9 @@
-import { Pagination, SortField } from '@/types/common';
+import { QueriesParams } from '@/types/queries';
+import { Pagination } from '@/types/common';
 import { User } from '@/types/user';
 
 export type GetUsersQueryType = {
-  Params: {
-    search?: string;
-    page?: number;
-    pageSize: number;
-    sortField: string;
-    sortOrder: SortField;
-  };
+  Params: QueriesParams;
   Data: { data: User[]; pagination: Pagination };
 };
 

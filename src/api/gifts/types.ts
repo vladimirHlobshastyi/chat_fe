@@ -1,22 +1,29 @@
+import { QueriesParams } from '@/types/queries';
+import { Pagination } from '@/types/common';
 import { Gift } from '@/types/gift';
 
 export type GetGiftsQueryType = {
-  Params: {
-    limit: number;
-    offset: number;
-  };
-  Data: Gift[];
+  Params: QueriesParams;
+  Data: { data: Gift[]; pagination: Pagination };
 };
 
+interface GiftParams {
+  name: string;
+  price?: number;
+  image?: string;
+  restrictedCountries?: string[];
+  isActive: boolean;
+}
+
 export type CreateGiftQueryType = {
-  Params: FormData;
+  Params: GiftParams;
   Data: Gift;
 };
 
 export type UpdateGiftQueryType = {
   Params: {
     id: string;
-    data: FormData;
+    data: GiftParams;
   };
   Data: Gift;
 };

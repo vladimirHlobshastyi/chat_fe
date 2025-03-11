@@ -27,10 +27,7 @@ const FileUploaderURL = ({
 
     uploadFile(formData, {
       onSuccess: (response) => {
-        onUploadSuccess(response.data.publicUrl);
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
-        }
+        onUploadSuccess(response.data.url);
       },
       onError: (error) => {
         setError(error.message);

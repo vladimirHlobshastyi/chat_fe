@@ -1,10 +1,15 @@
-export type UploadFileQueryType = {
+interface FileResponseData {
+  id: string;
+  name: string;
+  size: number;
+  type: string;
+  url: string;
+}
+
+export interface UploadFileQueryType {
   Params: FormData;
   Data: {
-    status: 'success';
-    data: {
-      path: 'string';
-      publicUrl: 'string';
-    };
+    status: string;
+    data: FileResponseData;
   };
-};
+}

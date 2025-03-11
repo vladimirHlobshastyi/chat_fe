@@ -1,15 +1,15 @@
 import { Controller, useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 import { EditGiftFormData, EditGiftFormProps } from './EditGiftForm.types';
 import { validators } from './EditGiftForm.data';
 import { cn } from '@/utils/styles';
-import { useEffect } from 'react';
 import { H3, Span } from '@/components/Typography/Typography.component';
 import InputField from '@/components/Inputs/InputField';
 import MultiSelect from '@/components/MultiSelect';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
 import { MOCK_GEO_OPTIONS } from '@/common/mock';
-import FileUploader from '@/components/FileUploader';
+import FileUploaderURL from '@/features/Files/FileUploaderURL';
 
 const EditGiftForm = ({
   errorMessage,
@@ -29,13 +29,12 @@ const EditGiftForm = ({
     defaultValues: initialProps,
   });
 
-  const { image } = watch();
-
-  const imageFile = image?.[0] instanceof File ? image[0] : null;
-  const imageFileUrl = imageFile ? URL.createObjectURL(imageFile) : giftUrl;
+  const image = watch('image');
 
   useEffect(() => {
-    resetField('image');
+    if (giftUrl) {
+      resetField('image', { defaultValue: giftUrl });
+    }
   }, [giftUrl]);
 
   return (
@@ -44,7 +43,7 @@ const EditGiftForm = ({
       className='overflow-hidden border border-gray-100 rounded-lg'
     >
       <div className='w-full border-b border-gray-100'>
-        <H3 className='px-6 py-5'>Add new Gift</H3>
+        <H3 className='px-6 py-5'>Edit {initialProps.name} Gift</H3>
       </div>
 
       <div className='w-full flex flex-col gap-y-6 px-6 pt-6 max-h-[60vh] overflow-auto'>
@@ -58,14 +57,14 @@ const EditGiftForm = ({
         />
 
         <Controller
-          name='geo'
+          name='restrictedCountries'
           control={control}
           render={({ field }) => (
             <MultiSelect
               selectedValues={field.value}
               options={MOCK_GEO_OPTIONS}
               onChange={(value) => field.onChange(value)}
-              label='Geo'
+              label='Restricted countries'
             />
           )}
         />
@@ -77,19 +76,19 @@ const EditGiftForm = ({
           error={!!errors?.price}
           helperText={errors.price?.message}
           id='price'
-          {...register('price', validators.price)}
+          {...register('price', { ...validators.price, valueAsNumber: true })}
         />
 
         <div
           className={cn(
-            'flex justify-center items-center h-36 w-full rounded-lg bg-gray-200',
+            'flex justify-center items-center h-36 w-full rounded-lg bg-gray-100',
             errors.image ? 'border border-red-500' : '',
           )}
         >
-          {imageFileUrl ? (
+          {image ? (
             <img
-              className='w-full h-full object-contain'
-              src={imageFileUrl}
+              className='w-full h-full min-h-36 object-contain'
+              src={image}
               alt='Gift'
             />
           ) : (
@@ -99,7 +98,18 @@ const EditGiftForm = ({
           )}
         </div>
 
-        <FileUploader id='image' label='Image' {...register('image')} />
+        <Controller
+          name='image'
+          control={control}
+          render={({ field }) => (
+            <FileUploaderURL
+              errorMessage={errors.image?.message}
+              onUploadSuccess={(value) => {
+                field.onChange(value, { shouldDirty: true });
+              }}
+            />
+          )}
+        />
 
         <Controller
           name='isActive'
@@ -113,7 +123,7 @@ const EditGiftForm = ({
           )}
         />
 
-        {errorMessage && <span className='errorText'>{errorMessage}</span>}
+        {errorMessage && <span className='error-text'>{errorMessage}</span>}
       </div>
 
       <div className='flex w-full justify-end gap-2 p-6'>
@@ -122,7 +132,7 @@ const EditGiftForm = ({
         </Button>
 
         <Button disabled={!isDirty} type='submit'>
-          Add Gift
+          Save Changes
         </Button>
       </div>
     </form>

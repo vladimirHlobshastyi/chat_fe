@@ -13,19 +13,36 @@ import { SortState } from '@/types/common';
 export const useGifts = () => {
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState<SortState>({
-    field: 'createdAt',
+    field: 'created_at',
     direction: 'desc',
   });
+  const [searchValue, setSearchValue] = useState('');
   const [perPage, setPerPage] = useState(10);
   const [isAddNewGiftModalOpen, setIsAddNewGiftModalOpen] = useState(false);
   const [selectedGift, setSelectedGift] = useState<Gift | undefined>();
   const [addNewGiftError, setAddNewGiftError] = useState<string>('');
   const [editGiftError, setEditGiftError] = useState<string>('');
 
+  const {
+    data: gifts,
+    isLoading,
+    error,
+    isFetching,
+  } = useGiftsQuery({
+    page: page,
+    pageSize: perPage,
+    search: searchValue,
+    sortField: sort.field,
+    sortOrder: sort.direction,
+  });
+
+  const { total, totalPages } = gifts?.pagination || {};
+
   const handleEditGift = (currentGift: Gift): EditGiftFormData => {
     return {
       name: currentGift.name,
-      geo: [{ label: 'UA', value: 'UA' }], //TODO will change
+      restrictedCountries: [], //TODO will change
+      image: currentGift.image,
       price: currentGift.price,
       isActive: currentGift.isActive,
     };
@@ -38,16 +55,6 @@ export const useGifts = () => {
     setEditGiftError('');
   };
 
-  const {
-    data: gifts,
-    isLoading,
-    error,
-    isFetching,
-  } = useGiftsQuery({
-    limit: perPage,
-    offset: (page - 1) * perPage,
-  });
-
   const createGiftMutation = useCreateGiftMutation();
   const editGiftMutation = useUpdateGiftMutation();
   const deleteGiftMutation = useDeleteGiftMutation();
@@ -58,42 +65,30 @@ export const useGifts = () => {
   };
 
   const onCreateGiftSubmit = (createData: AddNewGiftFormData) => {
-    const formData = new FormData();
-    const { name, image, isActive, price } = createData;
-    formData.append('name', name);
-    if (image?.[0] instanceof File) {
-      formData.append('image', image[0]);
-    }
-    formData.append('isActive', isActive.toString());
-    if (price) {
-      formData.append('price', price.toString());
-    }
-    createGiftMutation.mutate(formData, {
-      onSuccess: () => {
-        console.log('Gift created successfully');
+    createGiftMutation.mutate(
+      { ...createData, restrictedCountries: [] },
+      {
+        onSuccess: () => {
+          onAddNewGiftModalClose();
+          console.log('Gift created successfully');
+        },
+        onError: () => {
+          setAddNewGiftError('Can`t create a new Gift');
+        },
       },
-      onError: () => {
-        setAddNewGiftError('Can`t create a new Gift');
-      },
-    });
+    );
   };
 
   const onEditGiftSubmit = (createData: EditGiftFormData) => {
-    const formData = new FormData();
-    const { name, image, isActive, price } = createData;
-    formData.append('name', name);
-    if (image?.[0] instanceof File) {
-      formData.append('image', image[0]);
-    }
-    formData.append('isActive', isActive.toString());
-    if (price) {
-      formData.append('price', price.toString());
-    }
     if (selectedGift?.id)
       editGiftMutation.mutate(
-        { id: selectedGift?.id, data: formData },
+        {
+          id: selectedGift?.id,
+          data: { ...createData, restrictedCountries: [] },
+        },
         {
           onSuccess: () => {
+            onEditGiftClose();
             console.log('Gift updated successfully');
           },
           onError: () => {
@@ -116,12 +111,17 @@ export const useGifts = () => {
     addNewGiftError,
     editGiftError,
     editInitialProps,
-    gifts: gifts || [],
+    gifts: gifts?.data || [],
     isLoading: isLoading || isFetching,
     error,
     page,
     selectedGift,
     sort,
+    perPage,
+    searchValue,
+    total,
+    totalPages,
+    setSearchValue,
     setPerPage,
     setSort,
     setPage,

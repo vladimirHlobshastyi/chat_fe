@@ -6,10 +6,13 @@ export const validators = {
       message: 'Name must be at least 4 characters',
     },
   },
-  geo: {
+  restrictedCountries: {
     required: 'Geo is required',
   },
   price: {
     required: 'Price is required',
+  },
+  image: {
+    required: 'Image is required',
   },
 };

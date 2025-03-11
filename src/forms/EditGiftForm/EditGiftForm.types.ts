@@ -2,9 +2,9 @@ import { Option } from '@/types/common';
 
 export interface EditGiftFormData {
   name: string;
-  geo?: Option[];
+  restrictedCountries?: Option[];
   price?: number;
-  image?: File;
+  image?: string;
   isActive: boolean;
 }
 
