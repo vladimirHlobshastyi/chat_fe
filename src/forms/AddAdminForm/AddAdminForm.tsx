@@ -4,10 +4,12 @@ import { AddAdminFormData, AddAdminFormProps } from './AddAdminForm.types';
 import { validators } from './AddAdminForm.data';
 import Checkbox from '@/components/Checkbox';
 import InputField from '@/components/Inputs/InputField';
-import { H3 } from '@/components/Typography/Typography.component';
+import { H3, Span } from '@/components/Typography/Typography.component';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
 import { MOCK_GEO_OPTIONS } from '@/common/mock';
+import FileUploaderURL from '@/features/Files/FileUploaderURL';
+import { cn } from '@/utils/styles';
 
 const AddAdminForm = ({
   onClose,
@@ -18,6 +20,7 @@ const AddAdminForm = ({
   const {
     register,
     handleSubmit,
+    watch,
     control,
     formState: { isDirty, errors },
   } = useForm<AddAdminFormData>({
@@ -26,9 +29,12 @@ const AddAdminForm = ({
       email: '',
       password: '',
       geo: 'ua',
+      avatar: '',
       //isVerified: false,
     },
   });
+
+  const avatar = watch('avatar');
 
   return (
     <form
@@ -82,8 +88,6 @@ const AddAdminForm = ({
           {...register('name', validators.name)}
         />
 
-        {/* TODO will Add avatar */}
-
         <Controller
           name='geo'
           control={control}
@@ -96,6 +100,39 @@ const AddAdminForm = ({
             />
           )}
         />
+
+        <div
+          className={cn(
+            'flex justify-center items-center h-36 w-full rounded-lg bg-gray-100',
+            errors.avatar ? 'border border-red-500' : '',
+          )}
+        >
+          {avatar ? (
+            <img
+              className='w-full h-full min-h-36 object-contain'
+              src={avatar}
+              alt='Gift'
+            />
+          ) : (
+            <Span className='text-gray-500 min-h-36 flex justify-center items-center'>
+              Upload Admin avatar
+            </Span>
+          )}
+        </div>
+
+        <Controller
+          name='avatar'
+          control={control}
+          render={({ field }) => (
+            <FileUploaderURL
+              errorMessage={errors.avatar?.message}
+              onUploadSuccess={(value) => {
+                field.onChange(value, { shouldDirty: true });
+              }}
+            />
+          )}
+        />
+
         <Controller
           name='isVerified'
           control={control}

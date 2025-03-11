@@ -6,6 +6,9 @@ import { H3 } from '@/components/Typography/Typography.component';
 import Table from '@/components/Table';
 import TableActions from '@/components/Table/TableActions';
 import { formatISODate } from '@/utils/date';
+import ErrorPage from '@/components/ErrorPage';
+import Avatar from '@/components/Avatar';
+import { getInitials } from '@/utils/typography';
 
 export const Admins = () => {
   const {
@@ -22,7 +25,7 @@ export const Admins = () => {
     totalPages,
     searchValue,
     setSearchValue,
-    setSort,
+    onSort,
     setPerPage,
     onDeleteAdmin,
     setPage,
@@ -34,7 +37,7 @@ export const Admins = () => {
     onAddNewAdminClose,
   } = useAdmins();
 
-  if (error) return <div>Error loading admins</div>;
+  if (error) return <ErrorPage label='Error loading admins' />;
 
   return (
     <div className='w-full h-full p-6 bg-gray-50'>
@@ -51,12 +54,18 @@ export const Admins = () => {
             onAddNewItem={() => setIsAddAdminModalOpen(true)}
             onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
-            onSort={setSort}
+            onSort={onSort}
             searchValue={searchValue}
             inputDelay={500}
             data={admins.map((admin) => {
               return {
-                role: admin.role,
+                avatar: (
+                  <Avatar
+                    src={admin.avatar}
+                    alt={admin.name}
+                    initials={getInitials(admin.name)}
+                  />
+                ),
                 name: admin.name,
                 email: admin.email,
                 is_verified: admin.isVerified ? 'Yes' : 'No',

@@ -14,6 +14,7 @@ export const getUsers = async (params: GetUsersQueryType['Params']) => {
       pageSize: params.pageSize,
       sortField: params.sortField,
       sortOrder: params.sortOrder,
+      role: params.role,
     },
   });
   return response.data;

@@ -37,6 +37,11 @@ export const useUsers = () => {
   const updateUser = useUpdateUserMutation();
   const deleteUser = useDeleteUserMutation();
 
+  const onSort = (sortValue: SortState) => {
+    setPage(1);
+    setSort(sortValue);
+  };
+
   const onDeleteUser = (userId: string) => {
     deleteUser.mutate(userId, {
       onError: () => {
@@ -60,6 +65,7 @@ export const useUsers = () => {
       onSuccess: () => {
         setAddNewUserError(undefined);
         setIsAddUserModalOpen(false);
+        onAddNewUserClose();
       },
       onError: () => setAddNewUserError('Сan`t create a user, try again later'),
     });
@@ -73,6 +79,7 @@ export const useUsers = () => {
           onSuccess: () => {
             setEditUserError(undefined);
             setSelectedUser(undefined);
+            onEditUserClose();
           },
           onError: () =>
             setEditUserError('Сan`t update the user, try again later'),
@@ -95,7 +102,7 @@ export const useUsers = () => {
     totalPages,
     searchValue,
     setSearchValue,
-    setSort,
+    onSort,
     setPerPage,
     onDeleteUser,
     setPage,

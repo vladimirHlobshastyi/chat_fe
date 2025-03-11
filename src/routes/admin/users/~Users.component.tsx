@@ -6,6 +6,9 @@ import Table from '@/components/Table/Table.component';
 import TableActions from '@/components/Table/TableActions';
 import { H3 } from '@/components/Typography/Typography.component';
 import { formatISODate } from '@/utils/date';
+import ErrorPage from '@/components/ErrorPage';
+import Avatar from '@/components/Avatar';
+import { getInitials } from '@/utils/typography';
 
 export const Users = () => {
   const {
@@ -22,7 +25,7 @@ export const Users = () => {
     totalPages,
     searchValue,
     setSearchValue,
-    setSort,
+    onSort,
     setPerPage,
     onDeleteUser,
     setPage,
@@ -34,7 +37,7 @@ export const Users = () => {
     onAddNewUserClose,
   } = useUsers();
 
-  if (error) return <div>Error loading users</div>;
+  if (error) return <ErrorPage label='Error loading users' />;
 
   return (
     <div className='w-full h-full p-6 bg-gray-50'>
@@ -51,13 +54,20 @@ export const Users = () => {
             onAddNewItem={() => setIsAddUserModalOpen(true)}
             onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
-            onSort={setSort}
+            onSort={onSort}
             inputDelay={500}
             searchValue={searchValue}
             data={users.map((user) => {
               return {
-                role: user.role,
+                avatar: (
+                  <Avatar
+                    src={user.avatar}
+                    alt={user.name}
+                    initials={getInitials(user.name)}
+                  />
+                ),
                 name: user.name,
+                role: user.role,
                 geo: user.geo,
                 is_verified: user.isVerified ? 'Yes' : 'No',
                 telegram_id: user.telegramId,

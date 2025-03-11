@@ -1,7 +1,7 @@
 import { Controller, useForm } from 'react-hook-form';
 import { AddUserFormData, AddUserFormProps } from './AddUserForm.types';
 import { validators } from './AddUserForm.data';
-import { H3 } from '@/components/Typography/Typography.component';
+import { H3, Span } from '@/components/Typography/Typography.component';
 import InputField from '@/components/Inputs/InputField';
 import Select from '@/components/Select';
 import Checkbox from '@/components/Checkbox';
@@ -10,6 +10,8 @@ import { MOCK_GEO_OPTIONS } from '@/common/mock';
 import TextArea from '@/components/Inputs/TextArea';
 import { USER_ROLE_OPTIONS } from '@/common/options';
 import { useState } from 'react';
+import FileUploaderURL from '@/features/Files/FileUploaderURL';
+import { cn } from '@/utils/styles';
 
 const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +19,7 @@ const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
   const {
     register,
     handleSubmit,
+    watch,
     control,
     formState: { isDirty, errors },
   } = useForm<AddUserFormData>({
@@ -27,11 +30,13 @@ const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
       name: '',
       role: 'model',
       geo: '',
+      isBanned: false,
       //isVerified: false,
       about: '',
-      isBanned: false,
     },
   });
+
+  const avatar = watch('avatar');
 
   return (
     <form
@@ -97,7 +102,6 @@ const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
             />
           )}
         />
-        {/* TODO will Add avatar */}
 
         <Controller
           name='geo'
@@ -108,6 +112,38 @@ const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
               options={MOCK_GEO_OPTIONS} //TODO will change
               onChange={(value) => field.onChange(value)}
               label='Geo'
+            />
+          )}
+        />
+
+        <div
+          className={cn(
+            'flex justify-center items-center h-36 w-full rounded-lg bg-gray-100',
+            errors.avatar ? 'border border-red-500' : '',
+          )}
+        >
+          {avatar ? (
+            <img
+              className='w-full h-full min-h-36 object-contain'
+              src={avatar}
+              alt='Gift'
+            />
+          ) : (
+            <Span className='text-gray-500 min-h-36 flex justify-center items-center'>
+              Upload User avatar
+            </Span>
+          )}
+        </div>
+
+        <Controller
+          name='avatar'
+          control={control}
+          render={({ field }) => (
+            <FileUploaderURL
+              errorMessage={errors.avatar?.message}
+              onUploadSuccess={(value) => {
+                field.onChange(value, { shouldDirty: true });
+              }}
             />
           )}
         />

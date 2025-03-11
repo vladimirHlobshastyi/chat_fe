@@ -7,6 +7,7 @@ import Table from '@/components/Table';
 import TableActions from '@/components/Table/TableActions';
 import TableImage from '@/components/Table/TableImage';
 import { formatISODate } from '@/utils/date';
+import ErrorPage from '@/components/ErrorPage';
 
 const Gifts = () => {
   const {
@@ -19,13 +20,12 @@ const Gifts = () => {
     error,
     page,
     sort,
-    selectedGift,
     searchValue,
     total,
     totalPages,
     setSearchValue,
     setPerPage,
-    setSort,
+    onSort,
     setPage,
     onEditGiftClose,
     onDeleteGift,
@@ -36,7 +36,7 @@ const Gifts = () => {
     setSelectedGift,
   } = useGifts();
 
-  if (error) return <div>Error loading gifts</div>;
+  if (error) return <ErrorPage label='Error loading gifts' />;
 
   return (
     <div className='w-full h-full p-6 bg-gray-50'>
@@ -53,7 +53,7 @@ const Gifts = () => {
             onAddNewItem={() => setIsAddNewGiftModalOpen(true)}
             onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
-            onSort={setSort}
+            onSort={onSort}
             data={gifts?.map((gift) => {
               return {
                 image: <TableImage src={gift.image} alt={gift.name} />,
@@ -93,7 +93,6 @@ const Gifts = () => {
 
       {editInitialProps && (
         <EditGiftModal
-          giftUrl={selectedGift?.image}
           initialProps={editInitialProps}
           errorMessage={editGiftError}
           isOpen={!!editInitialProps}

@@ -1,5 +1,4 @@
 import { Controller, useForm } from 'react-hook-form';
-import { useEffect } from 'react';
 import { EditGiftFormData, EditGiftFormProps } from './EditGiftForm.types';
 import { validators } from './EditGiftForm.data';
 import { cn } from '@/utils/styles';
@@ -14,7 +13,6 @@ import FileUploaderURL from '@/features/Files/FileUploaderURL';
 const EditGiftForm = ({
   errorMessage,
   initialProps,
-  giftUrl,
   onClose,
   onSubmit,
 }: EditGiftFormProps) => {
@@ -22,7 +20,6 @@ const EditGiftForm = ({
     register,
     handleSubmit,
     watch,
-    resetField,
     control,
     formState: { isDirty, errors },
   } = useForm<EditGiftFormData>({
@@ -30,12 +27,6 @@ const EditGiftForm = ({
   });
 
   const image = watch('image');
-
-  useEffect(() => {
-    if (giftUrl) {
-      resetField('image', { defaultValue: giftUrl });
-    }
-  }, [giftUrl]);
 
   return (
     <form

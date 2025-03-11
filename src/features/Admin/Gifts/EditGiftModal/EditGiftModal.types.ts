@@ -3,7 +3,6 @@ export interface EditGiftModalProps {
   isOpen: boolean;
   errorMessage?: string;
   initialProps: EditGiftFormData;
-  giftUrl?: string;
   onClose: () => void;
   onSubmit: (data: EditGiftFormData) => void;
 }

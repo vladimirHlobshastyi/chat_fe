@@ -2,15 +2,20 @@ import { UsersTableHeader } from './~Users.types';
 
 export const USERS_TABLE_HEADER: UsersTableHeader[] = [
   {
-    key: 'role',
-    title: 'Role',
-    width: 'min-w-20',
-    sortable: true,
+    key: 'avatar',
+    title: 'Avatar',
+    width: 'min-w-33',
   },
   {
     key: 'name',
     title: 'Name',
     width: 'min-w-33',
+    sortable: true,
+  },
+  {
+    key: 'role',
+    title: 'Role',
+    width: 'min-w-20',
     sortable: true,
   },
   {

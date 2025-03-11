@@ -38,6 +38,11 @@ export const useGifts = () => {
 
   const { total, totalPages } = gifts?.pagination || {};
 
+  const onSort = (sortValue: SortState) => {
+    setPage(1);
+    setSort(sortValue);
+  };
+
   const handleEditGift = (currentGift: Gift): EditGiftFormData => {
     return {
       name: currentGift.name,
@@ -115,7 +120,6 @@ export const useGifts = () => {
     isLoading: isLoading || isFetching,
     error,
     page,
-    selectedGift,
     sort,
     perPage,
     searchValue,
@@ -123,7 +127,7 @@ export const useGifts = () => {
     totalPages,
     setSearchValue,
     setPerPage,
-    setSort,
+    onSort,
     setPage,
     onEditGiftClose,
     onDeleteGift,

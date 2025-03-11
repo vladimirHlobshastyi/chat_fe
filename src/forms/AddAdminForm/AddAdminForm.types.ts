@@ -3,6 +3,7 @@ export interface AddAdminFormData {
   email: string;
   password: string;
   isVerified: boolean;
+  avatar?: string;
   geo: string;
 }
 

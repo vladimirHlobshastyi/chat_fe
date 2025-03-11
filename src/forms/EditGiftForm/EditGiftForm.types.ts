@@ -9,7 +9,6 @@ export interface EditGiftFormData {
 }
 
 export interface EditGiftFormProps {
-  giftUrl?: string;
   errorMessage?: string;
   initialProps: EditGiftFormData;
   onClose: () => void;

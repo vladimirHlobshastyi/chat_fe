@@ -5,7 +5,7 @@ export type EditUserFormData = UpdateUserParams;
 
 export interface EditUserFormProps {
   currentUser: User;
-  onSubmit: (data: EditUserFormData) => void;
   errorMessage?: string;
+  onSubmit: (data: EditUserFormData) => void;
   onClose: () => void;
 }

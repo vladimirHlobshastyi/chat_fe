@@ -3,8 +3,10 @@ import { EditAdminFormData, EditAdminFormProps } from './EditAdminForm.types';
 import { validators } from './EditAdminForm.data';
 import InputField from '@/components/Inputs/InputField';
 import Checkbox from '@/components/Checkbox';
-import { H3 } from '@/components/Typography/Typography.component';
+import { H3, Span } from '@/components/Typography/Typography.component';
 import Button from '@/components/Button';
+import FileUploaderURL from '@/features/Files/FileUploaderURL';
+import { cn } from '@/utils/styles';
 
 const EditAdminForm = ({
   currentAdmin,
@@ -15,16 +17,19 @@ const EditAdminForm = ({
   const {
     register,
     handleSubmit,
+    watch,
     control,
     formState: { isDirty, errors },
   } = useForm<EditAdminFormData>({
     defaultValues: {
       name: currentAdmin.name,
-      email: currentAdmin.email,
+      avatar: currentAdmin.avatar,
       //isVerified: currentAdmin.isVerified,
       isBanned: currentAdmin.isBanned,
     },
   });
+
+  const avatar = watch('avatar');
 
   return (
     <form
@@ -45,14 +50,36 @@ const EditAdminForm = ({
           {...register('name', validators.name)}
         />
 
-        <InputField
-          placeholder='Enter email...'
-          type='email'
-          label='Email'
-          error={!!errors?.email}
-          helperText={errors.email?.message}
-          id='email'
-          {...register('email', validators.email)}
+        <div
+          className={cn(
+            'flex justify-center items-center h-36 w-full rounded-lg bg-gray-100',
+            errors.avatar ? 'border border-red-500' : '',
+          )}
+        >
+          {avatar ? (
+            <img
+              className='w-full h-full min-h-36 object-contain'
+              src={avatar}
+              alt='Gift'
+            />
+          ) : (
+            <Span className='text-gray-500 min-h-36 flex justify-center items-center'>
+              Upload Admin avatar
+            </Span>
+          )}
+        </div>
+
+        <Controller
+          name='avatar'
+          control={control}
+          render={({ field }) => (
+            <FileUploaderURL
+              errorMessage={errors.avatar?.message}
+              onUploadSuccess={(value) => {
+                field.onChange(value, { shouldDirty: true });
+              }}
+            />
+          )}
         />
 
         <div className='w-full flex gap-4'>

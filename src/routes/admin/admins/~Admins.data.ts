@@ -2,15 +2,15 @@ import { AdminsTableHeader } from './~Admins.types';
 
 export const ADMINS_TABLE_HEADER: AdminsTableHeader[] = [
   {
-    key: 'role',
-    title: 'Role',
-    width: 'min-w-20',
+    key: 'avatar',
+    title: 'Avatar',
+    width: 'min-w-33',
   },
   {
     key: 'name',
     title: 'Name',
     width: 'min-w-33',
-    //sortable: true,
+    sortable: true,
   },
   {
     key: 'email',
@@ -26,19 +26,19 @@ export const ADMINS_TABLE_HEADER: AdminsTableHeader[] = [
     key: 'is_banned',
     title: 'Banned',
     width: 'min-w-20',
-    //sortable: true,
+    sortable: true,
   },
   {
     key: 'created_at',
     title: 'Created At',
     width: 'min-w-14',
-    //sortable: true,
+    sortable: true,
   },
   {
     key: 'updated_at',
     title: 'Updated At',
     width: 'min-w-14',
-    //sortable: true,
+    sortable: true,
   },
   {
     key: 'action',
