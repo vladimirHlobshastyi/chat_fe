@@ -1,6 +1,7 @@
 import { AvatarProps } from './Avatar.type';
 import { cn } from '@/utils/styles';
 import { Span } from '../Typography/Typography.component';
+import { useState } from 'react';
 
 const Avatar = ({
   src,
@@ -9,21 +10,27 @@ const Avatar = ({
   className,
   ...rest
 }: AvatarProps) => {
+  const [isError, setIsError] = useState(false);
+
   return (
-    <div
+    <span
       {...rest}
       className={cn(
-        'relative h-14 w-full max-w-14 rounded-full bg-gray-200',
-        initials && 'inline-flex items-center justify-center',
+        'relative h-10 w-10 rounded-full bg-gray-150 flex items-center justify-center',
         className,
       )}
     >
-      {src ? (
-        <img src={src} alt={alt} className='overflow-hidden rounded-full' />
+      {!isError && src ? (
+        <img
+          src={src}
+          alt={alt}
+          className='h-full w-full rounded-full object-cover'
+          onError={() => setIsError(true)}
+        />
       ) : (
-        <Span className='text-2xl'>{initials}</Span>
+        <Span className='text-2xl text-text-secondary'>{initials}</Span>
       )}
-    </div>
+    </span>
   );
 };
 

@@ -136,7 +136,7 @@ const Table = ({
           {isLoading && <Loader />}
 
           <table className='w-full text-sm text-left text-gray-800 h-full'>
-            <thead className='border-t border-gray-200'>
+            <thead className='border-y border-gray-200'>
               <tr>
                 {headers.map((header, index) => {
                   const isCurrentSortField = sort?.field === header.key;
