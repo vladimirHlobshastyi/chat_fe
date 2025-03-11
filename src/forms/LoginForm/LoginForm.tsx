@@ -63,7 +63,7 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
           </span>
         </div>
 
-        {errorMessage && <span className='errorText'>{errorMessage}</span>}
+        {errorMessage && <span className='error-text'>{errorMessage}</span>}
 
         <Button fullScreen disabled={!isDirty} type='submit'>
           Submit

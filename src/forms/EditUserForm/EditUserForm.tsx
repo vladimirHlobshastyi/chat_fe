@@ -122,7 +122,7 @@ const EditUserForm = ({
             )}
           />
         </div>
-        {errorMessage && <span className='errorText'>{errorMessage}</span>}
+        {errorMessage && <span className='error-text'>{errorMessage}</span>}
       </div>
 
       <div className='flex w-full justify-end gap-2 p-6'>
