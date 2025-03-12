@@ -27,7 +27,7 @@ export type CreateUserQueryType = {
 
 export interface UpdateUserParams {
   role: string;
-  clickId: string;
+  clickId?: string;
   name: string;
   geo: string;
   about: string;

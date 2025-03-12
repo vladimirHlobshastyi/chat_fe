@@ -3,7 +3,7 @@ import { getMyProfile } from './requests';
 
 export const useMyProfileQuery = () => {
   return useQuery({
-    queryKey: ['me'],
+    queryKey: ['myProfile'],
     queryFn: () => getMyProfile(),
     placeholderData: (prev) => prev,
   });
