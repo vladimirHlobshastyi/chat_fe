@@ -8,6 +8,7 @@ import TableActions from '@/components/Table/TableActions';
 import TableImage from '@/components/Table/TableImage';
 import { formatISODate } from '@/utils/date';
 import ErrorPage from '@/components/ErrorPage';
+import { MOCK_GEO_OPTIONS } from '@/common/mock';
 
 const Gifts = () => {
   const {
@@ -59,14 +60,19 @@ const Gifts = () => {
                 image: <TableImage src={gift.image} alt={gift.name} />,
                 name: gift.name,
                 price: gift.price,
-                restricted_countries: gift.restrictedCountries,
+                restricted_countries: 'MOCK country', //TODO will change
                 is_active: gift.isActive ? 'Yes' : 'No',
                 created_at: formatISODate(gift.createdAt),
                 updated_at: formatISODate(gift.updatedAt),
                 action: (
                   <TableActions
                     onDelete={() => onDeleteGift(gift.id)}
-                    onEdit={() => setSelectedGift(gift)}
+                    onEdit={() =>
+                      setSelectedGift({
+                        ...gift,
+                        restrictedCountries: MOCK_GEO_OPTIONS, //TODO will change
+                      })
+                    }
                   />
                 ),
               };

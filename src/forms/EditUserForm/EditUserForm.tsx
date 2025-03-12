@@ -6,9 +6,8 @@ import InputField from '@/components/Inputs/InputField';
 import Select from '@/components/Select';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
-import { MOCK_GEO_OPTIONS } from '@/common/mock';
 import TextArea from '@/components/Inputs/TextArea';
-import { USER_ROLE_OPTIONS } from '@/common/options';
+import { COUNTRIES_OPTIONS, USER_ROLE_OPTIONS } from '@/common/options';
 import { cn } from '@/utils/styles';
 import FileUploaderURL from '@/features/Files/FileUploaderURL';
 
@@ -86,7 +85,7 @@ const EditUserForm = ({
           render={({ field }) => (
             <Select
               selectedValue={field.value}
-              options={MOCK_GEO_OPTIONS} //TODO will change
+              options={COUNTRIES_OPTIONS}
               onChange={(value) => field.onChange(value)}
               label='Geo'
             />

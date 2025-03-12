@@ -7,8 +7,9 @@ import InputField from '@/components/Inputs/InputField';
 import MultiSelect from '@/components/MultiSelect';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
-import { MOCK_GEO_OPTIONS } from '@/common/mock';
 import FileUploaderURL from '@/features/Files/FileUploaderURL';
+import { COUNTRIES_OPTIONS } from '@/common/options';
+import { getCountriesByCodes } from '@/utils/common';
 
 const EditGiftForm = ({
   errorMessage,
@@ -26,7 +27,7 @@ const EditGiftForm = ({
     defaultValues: initialProps,
   });
 
-  const image = watch('image');
+  const { image } = watch();
 
   return (
     <form
@@ -52,9 +53,11 @@ const EditGiftForm = ({
           control={control}
           render={({ field }) => (
             <MultiSelect
-              selectedValues={field.value}
-              options={MOCK_GEO_OPTIONS}
-              onChange={(value) => field.onChange(value)}
+              selectedValues={getCountriesByCodes(field.value)}
+              options={COUNTRIES_OPTIONS}
+              onChange={(value) =>
+                field.onChange(value.map((item) => item.value))
+              }
               label='Restricted countries'
             />
           )}

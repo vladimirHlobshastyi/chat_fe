@@ -1,8 +1,6 @@
-import { Option } from '@/types/common';
-
 export interface AddNewGiftFormData {
   name: string;
-  restrictedCountries?: Option[];
+  restrictedCountries?: string[];
   price?: number;
   image?: string;
   isActive: boolean;

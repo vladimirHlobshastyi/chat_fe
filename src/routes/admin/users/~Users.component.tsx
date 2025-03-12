@@ -9,6 +9,7 @@ import { formatISODate } from '@/utils/date';
 import ErrorPage from '@/components/ErrorPage';
 import Avatar from '@/components/Avatar';
 import { getInitials } from '@/utils/typography';
+import { getCountryValue } from '@/utils/common';
 
 export const Users = () => {
   const {
@@ -68,7 +69,7 @@ export const Users = () => {
                 ),
                 name: user.name,
                 role: user.role,
-                geo: user.geo,
+                geo: getCountryValue(user.geo),
                 is_verified: user.isVerified ? 'Yes' : 'No',
                 telegram_id: user.telegramId,
                 is_banned: user.isBanned ? 'Yes' : 'No',

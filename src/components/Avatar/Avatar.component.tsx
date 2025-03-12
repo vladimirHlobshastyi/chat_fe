@@ -6,17 +6,20 @@ import { useState } from 'react';
 const Avatar = ({
   src,
   alt = 'User',
+  size = 'default',
   initials,
   className,
   ...rest
 }: AvatarProps) => {
   const [isError, setIsError] = useState(false);
+  const isDefaultSize = size === 'default';
 
   return (
     <span
       {...rest}
       className={cn(
-        'relative h-10 w-10 rounded-full bg-gray-150 flex items-center justify-center',
+        'relative rounded-full bg-gray-150 flex items-center justify-center',
+        isDefaultSize ? 'h-10 w-10' : 'h-20 w-20',
         className,
       )}
     >
@@ -28,7 +31,14 @@ const Avatar = ({
           onError={() => setIsError(true)}
         />
       ) : (
-        <Span className='text-2xl text-text-secondary'>{initials}</Span>
+        <Span
+          className={cn(
+            'text-text-secondary',
+            isDefaultSize ? 'text-2xl' : 'text-4xl',
+          )}
+        >
+          {initials}
+        </Span>
       )}
     </span>
   );

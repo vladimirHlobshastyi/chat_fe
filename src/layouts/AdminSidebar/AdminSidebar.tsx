@@ -8,8 +8,8 @@ const AdminSidebar = () => {
 
   return (
     <div className='min-w-60 h-full flex flex-col border-r border-gray-200'>
-      <div className='pt-8 pb-7 px-5 border-b border-gray-200'>
-        <H1>Admin Menu</H1>
+      <div className='py-6 px-4'>
+        <H1 weight='bold'>Admin Menu</H1>
       </div>
       <nav className='w-full h-full flex flex-col gap-4 p-5 overflow-auto'>
         {MENU_ITEMS.map(({ title, path }) => {

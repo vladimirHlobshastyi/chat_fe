@@ -1,23 +1,9 @@
-export const MOCK_GEO_OPTIONS = [
-  { value: 'ua', label: 'UA' },
-  { value: 'fr', label: 'FR' },
-  { value: 'us', label: 'US' },
-  { value: 'ca', label: 'CA' },
-  { value: 'gb', label: 'GB' },
-  { value: 'de', label: 'DE' },
-  { value: 'it', label: 'IT' },
-  { value: 'es', label: 'ES' },
-  { value: 'cn', label: 'CN' },
-  { value: 'jp', label: 'JP' },
-  { value: 'in', label: 'IN' },
-  { value: 'br', label: 'BR' },
-  { value: 'au', label: 'AU' },
-  { value: 'mx', label: 'MX' },
-  { value: 'kr', label: 'KR' },
-  { value: 'ar', label: 'AR' },
-  { value: 'nl', label: 'NL' },
-  { value: 'ch', label: 'CH' },
-  { value: 'se', label: 'SE' },
-  { value: 'be', label: 'BE' },
-  { value: 'no', label: 'NO' },
-];
+export const MOCK_GEO_OPTIONS = ['UA', 'US'];
+
+export const MOCK_PROFILE_DATA = {
+  id: '123e4567-e89b-12d3-a456-426614174000',
+  email: 'user@example.com',
+  name: 'John',
+  //isVerified: boolean;
+  isBanned: false,
+};

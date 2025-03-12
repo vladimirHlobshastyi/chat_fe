@@ -135,7 +135,7 @@ const Table = ({
         <div className='min-w-[1102px] h-full'>
           {isLoading && <Loader />}
 
-          <table className='w-full text-sm text-left text-gray-800 h-full'>
+          <table className='w-full overflow-hidden text-sm text-left text-gray-800 h-full'>
             <thead className='border-y border-gray-200'>
               <tr>
                 {headers.map((header, index) => {
@@ -190,7 +190,7 @@ const Table = ({
               </tr>
             </thead>
 
-            <tbody className='w-full flex-grow'>
+            <tbody className='w-full  h-full overflow-auto flex-grow'>
               {data.length > 0 ? (
                 data.map((row, rowIndex) => (
                   <tr key={rowIndex} className='border-t border-gray-100'>

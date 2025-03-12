@@ -46,7 +46,7 @@ export const useGifts = () => {
   const handleEditGift = (currentGift: Gift): EditGiftFormData => {
     return {
       name: currentGift.name,
-      restrictedCountries: [], //TODO will change
+      restrictedCountries: currentGift.restrictedCountries,
       image: currentGift.image,
       price: currentGift.price,
       isActive: currentGift.isActive,
@@ -71,7 +71,7 @@ export const useGifts = () => {
 
   const onCreateGiftSubmit = (createData: AddNewGiftFormData) => {
     createGiftMutation.mutate(
-      { ...createData, restrictedCountries: [] },
+      { ...createData },
       {
         onSuccess: () => {
           onAddNewGiftModalClose();
@@ -89,7 +89,7 @@ export const useGifts = () => {
       editGiftMutation.mutate(
         {
           id: selectedGift?.id,
-          data: { ...createData, restrictedCountries: [] },
+          data: createData,
         },
         {
           onSuccess: () => {

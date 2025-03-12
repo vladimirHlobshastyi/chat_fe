@@ -7,9 +7,9 @@ import InputField from '@/components/Inputs/InputField';
 import { H3, Span } from '@/components/Typography/Typography.component';
 import Button from '@/components/Button';
 import Select from '@/components/Select';
-import { MOCK_GEO_OPTIONS } from '@/common/mock';
 import FileUploaderURL from '@/features/Files/FileUploaderURL';
 import { cn } from '@/utils/styles';
+import { COUNTRIES_OPTIONS } from '@/common/options';
 
 const AddAdminForm = ({
   onClose,
@@ -94,7 +94,7 @@ const AddAdminForm = ({
           render={({ field }) => (
             <Select
               selectedValue={field.value}
-              options={MOCK_GEO_OPTIONS} //TODO will change
+              options={COUNTRIES_OPTIONS}
               onChange={(value) => field.onChange(value)}
               label='Geo'
             />

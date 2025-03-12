@@ -10,8 +10,8 @@ import MultiSelect from '@/components/MultiSelect';
 import { H3, Span } from '@/components/Typography/Typography.component';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
-import { MOCK_GEO_OPTIONS } from '@/common/mock';
 import FileUploaderURL from '@/features/Files/FileUploaderURL';
+import { COUNTRIES_OPTIONS } from '@/common/options';
 
 const AddNewGiftForm = ({
   errorMessage,
@@ -60,9 +60,10 @@ const AddNewGiftForm = ({
           control={control}
           render={({ field }) => (
             <MultiSelect
-              selectedValues={field.value}
-              options={MOCK_GEO_OPTIONS}
-              onChange={(value) => field.onChange(value)}
+              options={COUNTRIES_OPTIONS}
+              onChange={(value) =>
+                field.onChange(value.map((item) => item.value))
+              }
               label='Restricted countries'
             />
           )}
