@@ -5,5 +5,6 @@ export interface SelectProps {
   options: Option[];
   selectedValue?: string;
   className?: string;
+  errorMessage?: string;
   onChange: (value: string) => void;
 }

@@ -6,5 +6,6 @@ export interface MultiSelectProps {
   placeholder?: string;
   selectedValues?: Option[];
   className?: string;
+  errorMessage?: string;
   onChange: (selected: Option[]) => void;
 }

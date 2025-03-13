@@ -10,6 +10,7 @@ const MultiSelect = ({
   options,
   className,
   selectedValues = [],
+  errorMessage,
   onChange,
 }: MultiSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,8 +51,13 @@ const MultiSelect = ({
       <div className='relative w-full'>
         <div
           className={cn(
-            'flex flex-wrap items-center min-h-11 gap-2 py-1.5 px-3 border border-gray-300 overflow-hidden rounded-lg cursor-pointer shadow-theme-xs focus:border-border-focus focus:outline-none focus:ring focus:ring-ring',
-            isOpen && 'ring border-border-focus outline-none ring-ring',
+            'flex flex-wrap items-center min-h-11 gap-2 py-1.5 px-3 border border-gray-300 overflow-hidden rounded-lg cursor-pointer shadow-theme-xs focus:outline-none ',
+            !errorMessage &&
+              isOpen &&
+              'ring border-border-focus outline-none ring-ring',
+            errorMessage
+              ? 'border-border-error focus:border-border-error focus:ring focus:ring-ring-error'
+              : 'focus:border-border-focus focus:ring focus:ring-ring',
           )}
           onClick={() => setIsOpen((prev) => !prev)}
         >
@@ -125,9 +131,12 @@ const MultiSelect = ({
             </div>
           </div>
         </div>
+        {errorMessage && (
+          <p className={cn('helper-text text-text-error')}>{errorMessage}</p>
+        )}
 
         {isOpen && (
-          <div className='max-h-60 absolute left-0 top-full mt-2 w-full rounded-lg border border-gray-300 bg-white shadow-sm z-10 overflow-auto'>
+          <div className='max-h-60 absolute left-0 top-10 mt-2 w-full rounded-lg border border-gray-300 bg-white shadow-sm z-10 overflow-auto'>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
                 <div
