@@ -10,7 +10,7 @@ export const validators = {
     },
   },
   geo: {
-    required: 'Name is required',
+    required: 'Geo is required',
   },
   name: {
     required: 'Name is required',

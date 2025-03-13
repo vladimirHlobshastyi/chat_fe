@@ -65,8 +65,10 @@ const AddNewGiftForm = ({
                 field.onChange(value.map((item) => item.value))
               }
               label='Restricted countries'
+              errorMessage={errors.restrictedCountries?.message}
             />
           )}
+          rules={validators.restrictedCountries}
         />
 
         <InputField

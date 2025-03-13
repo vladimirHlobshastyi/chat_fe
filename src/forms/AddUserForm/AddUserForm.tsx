@@ -7,7 +7,7 @@ import Select from '@/components/Select';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
 import TextArea from '@/components/Inputs/TextArea';
-import { COUNTRIES_OPTIONS, USER_ROLE_OPTIONS } from '@/common/options';
+import { COUNTRIES_OPTIONS } from '@/common/options';
 import { useState } from 'react';
 import FileUploaderURL from '@/features/Files/FileUploaderURL';
 import { cn } from '@/utils/styles';
@@ -27,7 +27,6 @@ const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
       password: '',
       avatar: '',
       name: '',
-      role: 'model',
       geo: '',
       isBanned: false,
       //isVerified: false,
@@ -90,29 +89,18 @@ const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
         />
 
         <Controller
-          name='role'
-          control={control}
-          render={({ field }) => (
-            <Select
-              selectedValue={field.value}
-              options={USER_ROLE_OPTIONS}
-              onChange={(value) => field.onChange(value)}
-              label='Role'
-            />
-          )}
-        />
-
-        <Controller
           name='geo'
           control={control}
           render={({ field }) => (
             <Select
+              errorMessage={errors.geo?.message}
               selectedValue={field.value}
               options={COUNTRIES_OPTIONS}
               onChange={(value) => field.onChange(value)}
               label='Geo'
             />
           )}
+          rules={validators.geo}
         />
 
         <div

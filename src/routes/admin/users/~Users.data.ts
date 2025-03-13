@@ -13,12 +13,6 @@ export const USERS_TABLE_HEADER: TableHeader[] = [
     sortable: true,
   },
   {
-    key: 'role',
-    title: 'Role',
-    width: 'min-w-20',
-    sortable: true,
-  },
-  {
     key: 'geo',
     title: 'Geo',
     width: 'min-w-18',

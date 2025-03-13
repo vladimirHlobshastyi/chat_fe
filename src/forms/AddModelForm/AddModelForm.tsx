@@ -60,8 +60,10 @@ const AddModelForm = ({
               options={COUNTRIES_OPTIONS}
               onChange={(value) => field.onChange(value)}
               label='Geo'
+              errorMessage={errors.geo?.message}
             />
           )}
+          rules={validators.geo}
         />
 
         {/*<Controller
@@ -108,6 +110,7 @@ const AddModelForm = ({
               }}
             />
           )}
+          rules={validators.avatar}
         />
 
         <TextArea

@@ -10,7 +10,7 @@ export const validators = {
     },
   },
   geo: {
-    required: 'Name is required',
+    required: 'Geo is required',
   },
   name: {
     required: 'Name is required',
@@ -18,9 +18,6 @@ export const validators = {
       value: 4,
       message: 'Name must be at least 4 characters',
     },
-  },
-  role: {
-    required: 'Role is required',
   },
   /*   telegramId: {
     required: 'Telegram ID is required',

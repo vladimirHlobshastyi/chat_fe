@@ -74,6 +74,7 @@ export const Admins = () => {
                 updated_at: formatISODate(admin.updatedAt),
                 action: (
                   <TableActions
+                    deleteDisabled
                     onDelete={() => onDeleteAdmin(admin.id)}
                     onEdit={() => setSelectedAdmin(admin)}
                   />

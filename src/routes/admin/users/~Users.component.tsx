@@ -32,7 +32,7 @@ export const Users = () => {
     setPage,
     handleCreateUser,
     handleUpdateUser,
-    setIsAddUserModalOpen,
+    // setIsAddUserModalOpen,
     setSelectedUser,
     onEditUserClose,
     onAddNewUserClose,
@@ -52,7 +52,7 @@ export const Users = () => {
             onPerPageChange={setPerPage}
             headers={USERS_TABLE_HEADER}
             newItemLabel='Add New User'
-            onAddNewItem={() => setIsAddUserModalOpen(true)}
+            onAddNewItem={() => {} /* setIsAddUserModalOpen(true) */} //TODO will change
             onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
             onSort={onSort}
@@ -68,7 +68,6 @@ export const Users = () => {
                   />
                 ),
                 name: user.name,
-                role: user.role,
                 geo: getCountryValue(user.geo),
                 is_verified: user.isVerified ? 'Yes' : 'No',
                 telegram_id: user.telegramId,
@@ -77,6 +76,8 @@ export const Users = () => {
                 updated_at: formatISODate(user.updatedAt),
                 action: (
                   <TableActions
+                    deleteDisabled
+                    editDisabled
                     onDelete={() => onDeleteUser(user.id)}
                     onEdit={() => setSelectedUser(user)}
                   />

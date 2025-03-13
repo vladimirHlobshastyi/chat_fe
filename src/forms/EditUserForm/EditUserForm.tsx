@@ -7,7 +7,7 @@ import Select from '@/components/Select';
 import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
 import TextArea from '@/components/Inputs/TextArea';
-import { COUNTRIES_OPTIONS, USER_ROLE_OPTIONS } from '@/common/options';
+import { COUNTRIES_OPTIONS } from '@/common/options';
 import { cn } from '@/utils/styles';
 import FileUploaderURL from '@/features/Files/FileUploaderURL';
 
@@ -26,7 +26,6 @@ const EditUserForm = ({
   } = useForm<EditUserFormData>({
     defaultValues: {
       name: currentUser.name,
-      role: currentUser.role,
       //telegramId: currentUser.telegramId,
       geo: currentUser.geo,
       about: currentUser.about,
@@ -57,19 +56,6 @@ const EditUserForm = ({
           {...register('name', validators.name)}
         />
 
-        <Controller
-          name='role'
-          control={control}
-          render={({ field }) => (
-            <Select
-              selectedValue={field.value}
-              options={USER_ROLE_OPTIONS}
-              onChange={(value) => field.onChange(value)}
-              label='Role'
-            />
-          )}
-        />
-
         {/*  <InputField
           placeholder='Enter telegram Id...'
           label='Telegram Id'
@@ -84,12 +70,14 @@ const EditUserForm = ({
           control={control}
           render={({ field }) => (
             <Select
+              errorMessage={errors.geo?.message}
               selectedValue={field.value}
               options={COUNTRIES_OPTIONS}
               onChange={(value) => field.onChange(value)}
               label='Geo'
             />
           )}
+          rules={validators.geo}
         />
 
         <div

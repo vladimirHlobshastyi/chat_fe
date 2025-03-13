@@ -23,6 +23,7 @@ export const useUsers = () => {
   const [perPage, setPerPage] = useState(10);
 
   const { data, error, isLoading, isFetching } = useUsersQuery({
+    role: 'user',
     page: page,
     pageSize: perPage,
     search: searchValue,

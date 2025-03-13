@@ -61,6 +61,7 @@ const EditGiftForm = ({
               label='Restricted countries'
             />
           )}
+          rules={validators.restrictedCountries}
         />
 
         <InputField
@@ -103,6 +104,7 @@ const EditGiftForm = ({
               }}
             />
           )}
+          rules={validators.image}
         />
 
         <Controller

@@ -7,7 +7,7 @@ export const validators = {
     },
   },
   geo: {
-    required: 'Name is required',
+    required: 'Geo is required',
   },
   avatar: {
     required: 'Avatar is required',

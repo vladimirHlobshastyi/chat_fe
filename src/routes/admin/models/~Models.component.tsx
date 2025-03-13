@@ -69,12 +69,13 @@ export const Models = () => {
                 ),
                 name: model.name,
                 geo: getCountryValue(model.geo),
-                about: model.about,
+                about: model.about || 'Empty field...',
                 created_by: model.createdBy,
                 created_at: formatISODate(model.createdAt),
                 updated_at: formatISODate(model.updatedAt),
                 action: (
                   <TableActions
+                    deleteDisabled
                     onDelete={() => onDeleteModel(/* model.id */)} //TODO will change
                     onEdit={() => setSelectedModel(model)}
                   />

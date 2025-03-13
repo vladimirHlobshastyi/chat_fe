@@ -93,12 +93,14 @@ const AddAdminForm = ({
           control={control}
           render={({ field }) => (
             <Select
+              errorMessage={errors.geo?.message}
               selectedValue={field.value}
               options={COUNTRIES_OPTIONS}
               onChange={(value) => field.onChange(value)}
               label='Geo'
             />
           )}
+          rules={validators.geo}
         />
 
         <div
