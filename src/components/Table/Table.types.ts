@@ -6,7 +6,7 @@ export interface TableHeader {
   title: string;
   width: string;
   sortable?: boolean;
-}
+} //TODO Will add max-width
 
 interface TableData {
   [key: string]: ReactNode;

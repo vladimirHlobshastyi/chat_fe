@@ -1,12 +1,23 @@
+import { cn } from '@/utils/styles';
 import { TableActionsProps } from './TableActions.types';
 
-const TableActions = ({ onEdit, onDelete }: TableActionsProps) => {
+const TableActions = ({
+  deleteDisabled,
+  editDisabled,
+  onEdit,
+  onDelete,
+}: TableActionsProps) => {
   return (
     <span className='flex w-full items-center gap-2'>
       {onDelete && (
         <button
-          className='text-gray-500 hover:text-destructive'
+          className={cn(
+            deleteDisabled
+              ? 'text-text-disabled'
+              : 'text-gray-500 hover:text-destructive',
+          )}
           onClick={onDelete}
+          disabled={deleteDisabled}
         >
           <svg
             className='fill-current'
@@ -27,7 +38,15 @@ const TableActions = ({ onEdit, onDelete }: TableActionsProps) => {
       )}
 
       {onEdit && (
-        <button className='text-gray-500 hover:text-gray-800' onClick={onEdit}>
+        <button
+          className={cn(
+            editDisabled
+              ? 'text-text-disabled'
+              : 'text-gray-500 hover:text-gray-800',
+          )}
+          disabled={editDisabled}
+          onClick={onEdit}
+        >
           <svg
             className='fill-current'
             width='21'
