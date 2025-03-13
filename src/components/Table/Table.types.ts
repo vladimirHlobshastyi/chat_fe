@@ -1,7 +1,7 @@
 import { SortState } from '@/types/common';
 import { ReactNode } from 'react';
 
-interface TableHeader {
+export interface TableHeader {
   key: string;
   title: string;
   width: string;

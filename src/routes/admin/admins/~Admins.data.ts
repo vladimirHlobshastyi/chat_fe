@@ -1,6 +1,6 @@
-import { AdminsTableHeader } from './~Admins.types';
+import { TableHeader } from '@/components/Table/Table.types';
 
-export const ADMINS_TABLE_HEADER: AdminsTableHeader[] = [
+export const ADMINS_TABLE_HEADER: TableHeader[] = [
   {
     key: 'avatar',
     title: 'Avatar',

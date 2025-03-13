@@ -5,10 +5,3 @@ export interface EditAdminData {
   isBanned: boolean;
   avatar?: string;
 }
-
-export interface AdminsTableHeader {
-  key: string;
-  title: string;
-  width: string;
-  sortable?: boolean;
-}

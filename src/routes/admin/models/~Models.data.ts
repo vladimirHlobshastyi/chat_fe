@@ -1,6 +1,6 @@
 import { TableHeader } from '@/components/Table/Table.types';
 
-export const USERS_TABLE_HEADER: TableHeader[] = [
+export const MODELS_TABLE_HEADER: TableHeader[] = [
   {
     key: 'avatar',
     title: 'Avatar',
@@ -13,30 +13,19 @@ export const USERS_TABLE_HEADER: TableHeader[] = [
     sortable: true,
   },
   {
-    key: 'role',
-    title: 'Role',
-    width: 'min-w-20',
-    sortable: true,
-  },
-  {
     key: 'geo',
     title: 'Geo',
     width: 'min-w-18',
   },
   {
-    key: 'is_verified',
-    title: 'Verified',
+    key: 'about',
+    title: 'About',
+    width: 'min-w-32',
+  },
+  {
+    key: 'created_by',
+    title: 'Created By',
     width: 'min-w-14',
-  },
-  {
-    key: 'telegram_id',
-    title: 'Telegram ID',
-    width: 'min-w-26',
-  },
-  {
-    key: 'is_banned',
-    title: 'Banned',
-    width: 'min-w-20',
     sortable: true,
   },
   {

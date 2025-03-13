@@ -1,6 +1,6 @@
-import { GiftsTableHeader } from './~Gifts.types';
+import { TableHeader } from '@/components/Table/Table.types';
 
-export const GIFTS_TABLE_HEADER: GiftsTableHeader[] = [
+export const GIFTS_TABLE_HEADER: TableHeader[] = [
   {
     key: 'image',
     title: 'Image',
