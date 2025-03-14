@@ -94,7 +94,7 @@ const AdminSidebar = () => {
         </div>
 
         {isDropdownOpen && (
-          <div className='absolute top-full left-0 w-full z-10 bg-white border border-gray-200 rounded-b-lg shadow-lg'>
+          <div className='absolute top-full left-0 w-full z-10 bg-white border-border rounded-b-lg shadow-lg'>
             <div className='p-3 flex flex-col w-full'>
               <div>
                 <span className='block text-sm font-medium text-gray-700'>
@@ -102,8 +102,7 @@ const AdminSidebar = () => {
                 </span>
                 <span className='mt-0.5 block text-xs text-gray-500'>
                   johndoe@example.com
-                  {/*               {myProfile?.email} TODO will change
-                   */}{' '}
+                  {/*  {myProfile?.email} TODO will change */}
                 </span>
               </div>
 

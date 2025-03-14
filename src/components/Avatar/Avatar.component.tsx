@@ -36,6 +36,7 @@ const Avatar = ({
     >
       {!isError && src ? (
         <img
+          loading='lazy'
           src={src}
           alt={alt}
           className='h-full w-full rounded-full object-cover'
