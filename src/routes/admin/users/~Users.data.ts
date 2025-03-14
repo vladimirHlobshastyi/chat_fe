@@ -4,12 +4,12 @@ export const USERS_TABLE_HEADER: TableHeader[] = [
   {
     key: 'avatar',
     title: 'Avatar',
-    width: 'min-w-33',
+    width: 'min-w-14',
   },
   {
     key: 'name',
     title: 'Name',
-    width: 'min-w-33',
+    width: 'min-w-33 max-w-40',
     sortable: true,
   },
   {

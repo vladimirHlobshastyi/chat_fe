@@ -50,7 +50,7 @@ const AdminSidebar = () => {
                 alt={myProfile.name}
                 initials={getInitials(myProfile.name)}
               />
-              <Span className='truncate'>{myProfile.name}</Span>
+              <Span className='truncate max-w-28'>{myProfile.name}</Span>
               <svg
                 className={cn(
                   'h-3 w-3 ml-auto stroke-current transition-transform text-gray-500',
