@@ -1,12 +1,6 @@
-interface MyProfileData {
-  id: string;
-  userId: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { User } from '@/types/user';
+
+type MyProfileData = User;
 
 export type GetMyProfileQueryType = {
   Params: unknown;
