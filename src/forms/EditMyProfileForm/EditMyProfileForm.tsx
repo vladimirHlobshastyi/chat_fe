@@ -9,6 +9,8 @@ import { H3, Span } from '@/components/Typography/Typography.component';
 import Button from '@/components/Button';
 import FileUploaderURL from '@/features/Files/FileUploaderURL';
 import { cn } from '@/utils/styles';
+import Select from '@/components/Select';
+import { USER_ROLE_OPTIONS } from '@/common/options';
 
 const EditMyProfileForm = ({
   data,
@@ -48,6 +50,13 @@ const EditMyProfileForm = ({
           helperText={errors.name?.message}
           id='name'
           {...register('name', validators.name)}
+        />
+
+        <Select
+          onChange={() => {}}
+          disabled
+          selectedValue={'admin'}
+          options={USER_ROLE_OPTIONS}
         />
 
         <div
