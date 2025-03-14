@@ -7,3 +7,10 @@ export const MOCK_PROFILE_DATA = {
   //isVerified: boolean;
   isBanned: false,
 };
+
+export const FAVORITE_GIFTS_DATA = [
+  { value: 'Banana', label: 'Banana' },
+  { value: 'Apple', label: 'Apple' },
+  { value: 'Gold', label: 'Gold' },
+  { value: 'Flower', label: 'Flower' },
+];

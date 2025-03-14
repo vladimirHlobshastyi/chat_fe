@@ -1,6 +1,8 @@
 import { cn } from '@/utils/styles';
 import { InputFieldProps } from './InputField.types';
 import { Span } from '@/components/Typography/Typography.component';
+import Checkbox from '@/components/Checkbox';
+import { useState } from 'react';
 
 const InputField = ({
   label,
@@ -9,8 +11,11 @@ const InputField = ({
   className,
   helperText,
   disabled,
+  type,
   ...rest
 }: InputFieldProps) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const isSuccess = success && !error;
   const isError = error && !disabled;
 
@@ -27,7 +32,7 @@ const InputField = ({
         </Span>
       )}
       <input
-        type='text'
+        type={showPassword ? 'text' : type}
         className={cn(
           'input-base',
           isError && 'input-error',
@@ -49,6 +54,21 @@ const InputField = ({
         >
           {helperText}
         </p>
+      )}
+
+      {type === 'password' && (
+        <div className='flex items-center gap-2 mt-2'>
+          <Checkbox
+            checked={showPassword}
+            onChange={() => setShowPassword((prev) => !prev)}
+          />
+          <span
+            className='cursor-pointer text-sm text-gray-500'
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? 'Hide password' : 'Show password'}
+          </span>
+        </div>
       )}
     </div>
   );

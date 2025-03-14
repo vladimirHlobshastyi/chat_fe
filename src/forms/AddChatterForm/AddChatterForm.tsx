@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import {
   AddChatterFormData,
@@ -19,7 +18,6 @@ const AddChatterForm = ({
   onSubmit,
   errorMessage,
 }: AddChatterFormProps) => {
-  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -65,22 +63,9 @@ const AddChatterForm = ({
           error={!!errors?.password}
           helperText={errors.password?.message}
           id='password'
-          type={showPassword ? 'text' : 'password'}
+          type='password'
           {...register('password', validators.password)}
         />
-
-        <div className='flex items-center gap-2'>
-          <Checkbox
-            checked={showPassword}
-            onChange={() => setShowPassword((prev) => !prev)}
-          />
-          <span
-            className='cursor-pointer'
-            onClick={() => setShowPassword((prev) => !prev)}
-          >
-            {showPassword ? 'Hide' : 'Show'}
-          </span>
-        </div>
 
         <InputField
           placeholder='Enter name...'

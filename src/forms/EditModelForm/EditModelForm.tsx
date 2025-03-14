@@ -9,6 +9,8 @@ import TextArea from '@/components/Inputs/TextArea';
 import { COUNTRIES_OPTIONS } from '@/common/options';
 import { cn } from '@/utils/styles';
 import FileUploaderURL from '@/features/Files/FileUploaderURL';
+import MultiSelect from '@/components/MultiSelect';
+import { FAVORITE_GIFTS_DATA } from '@/common/mock';
 
 const EditModelForm = ({
   currentModel,
@@ -66,6 +68,21 @@ const EditModelForm = ({
             />
           )}
           rules={validators.geo}
+        />
+
+        <Controller
+          name='favoriteGifts'
+          control={control}
+          render={() => (
+            <MultiSelect
+              options={FAVORITE_GIFTS_DATA}
+              onChange={
+                () => {}
+                //field.onChange(value.map((item) => item.value)) TODO will change
+              }
+              label='Favorite Gifts'
+            />
+          )}
         />
 
         {/*<Controller

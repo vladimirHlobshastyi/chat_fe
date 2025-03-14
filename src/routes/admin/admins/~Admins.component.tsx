@@ -5,7 +5,7 @@ import AddNewAdminModal from '@/features/Admin/Admins/AddNewAdminModal';
 import { H3 } from '@/components/Typography/Typography.component';
 import Table from '@/components/Table';
 import TableActions from '@/components/Table/TableActions';
-import { formatISODate } from '@/utils/date';
+import { convertUtcToLocal } from '@/utils/date';
 import ErrorPage from '@/components/ErrorPage';
 import Avatar from '@/components/Avatar';
 import { getInitials } from '@/utils/typography';
@@ -70,8 +70,8 @@ export const Admins = () => {
                 email: admin.email,
                 is_verified: admin.isVerified ? 'Yes' : 'No',
                 is_banned: admin.isBanned ? 'Yes' : 'No',
-                created_at: formatISODate(admin.createdAt),
-                updated_at: formatISODate(admin.updatedAt),
+                created_at: convertUtcToLocal(admin.createdAt),
+                updated_at: convertUtcToLocal(admin.updatedAt),
                 action: (
                   <TableActions
                     deleteDisabled

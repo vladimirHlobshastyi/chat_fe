@@ -46,6 +46,7 @@ export const useChatters = () => {
     email: selectedChatter.email || '',
     isVerified: selectedChatter.isVerified,
     isBanned: selectedChatter.isBanned,
+    avatar: selectedChatter.avatar,
   };
 
   const chatters = data?.data || [];

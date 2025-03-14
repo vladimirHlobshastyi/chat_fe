@@ -5,7 +5,7 @@ import EditUserModal from '@/features/Admin/Users/EditUserModal';
 import Table from '@/components/Table/Table.component';
 import TableActions from '@/components/Table/TableActions';
 import { H3 } from '@/components/Typography/Typography.component';
-import { formatISODate } from '@/utils/date';
+import { convertUtcToLocal } from '@/utils/date';
 import ErrorPage from '@/components/ErrorPage';
 import Avatar from '@/components/Avatar';
 import { getInitials } from '@/utils/typography';
@@ -72,8 +72,8 @@ export const Users = () => {
                 is_verified: user.isVerified ? 'Yes' : 'No',
                 telegram_id: user.telegramId,
                 is_banned: user.isBanned ? 'Yes' : 'No',
-                created_at: formatISODate(user.createdAt),
-                updated_at: formatISODate(user.updatedAt),
+                created_at: convertUtcToLocal(user.createdAt),
+                updated_at: convertUtcToLocal(user.updatedAt),
                 action: (
                   <TableActions
                     deleteDisabled

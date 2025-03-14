@@ -9,6 +9,7 @@ import { EditAdminData } from './~Admins.types';
 import { User } from '@/types/user';
 import { AddAdminFormData } from '@/forms/AddAdminForm/AddAdminForm.types';
 import { SortState } from '@/types/common';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const useAdmins = () => {
   const [page, setPage] = useState(1);
@@ -34,6 +35,8 @@ export const useAdmins = () => {
     role: 'admin',
   });
 
+  const queryClient = useQueryClient();
+
   const onSort = (sortValue: SortState) => {
     setPage(1);
     setSort(sortValue);
@@ -44,6 +47,7 @@ export const useAdmins = () => {
     email: selectedAdmin.email || '',
     isVerified: selectedAdmin.isVerified,
     isBanned: selectedAdmin.isBanned,
+    avatar: selectedAdmin.avatar,
   };
 
   const admins = data?.data || [];
@@ -93,6 +97,7 @@ export const useAdmins = () => {
           onSuccess: () => {
             setEditAdminError(undefined);
             setSelectedAdmin(undefined);
+            queryClient.invalidateQueries({ queryKey: ['myProfile'] });
           },
           onError: () =>
             setEditAdminError('Сan`t update the admin, try again later'),

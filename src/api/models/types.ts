@@ -13,6 +13,7 @@ export interface CreateModelParams {
   avatar: string;
   about: string;
   createdBy: number;
+  favoriteGifts?: string[];
 }
 
 export type CreateModelQueryType = {

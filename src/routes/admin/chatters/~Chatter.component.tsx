@@ -3,7 +3,7 @@ import { CHATTERS_TABLE_HEADER } from './~Chatter.data';
 import { H3 } from '@/components/Typography/Typography.component';
 import Table from '@/components/Table';
 import TableActions from '@/components/Table/TableActions';
-import { formatISODate } from '@/utils/date';
+import { convertUtcToLocal } from '@/utils/date';
 import ErrorPage from '@/components/ErrorPage';
 import Avatar from '@/components/Avatar';
 import { getInitials } from '@/utils/typography';
@@ -70,8 +70,8 @@ export const Chatters = () => {
                 email: chatter.email,
                 is_verified: chatter.isVerified ? 'Yes' : 'No',
                 is_banned: chatter.isBanned ? 'Yes' : 'No',
-                created_at: formatISODate(chatter.createdAt),
-                updated_at: formatISODate(chatter.updatedAt),
+                created_at: convertUtcToLocal(chatter.createdAt),
+                updated_at: convertUtcToLocal(chatter.updatedAt),
                 action: (
                   <TableActions
                     deleteDisabled
