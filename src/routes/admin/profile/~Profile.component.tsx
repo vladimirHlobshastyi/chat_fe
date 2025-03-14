@@ -4,12 +4,12 @@ import Button from '@/components/Button';
 import ErrorPage from '@/components/ErrorPage';
 import Loader from '@/components/Loader';
 import { H3 } from '@/components/Typography/Typography.component';
-import EditAdminModal from '@/features/Admin/Admins/EditAdminModal';
 import { getInitials } from '@/utils/typography';
 import { useState } from 'react';
 import { EditAdminData } from '../admins/~Admins.types';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMyProfileQuery } from '@/api/me/hooks';
+import EditMyProfileModal from '@/features/Admin/Admins/EditMyProfileModal';
 
 const Profile = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -123,9 +123,9 @@ const Profile = () => {
       </div>
 
       {isEditModalOpen && myProfile && (
-        <EditAdminModal
+        <EditMyProfileModal
           isOpen={isEditModalOpen}
-          currentAdmin={{ ...myProfile, email: 'example@gmail.com' }} //TODO will change
+          data={{ name: myProfile.name, avatar: myProfile.avatar }}
           errorMessage={errorMessage}
           onSubmit={handleUpdateAdmin}
           onClose={() => setIsEditModalOpen(false)}
