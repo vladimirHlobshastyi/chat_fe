@@ -1,7 +1,7 @@
 import { Controller, useForm } from 'react-hook-form';
 import { AddAdminFormData, AddAdminFormProps } from './AddAdminForm.types';
 import { validators } from './AddAdminForm.data';
-import Checkbox from '@/components/Checkbox';
+//import Checkbox from '@/components/Checkbox';
 import InputField from '@/components/Inputs/InputField';
 import { H3, Span } from '@/components/Typography/Typography.component';
 import Button from '@/components/Button';
@@ -120,7 +120,7 @@ const AddAdminForm = ({
           )}
         />
 
-        <Controller
+        {/*     <Controller
           name='isVerified'
           control={control}
           render={({ field }) => (
@@ -130,7 +130,7 @@ const AddAdminForm = ({
               label='Verified'
             />
           )}
-        />
+        /> */}
 
         {errorMessage && <span className='error-text'>{errorMessage}</span>}
       </div>

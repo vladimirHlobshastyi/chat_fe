@@ -4,7 +4,7 @@ import {
   AddChatterFormProps,
 } from './AddChatterForm.types';
 import { validators } from './AddChatterForm.data';
-import Checkbox from '@/components/Checkbox';
+//import Checkbox from '@/components/Checkbox';
 import InputField from '@/components/Inputs/InputField';
 import { H3, Span } from '@/components/Typography/Typography.component';
 import Button from '@/components/Button';
@@ -122,7 +122,7 @@ const AddChatterForm = ({
             />
           )}
         />
-
+        {/* 
         <Controller
           name='isVerified'
           control={control}
@@ -133,7 +133,7 @@ const AddChatterForm = ({
               label='Verified'
             />
           )}
-        />
+        /> */}
 
         {errorMessage && <span className='error-text'>{errorMessage}</span>}
       </div>
