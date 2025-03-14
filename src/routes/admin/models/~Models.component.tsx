@@ -75,8 +75,7 @@ export const Models = () => {
                 updated_at: convertUtcToLocal(model.updatedAt),
                 action: (
                   <TableActions
-                    deleteDisabled
-                    onDelete={() => onDeleteModel(/* model.id */)} //TODO will change
+                    onDelete={() => onDeleteModel(model.id)}
                     onEdit={() => setSelectedModel(model)}
                   />
                 ),

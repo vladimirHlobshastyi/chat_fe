@@ -76,7 +76,7 @@ export const Users = () => {
                 updated_at: convertUtcToLocal(user.updatedAt),
                 action: (
                   <TableActions
-                    deleteDisabled
+                    deleteDisabled //TODO will change
                     editDisabled
                     onDelete={() => onDeleteUser(user.id)}
                     onEdit={() => setSelectedUser(user)}

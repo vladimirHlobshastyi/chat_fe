@@ -9,6 +9,7 @@ import { EditChatterData } from './~Chatter.types';
 import { User } from '@/types/user';
 import { SortState } from '@/types/common';
 import { AddChatterFormData } from '@/forms/AddChatterForm/AddChatterForm.types';
+import { initialSortProps, updatedAtSortProps } from '@/common/common';
 
 export const useChatters = () => {
   const [page, setPage] = useState(1);
@@ -20,10 +21,7 @@ export const useChatters = () => {
   const [editChatterError, setEditChatterError] = useState<
     string | undefined
   >();
-  const [sort, setSort] = useState<SortState>({
-    field: 'created_at',
-    direction: 'desc',
-  });
+  const [sort, setSort] = useState<SortState>(initialSortProps);
   const [searchValue, setSearchValue] = useState('');
   const [perPage, setPerPage] = useState(10);
 
@@ -81,6 +79,7 @@ export const useChatters = () => {
         onSuccess: () => {
           setAddNewChatterError(undefined);
           setIsAddChatterModalOpen(false);
+          onSort(initialSortProps);
         },
         onError: () =>
           setAddNewChatterError('Сan`t create a chatter, try again later'),
@@ -96,6 +95,7 @@ export const useChatters = () => {
           onSuccess: () => {
             setEditChatterError(undefined);
             setSelectedChatter(undefined);
+            onSort(updatedAtSortProps);
           },
           onError: () =>
             setEditChatterError('Сan`t update the chatter, try again later'),

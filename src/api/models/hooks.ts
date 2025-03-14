@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createModel, getModels, updateModel } from './requests';
+import { createModel, deleteModel, getModels, updateModel } from './requests';
 import { GetModelsQueryType } from './types';
 
 export const useModelsQuery = (params: GetModelsQueryType['Params']) => {
@@ -30,7 +30,7 @@ export const useUpdateModelMutation = () => {
   });
 };
 
-/* export const useDeleteModelMutation = () => {
+export const useDeleteModelMutation = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: deleteModel,
@@ -38,4 +38,4 @@ export const useUpdateModelMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['models'] });
     },
   });
-}; */
+};

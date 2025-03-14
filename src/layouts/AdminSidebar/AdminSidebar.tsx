@@ -7,6 +7,7 @@ import { getInitials } from '@/utils/typography';
 import { useMyProfileQuery } from '@/api/me/hooks';
 import { useState, useRef, RefObject } from 'react';
 import useOutsideClick from '@/hooks/useOutsideClick';
+import { useLogOutMutation } from '@/api/auth/hooks';
 
 const AdminSidebar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -16,6 +17,12 @@ const AdminSidebar = () => {
   const matchRoute = useMatchRoute();
   const navigate = useNavigate();
   const myProfileQuery = useMyProfileQuery();
+  const logOutMutation = useLogOutMutation();
+
+  const handleLogout = () => {
+    logOutMutation.mutate();
+  };
+
   const myProfile = myProfileQuery?.data?.data;
 
   useOutsideClick(dropdownRef as RefObject<HTMLDivElement>, () => {
@@ -106,7 +113,10 @@ const AdminSidebar = () => {
                   <span>Profile</span>
                 </div>
               </ul>
-              <div className='group mt-3 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 cursor-pointer'>
+              <div
+                className='group mt-3 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 cursor-pointer'
+                onClick={handleLogout}
+              >
                 <svg
                   className='fill-gray-500 group-hover:fill-gray-700'
                   width='24'
