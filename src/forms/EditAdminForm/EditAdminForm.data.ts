@@ -6,7 +6,4 @@ export const validators = {
       message: 'Name must be at least 4 characters',
     },
   },
-  email: {
-    required: 'Email is required',
-  },
 };

@@ -41,7 +41,7 @@ const InputField = ({
       {helperText && (
         <p
           className={cn(
-            'mt-1.5 text-xs',
+            'helper-text',
             disabled && 'text-text-disabled',
             isSuccess && 'text-text-success',
             isError && 'text-text-error',

@@ -9,8 +9,11 @@ import {
 export const getGifts = async (params: GetGiftsQueryType['Params']) => {
   const response = await axiosClient.get<GetGiftsQueryType['Data']>('/gifts', {
     params: {
-      limit: params.limit,
-      offset: params.offset,
+      search: params.search,
+      page: params.page,
+      pageSize: params.pageSize,
+      sortField: params.sortField,
+      sortOrder: params.sortOrder,
     },
   });
   return response.data;

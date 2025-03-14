@@ -28,26 +28,18 @@
     @apply bg-gray-300;
   }
 
-  .tableHeader {
-    @apply tableCell sticky top-0 bg-gray-100 border-b-2 border-gray-200 cursor-pointer 
-      hover:bg-gray-200 transition-colors z-10 px-4;
+  .error-text {
+    @apply text-sm mt-1 block text-text-error;
   }
 
-  .errorText {
-    @apply text-sm mt-1 block text-text-error;
+  .helper-text {
+    @apply mt-1.5 text-xs;
   }
 }
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

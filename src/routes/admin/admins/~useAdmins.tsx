@@ -19,15 +19,25 @@ export const useAdmins = () => {
   >();
   const [editAdminError, setEditAdminError] = useState<string | undefined>();
   const [sort, setSort] = useState<SortState>({
-    field: 'createdAt',
+    field: 'created_at',
     direction: 'desc',
   });
+  const [searchValue, setSearchValue] = useState('');
   const [perPage, setPerPage] = useState(10);
 
   const { data, error, isLoading, isFetching } = useUsersQuery({
-    limit: perPage,
-    offset: (page - 1) * perPage,
+    page: page,
+    pageSize: perPage,
+    search: searchValue,
+    sortField: sort.field,
+    sortOrder: sort.direction,
+    role: 'admin',
   });
+
+  const onSort = (sortValue: SortState) => {
+    setPage(1);
+    setSort(sortValue);
+  };
 
   const handledSelectedAdmin = selectedAdmin && {
     name: selectedAdmin.name,
@@ -36,8 +46,8 @@ export const useAdmins = () => {
     isBanned: selectedAdmin.isBanned,
   };
 
-  const admins = data?.filter((user) => user.role === 'admin') || [];
-  const hasMore = admins.length === perPage;
+  const admins = data?.data || [];
+  const { total, totalPages } = data?.pagination || {};
 
   const createAdmin = useCreateUserMutation();
   const updateAdmin = useUpdateUserMutation();
@@ -63,7 +73,7 @@ export const useAdmins = () => {
 
   const handleCreateAdmin = (data: AddAdminFormData) => {
     createAdmin.mutate(
-      { role: 'admin', ...data },
+      { role: 'admin', ...data, isBanned: false, about: '' }, //TODO will change mock
       {
         onSuccess: () => {
           setAddNewAdminError(undefined);
@@ -96,13 +106,16 @@ export const useAdmins = () => {
     isLoading: isLoading || isFetching,
     error,
     page,
-    hasMore,
+    total,
+    totalPages,
     isAddAdminModalOpen,
     selectedAdmin: handledSelectedAdmin,
     addNewAdminError,
     editAdminError,
     sort,
-    setSort,
+    searchValue,
+    setSearchValue,
+    onSort,
     setPerPage,
     onDeleteAdmin,
     setPage,

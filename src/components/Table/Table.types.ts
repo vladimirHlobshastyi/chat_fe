@@ -1,12 +1,12 @@
 import { SortState } from '@/types/common';
 import { ReactNode } from 'react';
 
-interface TableHeader {
+export interface TableHeader {
   key: string;
   title: string;
   width: string;
   sortable?: boolean;
-}
+} //TODO Will add max-width
 
 interface TableData {
   [key: string]: ReactNode;
@@ -17,8 +17,8 @@ export interface TableProps {
   data: TableData[];
   isLoading?: boolean;
   currentPage?: number;
-  totalPages: number;
-  totalItems: number;
+  totalPages?: number;
+  totalItems?: number;
   newItemLabel?: string;
   sortProps?: SortState;
   searchValue?: string;

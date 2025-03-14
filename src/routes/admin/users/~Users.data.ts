@@ -1,11 +1,10 @@
-import { UsersTableHeader } from './~Users.types';
+import { TableHeader } from '@/components/Table/Table.types';
 
-export const USERS_TABLE_HEADER: UsersTableHeader[] = [
+export const USERS_TABLE_HEADER: TableHeader[] = [
   {
-    key: 'role',
-    title: 'Role',
-    width: 'min-w-20',
-    sortable: true,
+    key: 'avatar',
+    title: 'Avatar',
+    width: 'min-w-33',
   },
   {
     key: 'name',
@@ -19,31 +18,32 @@ export const USERS_TABLE_HEADER: UsersTableHeader[] = [
     width: 'min-w-18',
   },
   {
-    key: 'isVerified',
+    key: 'is_verified',
     title: 'Verified',
     width: 'min-w-14',
-    sortable: true,
   },
   {
-    key: 'telegramId',
+    key: 'telegram_id',
     title: 'Telegram ID',
     width: 'min-w-26',
   },
   {
-    key: 'isBanned',
+    key: 'is_banned',
     title: 'Banned',
     width: 'min-w-20',
+    sortable: true,
   },
   {
-    key: 'createdAt',
+    key: 'created_at',
     title: 'Created At',
     width: 'min-w-14',
     sortable: true,
   },
   {
-    key: 'updatedAt',
+    key: 'updated_at',
     title: 'Updated At',
     width: 'min-w-14',
+    sortable: true,
   },
   {
     key: 'action',

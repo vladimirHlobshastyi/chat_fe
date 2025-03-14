@@ -1,6 +1,9 @@
-import { EditAdminData } from '@/routes/admin/admins/~Admins.types';
-
-export type EditAdminFormData = EditAdminData;
+export interface EditAdminFormData {
+  name: string;
+  //isVerified: boolean;
+  isBanned: boolean;
+  avatar?: string;
+}
 
 export interface EditAdminFormProps {
   currentAdmin: EditAdminFormData;

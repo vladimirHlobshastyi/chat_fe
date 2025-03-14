@@ -9,8 +9,12 @@ import {
 export const getUsers = async (params: GetUsersQueryType['Params']) => {
   const response = await axiosClient.get<GetUsersQueryType['Data']>('/users', {
     params: {
-      limit: params.limit,
-      offset: params.offset,
+      search: params.search,
+      page: params.page,
+      pageSize: params.pageSize,
+      sortField: params.sortField,
+      sortOrder: params.sortOrder,
+      role: params.role,
     },
   });
   return response.data;

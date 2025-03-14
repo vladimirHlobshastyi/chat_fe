@@ -6,6 +6,7 @@ const Select = ({
   options,
   selectedValue,
   className,
+  errorMessage,
   onChange,
 }: SelectProps) => {
   return (
@@ -16,18 +17,26 @@ const Select = ({
         </label>
       )}
       <select
-        className='block w-full min-h-11 px-4 py-2.5 bg-background border border-border text-text text-sm rounded-lg focus:border-border-focus focus:outline-none focus:ring focus:ring-ring'
+        className={cn(
+          'block w-full min-h-11 px-4 py-2.5 bg-background border border-border text-text text-sm rounded-lg focus:outline-none',
+          errorMessage
+            ? 'border-border-error focus:border-border-error focus:ring focus:ring-ring-error'
+            : 'focus:border-border-focus focus:ring focus:ring-ring',
+        )}
         value={selectedValue || ''}
         onChange={(e) => onChange(e.target.value)}
         aria-label={label}
       >
-        <option value=''>Select an option</option>
+        <option value={''}>Select an option</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>
         ))}
       </select>
+      {errorMessage && (
+        <p className={cn('helper-text text-text-error')}>{errorMessage}</p>
+      )}
     </div>
   );
 };

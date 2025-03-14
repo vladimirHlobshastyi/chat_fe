@@ -16,6 +16,8 @@ import { Route as AdminRouteImport } from './routes/admin/route'
 import { Route as AdminUsersRouteImport } from './routes/admin/users/route'
 import { Route as AdminTransactionsRouteImport } from './routes/admin/transactions/route'
 import { Route as AdminTariffsRouteImport } from './routes/admin/tariffs/route'
+import { Route as AdminProfileRouteImport } from './routes/admin/profile/route'
+import { Route as AdminModelsRouteImport } from './routes/admin/models/route'
 import { Route as AdminGiftsRouteImport } from './routes/admin/gifts/route'
 import { Route as AdminDialogsRouteImport } from './routes/admin/dialogs/route'
 import { Route as AdminChattersRouteImport } from './routes/admin/chatters/route'
@@ -50,6 +52,18 @@ const AdminTransactionsRouteRoute = AdminTransactionsRouteImport.update({
 const AdminTariffsRouteRoute = AdminTariffsRouteImport.update({
   id: '/tariffs',
   path: '/tariffs',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+
+const AdminProfileRouteRoute = AdminProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+
+const AdminModelsRouteRoute = AdminModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
   getParentRoute: () => AdminRouteRoute,
 } as any)
 
@@ -123,6 +137,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGiftsRouteImport
       parentRoute: typeof AdminRouteImport
     }
+    '/admin/models': {
+      id: '/admin/models'
+      path: '/models'
+      fullPath: '/admin/models'
+      preLoaderRoute: typeof AdminModelsRouteImport
+      parentRoute: typeof AdminRouteImport
+    }
+    '/admin/profile': {
+      id: '/admin/profile'
+      path: '/profile'
+      fullPath: '/admin/profile'
+      preLoaderRoute: typeof AdminProfileRouteImport
+      parentRoute: typeof AdminRouteImport
+    }
     '/admin/tariffs': {
       id: '/admin/tariffs'
       path: '/tariffs'
@@ -154,6 +182,8 @@ interface AdminRouteRouteChildren {
   AdminChattersRouteRoute: typeof AdminChattersRouteRoute
   AdminDialogsRouteRoute: typeof AdminDialogsRouteRoute
   AdminGiftsRouteRoute: typeof AdminGiftsRouteRoute
+  AdminModelsRouteRoute: typeof AdminModelsRouteRoute
+  AdminProfileRouteRoute: typeof AdminProfileRouteRoute
   AdminTariffsRouteRoute: typeof AdminTariffsRouteRoute
   AdminTransactionsRouteRoute: typeof AdminTransactionsRouteRoute
   AdminUsersRouteRoute: typeof AdminUsersRouteRoute
@@ -164,6 +194,8 @@ const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminChattersRouteRoute: AdminChattersRouteRoute,
   AdminDialogsRouteRoute: AdminDialogsRouteRoute,
   AdminGiftsRouteRoute: AdminGiftsRouteRoute,
+  AdminModelsRouteRoute: AdminModelsRouteRoute,
+  AdminProfileRouteRoute: AdminProfileRouteRoute,
   AdminTariffsRouteRoute: AdminTariffsRouteRoute,
   AdminTransactionsRouteRoute: AdminTransactionsRouteRoute,
   AdminUsersRouteRoute: AdminUsersRouteRoute,
@@ -180,6 +212,8 @@ export interface FileRoutesByFullPath {
   '/admin/chatters': typeof AdminChattersRouteRoute
   '/admin/dialogs': typeof AdminDialogsRouteRoute
   '/admin/gifts': typeof AdminGiftsRouteRoute
+  '/admin/models': typeof AdminModelsRouteRoute
+  '/admin/profile': typeof AdminProfileRouteRoute
   '/admin/tariffs': typeof AdminTariffsRouteRoute
   '/admin/transactions': typeof AdminTransactionsRouteRoute
   '/admin/users': typeof AdminUsersRouteRoute
@@ -192,6 +226,8 @@ export interface FileRoutesByTo {
   '/admin/chatters': typeof AdminChattersRouteRoute
   '/admin/dialogs': typeof AdminDialogsRouteRoute
   '/admin/gifts': typeof AdminGiftsRouteRoute
+  '/admin/models': typeof AdminModelsRouteRoute
+  '/admin/profile': typeof AdminProfileRouteRoute
   '/admin/tariffs': typeof AdminTariffsRouteRoute
   '/admin/transactions': typeof AdminTransactionsRouteRoute
   '/admin/users': typeof AdminUsersRouteRoute
@@ -205,6 +241,8 @@ export interface FileRoutesById {
   '/admin/chatters': typeof AdminChattersRouteRoute
   '/admin/dialogs': typeof AdminDialogsRouteRoute
   '/admin/gifts': typeof AdminGiftsRouteRoute
+  '/admin/models': typeof AdminModelsRouteRoute
+  '/admin/profile': typeof AdminProfileRouteRoute
   '/admin/tariffs': typeof AdminTariffsRouteRoute
   '/admin/transactions': typeof AdminTransactionsRouteRoute
   '/admin/users': typeof AdminUsersRouteRoute
@@ -219,6 +257,8 @@ export interface FileRouteTypes {
     | '/admin/chatters'
     | '/admin/dialogs'
     | '/admin/gifts'
+    | '/admin/models'
+    | '/admin/profile'
     | '/admin/tariffs'
     | '/admin/transactions'
     | '/admin/users'
@@ -230,6 +270,8 @@ export interface FileRouteTypes {
     | '/admin/chatters'
     | '/admin/dialogs'
     | '/admin/gifts'
+    | '/admin/models'
+    | '/admin/profile'
     | '/admin/tariffs'
     | '/admin/transactions'
     | '/admin/users'
@@ -241,6 +283,8 @@ export interface FileRouteTypes {
     | '/admin/chatters'
     | '/admin/dialogs'
     | '/admin/gifts'
+    | '/admin/models'
+    | '/admin/profile'
     | '/admin/tariffs'
     | '/admin/transactions'
     | '/admin/users'
@@ -278,6 +322,8 @@ export const routeTree = rootRoute
         "/admin/chatters",
         "/admin/dialogs",
         "/admin/gifts",
+        "/admin/models",
+        "/admin/profile",
         "/admin/tariffs",
         "/admin/transactions",
         "/admin/users"
@@ -300,6 +346,14 @@ export const routeTree = rootRoute
     },
     "/admin/gifts": {
       "filePath": "admin/gifts/route.tsx",
+      "parent": "/admin"
+    },
+    "/admin/models": {
+      "filePath": "admin/models/route.tsx",
+      "parent": "/admin"
+    },
+    "/admin/profile": {
+      "filePath": "admin/profile/route.tsx",
       "parent": "/admin"
     },
     "/admin/tariffs": {

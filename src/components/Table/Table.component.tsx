@@ -13,8 +13,8 @@ const Table = ({
   data,
   isLoading = false,
   currentPage = 1,
-  totalPages,
-  totalItems,
+  totalPages = 0,
+  totalItems = 0,
   newItemLabel,
   sortProps,
   searchValue = '',
@@ -79,7 +79,7 @@ const Table = ({
 
   return (
     <div className='relative overflow-hidden rounded-xl border border-gray-200 bg-white pt-4 flex flex-col h-full'>
-      <div className='mb-4 flex flex-col gap-2 px-4 sm:flex-row sm:items-center sm:justify-between'>
+      <div className='pb-4 flex flex-col gap-2 px-4 sm:flex-row sm:items-center border-b border-gray-200 sm:justify-between'>
         <div className='flex items-center gap-3'>
           <span className='text-gray-500'>Show</span>
           <div className='relative z-20 bg-transparent'>
@@ -135,8 +135,8 @@ const Table = ({
         <div className='min-w-[1102px] h-full'>
           {isLoading && <Loader />}
 
-          <table className='w-full text-sm text-left text-gray-800 h-full'>
-            <thead className='border-t border-gray-200'>
+          <table className='w-full h-full text-sm text-left text-gray-800 border-b border-gray-200'>
+            <thead className='sticky top-0 left-0 bg-secondary z-20 shadow-[0_1px_0_0_#F3F4F6] '>
               <tr>
                 {headers.map((header, index) => {
                   const isCurrentSortField = sort?.field === header.key;
@@ -144,7 +144,7 @@ const Table = ({
                   return (
                     <th
                       key={index}
-                      className={`border-r border-gray-200 px-4 py-3 ${header.width}`}
+                      className={`border-r border-gray-100 px-4 py-3 ${header.width}`}
                       onClick={() => header.sortable && handleSort(header.key)}
                     >
                       <div
@@ -190,7 +190,7 @@ const Table = ({
               </tr>
             </thead>
 
-            <tbody className='w-full flex-grow'>
+            <tbody className='w-full h-full overflow-auto flex-grow'>
               {data.length > 0 ? (
                 data.map((row, rowIndex) => (
                   <tr key={rowIndex} className='border-t border-gray-100'>

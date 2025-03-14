@@ -6,6 +6,7 @@ const FileUploader = ({
   className,
   accept,
   id,
+  ref,
   ...rest
 }: FileUploaderProps) => {
   return (
@@ -16,6 +17,7 @@ const FileUploader = ({
         </label>
       )}
       <input
+        ref={ref}
         type='file'
         id={id}
         accept={accept}

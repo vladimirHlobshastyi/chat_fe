@@ -6,6 +6,9 @@ import { H3 } from '@/components/Typography/Typography.component';
 import Table from '@/components/Table';
 import TableActions from '@/components/Table/TableActions';
 import TableImage from '@/components/Table/TableImage';
+import { formatISODate } from '@/utils/date';
+import ErrorPage from '@/components/ErrorPage';
+import { MOCK_GEO_OPTIONS } from '@/common/mock';
 
 const Gifts = () => {
   const {
@@ -18,9 +21,12 @@ const Gifts = () => {
     error,
     page,
     sort,
-    selectedGift,
+    searchValue,
+    total,
+    totalPages,
+    setSearchValue,
     setPerPage,
-    setSort,
+    onSort,
     setPage,
     onEditGiftClose,
     onDeleteGift,
@@ -31,7 +37,7 @@ const Gifts = () => {
     setSelectedGift,
   } = useGifts();
 
-  if (error) return <div>Error loading gifts</div>;
+  if (error) return <ErrorPage label='Error loading gifts' />;
 
   return (
     <div className='w-full h-full p-6 bg-gray-50'>
@@ -46,45 +52,41 @@ const Gifts = () => {
             headers={GIFTS_TABLE_HEADER}
             newItemLabel='Add New Gift'
             onAddNewItem={() => setIsAddNewGiftModalOpen(true)}
-            onSearch={() => {}} //TODO will change
+            onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
-            onSort={setSort}
+            onSort={onSort}
             data={gifts?.map((gift) => {
               return {
+                image: <TableImage src={gift.image} alt={gift.name} />,
                 name: gift.name,
                 price: gift.price,
-                geo: 'US', //Will be change
-                image: <TableImage src={gift.image} alt={gift.name} />,
-                active: gift.isActive ? 'Yes' : 'No',
-                createdAt: gift.createdAt,
-                updatedAt: gift.updatedAt,
+                restricted_countries: 'MOCK country', //TODO will change
+                is_active: gift.isActive ? 'Yes' : 'No',
+                created_at: formatISODate(gift.createdAt),
+                updated_at: formatISODate(gift.updatedAt),
                 action: (
                   <TableActions
                     onDelete={() => onDeleteGift(gift.id)}
-                    onEdit={() => setSelectedGift(gift)}
+                    onEdit={() =>
+                      setSelectedGift({
+                        ...gift,
+                        restrictedCountries: MOCK_GEO_OPTIONS, //TODO will change
+                      })
+                    }
                   />
                 ),
               };
             })}
+            searchValue={searchValue}
+            inputDelay={500}
             sortProps={sort}
             isLoading={isLoading}
-            totalPages={10} //TODO will change
-            totalItems={9} //TODO will change
+            totalPages={totalPages}
+            totalItems={total}
             currentPage={page}
           />
         </div>
       </div>
-
-      {editInitialProps && (
-        <EditGiftModal
-          giftUrl={selectedGift?.image}
-          initialProps={editInitialProps}
-          errorMessage={editGiftError}
-          isOpen={!!editInitialProps}
-          onSubmit={onEditGiftSubmit}
-          onClose={onEditGiftClose}
-        />
-      )}
 
       {isAddNewGiftModalOpen && (
         <AddNewGiftModal
@@ -92,6 +94,16 @@ const Gifts = () => {
           isOpen={isAddNewGiftModalOpen}
           onSubmit={onCreateGiftSubmit}
           onClose={onAddNewGiftModalClose}
+        />
+      )}
+
+      {editInitialProps && (
+        <EditGiftModal
+          initialProps={editInitialProps}
+          errorMessage={editGiftError}
+          isOpen={!!editInitialProps}
+          onSubmit={onEditGiftSubmit}
+          onClose={onEditGiftClose}
         />
       )}
     </div>

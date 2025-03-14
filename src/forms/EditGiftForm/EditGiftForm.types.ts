@@ -1,15 +1,12 @@
-import { Option } from '@/types/common';
-
 export interface EditGiftFormData {
   name: string;
-  geo?: Option[];
+  restrictedCountries?: string[];
   price?: number;
-  image?: File;
+  image?: string;
   isActive: boolean;
 }
 
 export interface EditGiftFormProps {
-  giftUrl?: string;
   errorMessage?: string;
   initialProps: EditGiftFormData;
   onClose: () => void;

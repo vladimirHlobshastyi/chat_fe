@@ -1,11 +1,10 @@
-import { AdminsTableHeader } from './~Admins.types';
+import { TableHeader } from '@/components/Table/Table.types';
 
-export const ADMINS_TABLE_HEADER: AdminsTableHeader[] = [
+export const ADMINS_TABLE_HEADER: TableHeader[] = [
   {
-    key: 'role',
-    title: 'Role',
-    width: 'min-w-20',
-    sortable: true,
+    key: 'avatar',
+    title: 'Avatar',
+    width: 'min-w-33',
   },
   {
     key: 'name',
@@ -19,26 +18,27 @@ export const ADMINS_TABLE_HEADER: AdminsTableHeader[] = [
     width: 'min-w-33',
   },
   {
-    key: 'isVerified',
+    key: 'is_verified',
     title: 'Verified',
     width: 'min-w-14',
+  },
+  {
+    key: 'is_banned',
+    title: 'Banned',
+    width: 'min-w-20',
     sortable: true,
   },
   {
-    key: 'isBanned',
-    title: 'Banned',
-    width: 'min-w-20',
-  },
-  {
-    key: 'createdAt',
+    key: 'created_at',
     title: 'Created At',
     width: 'min-w-14',
     sortable: true,
   },
   {
-    key: 'updatedAt',
+    key: 'updated_at',
     title: 'Updated At',
     width: 'min-w-14',
+    sortable: true,
   },
   {
     key: 'action',

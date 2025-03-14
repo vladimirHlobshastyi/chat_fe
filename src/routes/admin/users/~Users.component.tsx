@@ -5,6 +5,11 @@ import EditUserModal from '@/features/Admin/Users/EditUserModal';
 import Table from '@/components/Table/Table.component';
 import TableActions from '@/components/Table/TableActions';
 import { H3 } from '@/components/Typography/Typography.component';
+import { formatISODate } from '@/utils/date';
+import ErrorPage from '@/components/ErrorPage';
+import Avatar from '@/components/Avatar';
+import { getInitials } from '@/utils/typography';
+import { getCountryValue } from '@/utils/common';
 
 export const Users = () => {
   const {
@@ -17,19 +22,23 @@ export const Users = () => {
     addNewUserError,
     editUserError,
     sort,
-    setSort,
+    total,
+    totalPages,
+    searchValue,
+    setSearchValue,
+    onSort,
     setPerPage,
     onDeleteUser,
     setPage,
     handleCreateUser,
     handleUpdateUser,
-    setIsAddUserModalOpen,
+    // setIsAddUserModalOpen,
     setSelectedUser,
     onEditUserClose,
     onAddNewUserClose,
   } = useUsers();
 
-  if (error) return <div>Error loading users</div>;
+  if (error) return <ErrorPage label='Error loading users' />;
 
   return (
     <div className='w-full h-full p-6 bg-gray-50'>
@@ -43,22 +52,32 @@ export const Users = () => {
             onPerPageChange={setPerPage}
             headers={USERS_TABLE_HEADER}
             newItemLabel='Add New User'
-            onAddNewItem={() => setIsAddUserModalOpen(true)}
-            onSearch={() => {}} //TODO will change
+            onAddNewItem={() => {} /* setIsAddUserModalOpen(true) */} //TODO will change
+            onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
-            onSort={setSort}
+            onSort={onSort}
+            inputDelay={500}
+            searchValue={searchValue}
             data={users.map((user) => {
               return {
-                role: user.role,
+                avatar: (
+                  <Avatar
+                    src={user.avatar}
+                    alt={user.name}
+                    initials={getInitials(user.name)}
+                  />
+                ),
                 name: user.name,
-                geo: user.geo,
-                isVerified: user.isVerified ? 'Yes' : 'No',
-                telegramId: user.telegramId,
-                isBanned: user.isBanned ? 'Yes' : 'No',
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
+                geo: getCountryValue(user.geo),
+                is_verified: user.isVerified ? 'Yes' : 'No',
+                telegram_id: user.telegramId,
+                is_banned: user.isBanned ? 'Yes' : 'No',
+                created_at: formatISODate(user.createdAt),
+                updated_at: formatISODate(user.updatedAt),
                 action: (
                   <TableActions
+                    deleteDisabled
+                    editDisabled
                     onDelete={() => onDeleteUser(user.id)}
                     onEdit={() => setSelectedUser(user)}
                   />
@@ -67,8 +86,8 @@ export const Users = () => {
             })}
             sortProps={sort}
             isLoading={isLoading}
-            totalPages={10} //TODO will change
-            totalItems={1} //TODO will change
+            totalPages={totalPages}
+            totalItems={total}
             currentPage={page}
           />
         </div>

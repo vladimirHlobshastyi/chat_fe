@@ -1,6 +1,11 @@
-import { GiftsTableHeader } from './~Gifts.types';
+import { TableHeader } from '@/components/Table/Table.types';
 
-export const GIFTS_TABLE_HEADER: GiftsTableHeader[] = [
+export const GIFTS_TABLE_HEADER: TableHeader[] = [
+  {
+    key: 'image',
+    title: 'Image',
+    width: 'min-w-14',
+  },
   {
     key: 'name',
     title: 'Name',
@@ -14,30 +19,25 @@ export const GIFTS_TABLE_HEADER: GiftsTableHeader[] = [
     sortable: true,
   },
   {
-    key: 'geo',
-    title: 'Geo',
+    key: 'restricted_countries',
+    title: 'restricted countries',
     width: 'min-w-18',
     sortable: true,
   },
   {
-    key: 'image',
-    title: 'Image',
-    width: 'min-w-14',
-  },
-  {
-    key: 'active',
+    key: 'is_active',
     title: 'Active',
     width: 'min-w-26',
     sortable: true,
   },
   {
-    key: 'createdAt',
+    key: 'created_at',
     title: 'Created At',
     width: 'min-w-14',
     sortable: true,
   },
   {
-    key: 'updatedAt',
+    key: 'updated_at',
     title: 'Updated At',
     width: 'min-w-14',
   },

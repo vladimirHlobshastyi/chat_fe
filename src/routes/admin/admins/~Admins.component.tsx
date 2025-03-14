@@ -5,6 +5,10 @@ import AddNewAdminModal from '@/features/Admin/Admins/AddNewAdminModal';
 import { H3 } from '@/components/Typography/Typography.component';
 import Table from '@/components/Table';
 import TableActions from '@/components/Table/TableActions';
+import { formatISODate } from '@/utils/date';
+import ErrorPage from '@/components/ErrorPage';
+import Avatar from '@/components/Avatar';
+import { getInitials } from '@/utils/typography';
 
 export const Admins = () => {
   const {
@@ -17,7 +21,11 @@ export const Admins = () => {
     addNewAdminError,
     editAdminError,
     sort,
-    setSort,
+    total,
+    totalPages,
+    searchValue,
+    setSearchValue,
+    onSort,
     setPerPage,
     onDeleteAdmin,
     setPage,
@@ -29,7 +37,7 @@ export const Admins = () => {
     onAddNewAdminClose,
   } = useAdmins();
 
-  if (error) return <div>Error loading admins</div>;
+  if (error) return <ErrorPage label='Error loading admins' />;
 
   return (
     <div className='w-full h-full p-6 bg-gray-50'>
@@ -44,20 +52,29 @@ export const Admins = () => {
             headers={ADMINS_TABLE_HEADER}
             newItemLabel='Add New Admin'
             onAddNewItem={() => setIsAddAdminModalOpen(true)}
-            onSearch={() => {}} //TODO will change
+            onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
-            onSort={setSort}
+            onSort={onSort}
+            searchValue={searchValue}
+            inputDelay={500}
             data={admins.map((admin) => {
               return {
-                role: admin.role,
+                avatar: (
+                  <Avatar
+                    src={admin.avatar}
+                    alt={admin.name}
+                    initials={getInitials(admin.name)}
+                  />
+                ),
                 name: admin.name,
                 email: admin.email,
-                isVerified: admin.isVerified ? 'Yes' : 'No',
-                isBanned: admin.isBanned ? 'Yes' : 'No',
-                createdAt: admin.createdAt,
-                updatedAt: admin.updatedAt,
+                is_verified: admin.isVerified ? 'Yes' : 'No',
+                is_banned: admin.isBanned ? 'Yes' : 'No',
+                created_at: formatISODate(admin.createdAt),
+                updated_at: formatISODate(admin.updatedAt),
                 action: (
                   <TableActions
+                    deleteDisabled
                     onDelete={() => onDeleteAdmin(admin.id)}
                     onEdit={() => setSelectedAdmin(admin)}
                   />
@@ -66,8 +83,8 @@ export const Admins = () => {
             })}
             sortProps={sort}
             isLoading={isLoading}
-            totalPages={10} //TODO will change
-            totalItems={1} //TODO will change
+            totalPages={totalPages}
+            totalItems={total}
             currentPage={page}
           />
         </div>

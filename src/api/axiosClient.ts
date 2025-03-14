@@ -18,7 +18,7 @@ axiosClient.interceptors.response.use(
       }
       console.warn(error);
     }
-    return Promise.reject(error);
+    return Promise.reject(error.response?.data);
   },
 );
 
