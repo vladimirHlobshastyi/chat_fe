@@ -3,19 +3,17 @@ import {
   useModelsQuery,
   useCreateModelMutation,
   useUpdateModelMutation,
-  // useDeleteModelMutation,
+  useDeleteModelMutation,
 } from '@api/models/hooks';
 import { Model } from '@/types/model';
 import { SortState } from '@/types/common';
 import { CreateModelParams, UpdateModelParams } from '@/api/models/types';
 import { useMyProfileQuery } from '@/api/me/hooks';
+import { initialSortProps, updatedAtSortProps } from '@/common/common';
 
 export const useModels = () => {
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState<SortState>({
-    field: 'created_at',
-    direction: 'desc',
-  });
+  const [sort, setSort] = useState<SortState>(initialSortProps);
   const [searchValue, setSearchValue] = useState('');
   const [isAddModelModalOpen, setIsAddModelModalOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState<Model | undefined>();
@@ -42,7 +40,7 @@ export const useModels = () => {
 
   const createModel = useCreateModelMutation();
   const updateModel = useUpdateModelMutation();
-  //const deleteModel = useDeleteModelMutation();
+  const deleteModel = useDeleteModelMutation();
 
   const handledSelectedModel = selectedModel && {
     name: selectedModel.name,
@@ -57,12 +55,12 @@ export const useModels = () => {
     setSort(sortValue);
   };
 
-  const onDeleteModel = (/* modelId: string */) => {
-    /* deleteModel.mutate(modelId, {
+  const onDeleteModel = (modelId: string) => {
+    deleteModel.mutate(modelId, {
       onError: () => {
         console.error(`Failed to delete model with ID: ${modelId}`);
       },
-    }); */
+    });
   };
 
   const onEditModelClose = () => {
@@ -83,6 +81,7 @@ export const useModels = () => {
           setAddNewModelError(undefined);
           setIsAddModelModalOpen(false);
           onAddNewModelClose();
+          onSort(initialSortProps);
         },
         onError: () =>
           setAddNewModelError('Сan`t create a model, try again later'),
@@ -99,6 +98,7 @@ export const useModels = () => {
             setEditModelError(undefined);
             setSelectedModel(undefined);
             onEditModelClose();
+            onSort(updatedAtSortProps);
           },
           onError: () =>
             setEditModelError('Сan`t update the model, try again later'),

@@ -1,54 +1,35 @@
 import { Span } from '@/components/Typography/Typography.component';
-import { Link, useMatchRoute } from '@tanstack/react-router';
+import { Link, useMatchRoute, useNavigate } from '@tanstack/react-router';
 import { MENU_ITEMS } from './AdminSidebar.data';
 import { cn } from '@/utils/styles';
 import Avatar from '@/components/Avatar';
 import { getInitials } from '@/utils/typography';
 import { useMyProfileQuery } from '@/api/me/hooks';
-import EditAdminModal from '@/features/Admin/Admins/EditAdminModal';
 import { useState, useRef, RefObject } from 'react';
-import { useUpdateUserMutation } from '@/api/users/hooks';
-import type { EditAdminData } from '@/routes/admin/admins/~Admins.types';
-import { useQueryClient } from '@tanstack/react-query';
 import useOutsideClick from '@/hooks/useOutsideClick';
+import { useLogOutMutation } from '@/api/auth/hooks';
 
 const AdminSidebar = () => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const matchRoute = useMatchRoute();
-  const queryClient = useQueryClient();
-
+  const navigate = useNavigate();
   const myProfileQuery = useMyProfileQuery();
-  const myProfile = myProfileQuery?.data?.data;
+  const logOutMutation = useLogOutMutation();
 
-  const updateAdmin = useUpdateUserMutation();
+  const handleLogout = () => {
+    logOutMutation.mutate();
+  };
+
+  const myProfile = myProfileQuery?.data?.data;
 
   useOutsideClick(dropdownRef as RefObject<HTMLDivElement>, () => {
     if (isDropdownOpen) {
       setIsDropdownOpen(false);
     }
   });
-
-  const handleUpdateAdmin = (data: EditAdminData) => {
-    if (myProfile?.id) {
-      updateAdmin.mutate(
-        { id: myProfile.id, data },
-        {
-          onSuccess: () => {
-            setErrorMessage('');
-            queryClient.invalidateQueries({ queryKey: ['myProfile'] });
-            setIsEditModalOpen(false);
-          },
-          onError: () =>
-            setErrorMessage('Сan`t update the admin, try again later'),
-        },
-      );
-    }
-  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -69,7 +50,7 @@ const AdminSidebar = () => {
                 alt={myProfile.name}
                 initials={getInitials(myProfile.name)}
               />
-              <Span>{myProfile.name}</Span>
+              <Span className='truncate max-w-28'>{myProfile.name}</Span>
               <svg
                 className={cn(
                   'h-3 w-3 ml-auto stroke-current transition-transform text-gray-500',
@@ -94,7 +75,7 @@ const AdminSidebar = () => {
         </div>
 
         {isDropdownOpen && (
-          <div className='absolute top-full left-0 w-full z-10 bg-white border border-gray-200 rounded-b-lg shadow-lg'>
+          <div className='absolute top-full left-0 w-full z-10 bg-white border-border rounded-b-lg shadow-lg'>
             <div className='p-3 flex flex-col w-full'>
               <div>
                 <span className='block text-sm font-medium text-gray-700'>
@@ -102,8 +83,7 @@ const AdminSidebar = () => {
                 </span>
                 <span className='mt-0.5 block text-xs text-gray-500'>
                   johndoe@example.com
-                  {/*               {myProfile?.email} TODO will change
-                   */}{' '}
+                  {/*  {myProfile?.email} TODO will change */}
                 </span>
               </div>
 
@@ -111,7 +91,7 @@ const AdminSidebar = () => {
                 <div
                   className='flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 cursor-pointer'
                   onClick={() => {
-                    setIsEditModalOpen(true);
+                    navigate({ to: '/admin/profile' });
                     setIsDropdownOpen(false);
                   }}
                 >
@@ -130,10 +110,13 @@ const AdminSidebar = () => {
                       fill=''
                     ></path>
                   </svg>
-                  <span>Edit profile</span>
+                  <span>Profile</span>
                 </div>
               </ul>
-              <div className='group mt-3 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 cursor-pointer'>
+              <div
+                className='group mt-3 flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 cursor-pointer'
+                onClick={handleLogout}
+              >
                 <svg
                   className='fill-gray-500 group-hover:fill-gray-700'
                   width='24'
@@ -149,7 +132,7 @@ const AdminSidebar = () => {
                     fill=''
                   ></path>
                 </svg>
-                Sign out
+                Log Out
               </div>
             </div>
           </div>
@@ -181,15 +164,6 @@ const AdminSidebar = () => {
           );
         })}
       </nav>
-      {isEditModalOpen && myProfile && (
-        <EditAdminModal
-          isOpen={isEditModalOpen}
-          currentAdmin={{ ...myProfile, email: 'mock@gmail.com' }}
-          errorMessage={errorMessage}
-          onSubmit={handleUpdateAdmin}
-          onClose={() => setIsEditModalOpen(false)}
-        />
-      )}
     </div>
   );
 };

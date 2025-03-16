@@ -9,6 +9,8 @@ import { EditAdminData } from './~Admins.types';
 import { User } from '@/types/user';
 import { AddAdminFormData } from '@/forms/AddAdminForm/AddAdminForm.types';
 import { SortState } from '@/types/common';
+import { useQueryClient } from '@tanstack/react-query';
+import { initialSortProps, updatedAtSortProps } from '@/common/common';
 
 export const useAdmins = () => {
   const [page, setPage] = useState(1);
@@ -18,10 +20,7 @@ export const useAdmins = () => {
     string | undefined
   >();
   const [editAdminError, setEditAdminError] = useState<string | undefined>();
-  const [sort, setSort] = useState<SortState>({
-    field: 'created_at',
-    direction: 'desc',
-  });
+  const [sort, setSort] = useState<SortState>(initialSortProps);
   const [searchValue, setSearchValue] = useState('');
   const [perPage, setPerPage] = useState(10);
 
@@ -34,6 +33,8 @@ export const useAdmins = () => {
     role: 'admin',
   });
 
+  const queryClient = useQueryClient();
+
   const onSort = (sortValue: SortState) => {
     setPage(1);
     setSort(sortValue);
@@ -44,6 +45,7 @@ export const useAdmins = () => {
     email: selectedAdmin.email || '',
     isVerified: selectedAdmin.isVerified,
     isBanned: selectedAdmin.isBanned,
+    avatar: selectedAdmin.avatar,
   };
 
   const admins = data?.data || [];
@@ -78,6 +80,7 @@ export const useAdmins = () => {
         onSuccess: () => {
           setAddNewAdminError(undefined);
           setIsAddAdminModalOpen(false);
+          onSort(initialSortProps);
         },
         onError: () =>
           setAddNewAdminError('Сan`t create a admin, try again later'),
@@ -93,6 +96,8 @@ export const useAdmins = () => {
           onSuccess: () => {
             setEditAdminError(undefined);
             setSelectedAdmin(undefined);
+            onSort(updatedAtSortProps);
+            queryClient.invalidateQueries({ queryKey: ['myProfile'] });
           },
           onError: () =>
             setEditAdminError('Сan`t update the admin, try again later'),

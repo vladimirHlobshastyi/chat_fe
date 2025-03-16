@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { AddAdminFormData, AddAdminFormProps } from './AddAdminForm.types';
 import { validators } from './AddAdminForm.data';
-import Checkbox from '@/components/Checkbox';
+//import Checkbox from '@/components/Checkbox';
 import InputField from '@/components/Inputs/InputField';
 import { H3, Span } from '@/components/Typography/Typography.component';
 import Button from '@/components/Button';
@@ -16,7 +15,6 @@ const AddAdminForm = ({
   onSubmit,
   errorMessage,
 }: AddAdminFormProps) => {
-  const [showPassword, setShowPassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -62,22 +60,9 @@ const AddAdminForm = ({
           error={!!errors?.password}
           helperText={errors.password?.message}
           id='password'
-          type={showPassword ? 'text' : 'password'}
+          type='password'
           {...register('password', validators.password)}
         />
-
-        <div className='flex items-center gap-2'>
-          <Checkbox
-            checked={showPassword}
-            onChange={() => setShowPassword((prev) => !prev)}
-          />
-          <span
-            className='cursor-pointer'
-            onClick={() => setShowPassword((prev) => !prev)}
-          >
-            {showPassword ? 'Hide' : 'Show'}
-          </span>
-        </div>
 
         <InputField
           placeholder='Enter name...'
@@ -135,7 +120,7 @@ const AddAdminForm = ({
           )}
         />
 
-        <Controller
+        {/*     <Controller
           name='isVerified'
           control={control}
           render={({ field }) => (
@@ -145,7 +130,7 @@ const AddAdminForm = ({
               label='Verified'
             />
           )}
-        />
+        /> */}
 
         {errorMessage && <span className='error-text'>{errorMessage}</span>}
       </div>

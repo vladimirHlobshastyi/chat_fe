@@ -6,5 +6,6 @@ export interface SelectProps {
   selectedValue?: string;
   className?: string;
   errorMessage?: string;
+  disabled?: boolean;
   onChange: (value: string) => void;
 }

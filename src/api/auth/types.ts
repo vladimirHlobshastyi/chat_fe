@@ -5,3 +5,8 @@ export type LoginQueryType = {
   };
   Data: { message: string };
 };
+
+export type LogoutQueryType = {
+  Params: unknown;
+  Data: { message: string };
+};

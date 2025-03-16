@@ -9,13 +9,11 @@ import { useState } from 'react';
 import { AddNewGiftFormData } from '@/forms/AddNewGiftForm/AddNewGiftForm.types';
 import { EditGiftFormData } from '@/forms/EditGiftForm/EditGiftForm.types';
 import { SortState } from '@/types/common';
+import { initialSortProps, updatedAtSortProps } from '@/common/common';
 
 export const useGifts = () => {
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState<SortState>({
-    field: 'created_at',
-    direction: 'desc',
-  });
+  const [sort, setSort] = useState<SortState>(initialSortProps);
   const [searchValue, setSearchValue] = useState('');
   const [perPage, setPerPage] = useState(10);
   const [isAddNewGiftModalOpen, setIsAddNewGiftModalOpen] = useState(false);
@@ -75,6 +73,7 @@ export const useGifts = () => {
       {
         onSuccess: () => {
           onAddNewGiftModalClose();
+          onSort(initialSortProps);
           console.log('Gift created successfully');
         },
         onError: () => {
@@ -94,6 +93,7 @@ export const useGifts = () => {
         {
           onSuccess: () => {
             onEditGiftClose();
+            onSort(updatedAtSortProps);
             console.log('Gift updated successfully');
           },
           onError: () => {

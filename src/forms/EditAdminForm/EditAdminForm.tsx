@@ -7,6 +7,8 @@ import { H3, Span } from '@/components/Typography/Typography.component';
 import Button from '@/components/Button';
 import FileUploaderURL from '@/features/Files/FileUploaderURL';
 import { cn } from '@/utils/styles';
+import Select from '@/components/Select';
+import { USER_ROLE_OPTIONS } from '@/common/options';
 
 const EditAdminForm = ({
   currentAdmin,
@@ -26,6 +28,7 @@ const EditAdminForm = ({
       avatar: currentAdmin.avatar,
       //isVerified: currentAdmin.isVerified,
       isBanned: currentAdmin.isBanned,
+      role: 'admin',
     },
   });
 
@@ -48,6 +51,19 @@ const EditAdminForm = ({
           helperText={errors.name?.message}
           id='name'
           {...register('name', validators.name)}
+        />
+
+        <Controller
+          name='role'
+          control={control}
+          render={({ field }) => (
+            <Select
+              selectedValue={field.value}
+              options={USER_ROLE_OPTIONS}
+              onChange={(value) => field.onChange(value)}
+              label='Role'
+            />
+          )}
         />
 
         <div

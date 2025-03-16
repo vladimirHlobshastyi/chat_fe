@@ -20,8 +20,8 @@ const Avatar = ({
   };
 
   const textSizeClasses = {
-    default: 'text-2xl',
-    md: 'text-3xl',
+    default: 'text-1xl',
+    md: 'text-2xl',
     xl: 'text-4xl',
   };
 
@@ -36,6 +36,7 @@ const Avatar = ({
     >
       {!isError && src ? (
         <img
+          loading='lazy'
           src={src}
           alt={alt}
           className='h-full w-full rounded-full object-cover'

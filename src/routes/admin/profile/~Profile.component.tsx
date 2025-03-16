@@ -1,22 +1,26 @@
-/* import { useMyProfileQuery } from '@/api/me/hooks';
- */ import { useUpdateUserMutation } from '@/api/users/hooks';
+import { useUpdateUserMutation } from '@/api/users/hooks';
 import Avatar from '@/components/Avatar';
 import Button from '@/components/Button';
-/* import ErrorPage from '@/components/ErrorPage';
-import Loader from '@/components/Loader'; */
+import ErrorPage from '@/components/ErrorPage';
+import Loader from '@/components/Loader';
 import { H3 } from '@/components/Typography/Typography.component';
-import EditAdminModal from '@/features/Admin/Admins/EditAdminModal';
 import { getInitials } from '@/utils/typography';
 import { useState } from 'react';
 import { EditAdminData } from '../admins/~Admins.types';
-import { MOCK_PROFILE_DATA } from '@/common/mock';
+import { useQueryClient } from '@tanstack/react-query';
+import { useMyProfileQuery } from '@/api/me/hooks';
+import EditMyProfileModal from '@/features/Admin/Admins/EditMyProfileModal';
 
 const Profile = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const myProfile = MOCK_PROFILE_DATA;
+  const queryClient = useQueryClient();
+
+  const myProfileQuery = useMyProfileQuery();
   const updateAdmin = useUpdateUserMutation();
+
+  const myProfile = myProfileQuery?.data?.data;
 
   const handleUpdateAdmin = (data: EditAdminData) => {
     if (myProfile?.id) {
@@ -25,6 +29,8 @@ const Profile = () => {
         {
           onSuccess: () => {
             setErrorMessage('');
+            setIsEditModalOpen(false);
+            queryClient.invalidateQueries({ queryKey: ['myProfile'] });
           },
           onError: () =>
             setErrorMessage('Сan`t update the admin, try again later'),
@@ -33,10 +39,10 @@ const Profile = () => {
     }
   };
 
-  /*   const { error, isLoading } = useMyProfileQuery();
+  const { error, isLoading } = useMyProfileQuery();
 
   if (error) return <ErrorPage label='Error loading admins try later...' />;
-  if (isLoading) return <Loader />; */
+  if (isLoading) return <Loader />;
 
   return (
     <div className='w-full h-full p-6 bg-gray-50'>
@@ -53,6 +59,7 @@ const Profile = () => {
                   <div className='flex items-center w-full gap-6'>
                     <div className='w-20 h-20 border border-gray-200 rounded-full'>
                       <Avatar
+                        src={myProfile.avatar}
                         initials={getInitials(myProfile.name)}
                         size='xl'
                       />
@@ -103,7 +110,8 @@ const Profile = () => {
                         Email address
                       </p>
                       <p className='text-sm font-medium text-gray-800'>
-                        {myProfile.email}
+                        {myProfile.email || 'example@gmail.com'}{' '}
+                        {/* TODO will change */}
                       </p>
                     </div>
                   </div>
@@ -114,10 +122,10 @@ const Profile = () => {
         </div>
       </div>
 
-      {isEditModalOpen && (
-        <EditAdminModal
+      {isEditModalOpen && myProfile && (
+        <EditMyProfileModal
           isOpen={isEditModalOpen}
-          currentAdmin={myProfile}
+          data={{ name: myProfile.name, avatar: myProfile.avatar }}
           errorMessage={errorMessage}
           onSubmit={handleUpdateAdmin}
           onClose={() => setIsEditModalOpen(false)}

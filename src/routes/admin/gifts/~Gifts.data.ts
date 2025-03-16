@@ -9,7 +9,7 @@ export const GIFTS_TABLE_HEADER: TableHeader[] = [
   {
     key: 'name',
     title: 'Name',
-    width: 'min-w-20',
+    width: 'min-w-20 max-w-40',
     sortable: true,
   },
   {
@@ -21,7 +21,7 @@ export const GIFTS_TABLE_HEADER: TableHeader[] = [
   {
     key: 'restricted_countries',
     title: 'restricted countries',
-    width: 'min-w-18',
+    width: 'min-w-18 max-w-40',
     sortable: true,
   },
   {

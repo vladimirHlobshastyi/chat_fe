@@ -1,6 +1,7 @@
 import axiosClient from '../axiosClient';
 import {
   CreateModelQueryType,
+  DeleteModelQueryType,
   GetModelsQueryType,
   UpdateModelQueryType,
 } from './types';
@@ -38,10 +39,9 @@ export const updateModel = async (params: UpdateModelQueryType['Params']) => {
   return response.data;
 };
 
-/* export const deleteModel = async (params: DeleteModelQueryType['Params']) => {
+export const deleteModel = async (params: DeleteModelQueryType['Params']) => {
   const response = await axiosClient.delete<DeleteModelQueryType['Data']>(
     `/models/${params}`,
   );
   return response.data;
 };
- */

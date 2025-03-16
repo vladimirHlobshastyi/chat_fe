@@ -7,6 +7,7 @@ const Select = ({
   selectedValue,
   className,
   errorMessage,
+  disabled,
   onChange,
 }: SelectProps) => {
   return (
@@ -17,6 +18,7 @@ const Select = ({
         </label>
       )}
       <select
+        disabled={disabled}
         className={cn(
           'block w-full min-h-11 px-4 py-2.5 bg-background border border-border text-text text-sm rounded-lg focus:outline-none',
           errorMessage

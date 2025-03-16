@@ -5,7 +5,7 @@ import EditModelModal from '@/features/Admin/Models/EditModelModal';
 import Table from '@/components/Table/Table.component';
 import TableActions from '@/components/Table/TableActions';
 import { H3 } from '@/components/Typography/Typography.component';
-import { formatISODate } from '@/utils/date';
+import { convertUtcToLocal } from '@/utils/date';
 import ErrorPage from '@/components/ErrorPage';
 import Avatar from '@/components/Avatar';
 import { getInitials } from '@/utils/typography';
@@ -71,12 +71,11 @@ export const Models = () => {
                 geo: getCountryValue(model.geo),
                 about: model.about || 'Empty field...',
                 created_by: model.createdBy,
-                created_at: formatISODate(model.createdAt),
-                updated_at: formatISODate(model.updatedAt),
+                created_at: convertUtcToLocal(model.createdAt),
+                updated_at: convertUtcToLocal(model.updatedAt),
                 action: (
                   <TableActions
-                    deleteDisabled
-                    onDelete={() => onDeleteModel(/* model.id */)} //TODO will change
+                    onDelete={() => onDeleteModel(model.id)}
                     onEdit={() => setSelectedModel(model)}
                   />
                 ),

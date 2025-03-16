@@ -7,6 +7,7 @@ import Button from '../Button';
 import { Span } from '../Typography/Typography.component';
 import { SortState } from '@/types/common';
 import Loader from '../Loader';
+import { cn } from '@/utils/styles';
 
 const Table = ({
   headers,
@@ -197,7 +198,10 @@ const Table = ({
                     {headers.map((header, cellIndex) => (
                       <td
                         key={cellIndex}
-                        className='border-r border-gray-100 px-4 py-[17.5px] text-sm text-gray-700'
+                        className={cn(
+                          'border-r border-gray-100 px-4 py-[17.5px] text-sm text-gray-700 truncate',
+                          header.width,
+                        )}
                       >
                         {row[header.key]}
                       </td>
