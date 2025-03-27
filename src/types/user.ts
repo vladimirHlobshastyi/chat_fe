@@ -2,6 +2,7 @@ export type UserRole = 'chatter' | 'admin' | 'model' | 'user';
 
 export interface User {
   id: string;
+  userId?: string;
   clickId?: string;
   role: UserRole;
   name: string;
