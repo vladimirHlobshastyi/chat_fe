@@ -29,7 +29,7 @@ const Avatar = ({
     <span
       {...rest}
       className={cn(
-        'relative rounded-full bg-gray-150 flex items-center justify-center',
+        'relative rounded-full bg-gray-100 flex items-center justify-center',
         sizeClasses[size],
         className,
       )}

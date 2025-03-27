@@ -22,6 +22,7 @@ import { Route as AdminGiftsRouteImport } from './routes/admin/gifts/route'
 import { Route as AdminDialogsRouteImport } from './routes/admin/dialogs/route'
 import { Route as AdminChattersRouteImport } from './routes/admin/chatters/route'
 import { Route as AdminAdminsRouteImport } from './routes/admin/admins/route'
+import { Route as AdminDialogsUserIdRouteImport } from './routes/admin/dialogs/$userId/route'
 
 // Create/Update Routes
 
@@ -89,6 +90,12 @@ const AdminAdminsRouteRoute = AdminAdminsRouteImport.update({
   id: '/admins',
   path: '/admins',
   getParentRoute: () => AdminRouteRoute,
+} as any)
+
+const AdminDialogsUserIdRouteRoute = AdminDialogsUserIdRouteImport.update({
+  id: '/$userId',
+  path: '/$userId',
+  getParentRoute: () => AdminDialogsRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -172,15 +179,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRouteImport
     }
+    '/admin/dialogs/$userId': {
+      id: '/admin/dialogs/$userId'
+      path: '/$userId'
+      fullPath: '/admin/dialogs/$userId'
+      preLoaderRoute: typeof AdminDialogsUserIdRouteImport
+      parentRoute: typeof AdminDialogsRouteImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface AdminDialogsRouteRouteChildren {
+  AdminDialogsUserIdRouteRoute: typeof AdminDialogsUserIdRouteRoute
+}
+
+const AdminDialogsRouteRouteChildren: AdminDialogsRouteRouteChildren = {
+  AdminDialogsUserIdRouteRoute: AdminDialogsUserIdRouteRoute,
+}
+
+const AdminDialogsRouteRouteWithChildren =
+  AdminDialogsRouteRoute._addFileChildren(AdminDialogsRouteRouteChildren)
+
 interface AdminRouteRouteChildren {
   AdminAdminsRouteRoute: typeof AdminAdminsRouteRoute
   AdminChattersRouteRoute: typeof AdminChattersRouteRoute
-  AdminDialogsRouteRoute: typeof AdminDialogsRouteRoute
+  AdminDialogsRouteRoute: typeof AdminDialogsRouteRouteWithChildren
   AdminGiftsRouteRoute: typeof AdminGiftsRouteRoute
   AdminModelsRouteRoute: typeof AdminModelsRouteRoute
   AdminProfileRouteRoute: typeof AdminProfileRouteRoute
@@ -192,7 +217,7 @@ interface AdminRouteRouteChildren {
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminAdminsRouteRoute: AdminAdminsRouteRoute,
   AdminChattersRouteRoute: AdminChattersRouteRoute,
-  AdminDialogsRouteRoute: AdminDialogsRouteRoute,
+  AdminDialogsRouteRoute: AdminDialogsRouteRouteWithChildren,
   AdminGiftsRouteRoute: AdminGiftsRouteRoute,
   AdminModelsRouteRoute: AdminModelsRouteRoute,
   AdminProfileRouteRoute: AdminProfileRouteRoute,
@@ -210,13 +235,14 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRouteRoute
   '/admin/admins': typeof AdminAdminsRouteRoute
   '/admin/chatters': typeof AdminChattersRouteRoute
-  '/admin/dialogs': typeof AdminDialogsRouteRoute
+  '/admin/dialogs': typeof AdminDialogsRouteRouteWithChildren
   '/admin/gifts': typeof AdminGiftsRouteRoute
   '/admin/models': typeof AdminModelsRouteRoute
   '/admin/profile': typeof AdminProfileRouteRoute
   '/admin/tariffs': typeof AdminTariffsRouteRoute
   '/admin/transactions': typeof AdminTransactionsRouteRoute
   '/admin/users': typeof AdminUsersRouteRoute
+  '/admin/dialogs/$userId': typeof AdminDialogsUserIdRouteRoute
 }
 
 export interface FileRoutesByTo {
@@ -224,13 +250,14 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRouteRoute
   '/admin/admins': typeof AdminAdminsRouteRoute
   '/admin/chatters': typeof AdminChattersRouteRoute
-  '/admin/dialogs': typeof AdminDialogsRouteRoute
+  '/admin/dialogs': typeof AdminDialogsRouteRouteWithChildren
   '/admin/gifts': typeof AdminGiftsRouteRoute
   '/admin/models': typeof AdminModelsRouteRoute
   '/admin/profile': typeof AdminProfileRouteRoute
   '/admin/tariffs': typeof AdminTariffsRouteRoute
   '/admin/transactions': typeof AdminTransactionsRouteRoute
   '/admin/users': typeof AdminUsersRouteRoute
+  '/admin/dialogs/$userId': typeof AdminDialogsUserIdRouteRoute
 }
 
 export interface FileRoutesById {
@@ -239,13 +266,14 @@ export interface FileRoutesById {
   '/login': typeof LoginRouteRoute
   '/admin/admins': typeof AdminAdminsRouteRoute
   '/admin/chatters': typeof AdminChattersRouteRoute
-  '/admin/dialogs': typeof AdminDialogsRouteRoute
+  '/admin/dialogs': typeof AdminDialogsRouteRouteWithChildren
   '/admin/gifts': typeof AdminGiftsRouteRoute
   '/admin/models': typeof AdminModelsRouteRoute
   '/admin/profile': typeof AdminProfileRouteRoute
   '/admin/tariffs': typeof AdminTariffsRouteRoute
   '/admin/transactions': typeof AdminTransactionsRouteRoute
   '/admin/users': typeof AdminUsersRouteRoute
+  '/admin/dialogs/$userId': typeof AdminDialogsUserIdRouteRoute
 }
 
 export interface FileRouteTypes {
@@ -262,6 +290,7 @@ export interface FileRouteTypes {
     | '/admin/tariffs'
     | '/admin/transactions'
     | '/admin/users'
+    | '/admin/dialogs/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/admin'
@@ -275,6 +304,7 @@ export interface FileRouteTypes {
     | '/admin/tariffs'
     | '/admin/transactions'
     | '/admin/users'
+    | '/admin/dialogs/$userId'
   id:
     | '__root__'
     | '/admin'
@@ -288,6 +318,7 @@ export interface FileRouteTypes {
     | '/admin/tariffs'
     | '/admin/transactions'
     | '/admin/users'
+    | '/admin/dialogs/$userId'
   fileRoutesById: FileRoutesById
 }
 
@@ -342,7 +373,10 @@ export const routeTree = rootRoute
     },
     "/admin/dialogs": {
       "filePath": "admin/dialogs/route.tsx",
-      "parent": "/admin"
+      "parent": "/admin",
+      "children": [
+        "/admin/dialogs/$userId"
+      ]
     },
     "/admin/gifts": {
       "filePath": "admin/gifts/route.tsx",
@@ -367,6 +401,10 @@ export const routeTree = rootRoute
     "/admin/users": {
       "filePath": "admin/users/route.tsx",
       "parent": "/admin"
+    },
+    "/admin/dialogs/$userId": {
+      "filePath": "admin/dialogs/$userId/route.tsx",
+      "parent": "/admin/dialogs"
     }
   }
 }

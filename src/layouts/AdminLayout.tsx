@@ -3,7 +3,7 @@ import AdminSidebar from './AdminSidebar';
 
 const AdminLayout = () => {
   return (
-    <div className='w-full h-screen flex'>
+    <div className='w-full h-screen flex bg-secondary-dark'>
       <AdminSidebar />
       <Outlet />
     </div>
