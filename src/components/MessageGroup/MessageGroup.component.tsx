@@ -1,9 +1,10 @@
-import { getRelativeTimeFromUtc, shouldShowTimestamp } from '@/utils/date';
+import { shouldShowTimestamp } from '@/utils/date';
 import Avatar from '@/components/Avatar';
 import { Text } from '@/components/Typography/Typography.component';
 import { getInitials } from '@/utils/typography';
 import { cn } from '@/utils/styles';
 import { MessageGroupProps } from './MessageGroup.types';
+import ReactTimeAgo from 'react-time-ago';
 
 export const MessageGroup = ({
   messages,
@@ -63,14 +64,14 @@ export const MessageGroup = ({
             </div>
 
             {showTimestamp && (
-              <Text
+              <ReactTimeAgo
                 className={cn(
                   'flex text-gray-400 text-xs mt-1',
                   isPartnerMessage ? 'justify-start ml-12' : 'justify-end',
                 )}
-              >
-                {getRelativeTimeFromUtc(msg.created_at)}
-              </Text>
+                date={msg.created_at}
+                locale='en'
+              />
             )}
           </div>
         );

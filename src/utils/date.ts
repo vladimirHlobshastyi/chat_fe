@@ -15,14 +15,9 @@ export const convertUtcToLocal = (utcDate: string) => {
   return dayjs.utc(utcDate).tz(userTimeZone).format('YYYY-MM-DD HH:mm');
 };
 
-export const getRelativeTimeFromUtc = (utcDate: string) => {
-  const userTimeZone = dayjs.tz.guess();
-  return dayjs().to(dayjs.utc(utcDate).tz(userTimeZone));
-};
-
 export const shouldShowTimestamp = (
-  current: string,
-  next?: string,
+  current: Date,
+  next?: Date,
   currentSender?: string,
   nextSender?: string,
   thresholdMinutes = 5,
