@@ -1,5 +1,5 @@
 import { useParams } from '@tanstack/react-router';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, RefObject } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getMessages } from '@/api/message/requests';
 import { useMyProfileQuery } from '@/api/me/hooks';
@@ -9,17 +9,25 @@ import { useChatByIdQuery } from '@/api/chats/hooks';
 import { getInitials } from '@/utils/typography';
 import { Span } from '@/components/Typography/Typography.component';
 import MessageGroup from '@/components/MessageGroup';
+import useUniversalKeyboardShortcuts from '@/hooks/useUniversalKeyboardShortcuts';
+import { useChatStore } from '@/store/chatStore/useChatStore';
+import { getUserStatus } from '@/utils/date';
+import { useWebSocket } from '@/providers/WebSocketProvider/useWebSocket';
 
 function DialogPage() {
   const [message, setMessage] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
-  const ws = useRef<WebSocket | null>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+  const ws = useWebSocket();
 
   const { userId: partnerId } = useParams({ from: '/admin/dialogs/$userId' });
   const queryClient = useQueryClient();
   const { data: myProfile } = useMyProfileQuery();
+  const onlineUsers = useChatStore((s) => s.onlineUsers);
+  const isOnlineCurrentU = onlineUsers.has(partnerId);
 
   const chatId = [myProfile?.data.userId, partnerId].sort().join('_');
+  const currentUserId = myProfile?.data.userId;
   const { data: currentChat } = useChatByIdQuery(chatId);
 
   const { data: messagesData = [] } = useQuery<Message[]>({
@@ -29,17 +37,9 @@ function DialogPage() {
   });
 
   useEffect(() => {
-    if (!myProfile?.data) return;
+    if (!ws || !chatId) return;
 
-    ws.current = new WebSocket('ws://localhost:3001');
-
-    ws.current.onopen = () => {
-      ws.current?.send(
-        JSON.stringify({ type: 'init', userId: myProfile.data.userId }),
-      );
-    };
-
-    ws.current.onmessage = (event) => {
+    const handleMessage = (event: MessageEvent) => {
       const msg = JSON.parse(event.data);
       if (msg.type === 'new_message' && msg.data.chat_id === chatId) {
         queryClient.setQueryData(['dialog', chatId], (old: Message[] = []) => [
@@ -49,29 +49,34 @@ function DialogPage() {
       }
     };
 
+    ws.addEventListener('message', handleMessage);
+
     return () => {
-      ws.current?.close();
+      ws.removeEventListener('message', handleMessage);
     };
-  }, [myProfile, chatId, queryClient]);
+  }, [ws, chatId, queryClient]);
 
   const handleSend = () => {
-    if (!message.trim() || !chatId || !partnerId) return;
+    if (
+      !message.trim() ||
+      !chatId ||
+      !partnerId ||
+      ws?.readyState !== WebSocket.OPEN
+    )
+      return;
 
-    if (ws.current?.readyState === WebSocket.OPEN) {
-      try {
-        ws.current.send(
-          JSON.stringify({
-            type: 'message',
-            chatId,
-            recipientId: partnerId,
-            text: message,
-          }),
-        );
-        queryClient.invalidateQueries({ queryKey: ['chats'] });
-        setMessage('');
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      ws.send(
+        JSON.stringify({
+          type: 'message',
+          chatId,
+          recipientId: partnerId,
+          text: message,
+        }),
+      );
+      setMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error);
     }
   };
 
@@ -80,12 +85,18 @@ function DialogPage() {
     queryClient.invalidateQueries({ queryKey: ['chats'] });
   }, [messagesData]);
 
-  const currentUserId = myProfile?.data.userId;
-
+  useUniversalKeyboardShortcuts({
+    shortcuts: [{ key: 'Enter', action: handleSend }],
+    ref: mainRef as RefObject<HTMLElement>,
+  });
   return (
-    <div className='w-full h-full flex flex-col border border-gray-200 rounded-xl ml-6 bg-white'>
+    <div
+      className='w-full h-full flex flex-col border border-gray-200 rounded-xl ml-6 bg-white'
+      ref={mainRef}
+    >
       <div className='px-5 py-4 flex gap-3 items-center border-b border-gray-200'>
         <Avatar
+          userStatus={getUserStatus(isOnlineCurrentU, currentChat?.last_seen)}
           size='md'
           src={currentChat?.partner_avatar}
           initials={getInitials(currentChat?.partner_name || 'avatar')}
