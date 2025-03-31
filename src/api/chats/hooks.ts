@@ -7,6 +7,8 @@ export const useChatsQuery = (search: GetChatQueryType['Params']) => {
     queryKey: ['chats', search],
     queryFn: () => getChats(search),
     placeholderData: (prev) => prev,
+    staleTime: 30_000,
+    refetchInterval: 30_000,
   });
 };
 
@@ -26,5 +28,7 @@ export const useChatByIdQuery = (chatId: string) => {
     queryKey: ['chat', chatId],
     queryFn: () => getChatById(chatId),
     enabled: !!chatId,
+    staleTime: 30_000,
+    refetchInterval: 30_000,
   });
 };

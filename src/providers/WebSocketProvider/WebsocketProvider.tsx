@@ -1,7 +1,7 @@
 import { useEffect, useRef, useCallback, useState, ReactNode } from 'react';
 import { useChatStore } from '@/store/chatStore/useChatStore';
 import { WebSocketContext } from './useWebSocket';
-import { useAuthStore } from '@/store/authStore/authStore';
+import { useAuthStore } from '@/store/authStore/useAuthStore';
 
 export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const [ws, setWs] = useState<WebSocket | null>(null);
