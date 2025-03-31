@@ -43,6 +43,9 @@ export default {
           error: '#ffecec',
           success: '#12B76A1A',
         },
+        success: {
+          DEFAULT: '#11b86a',
+        },
         gray: {
           50: '#F9FAFB',
           100: '#F3F4F6',
@@ -74,6 +77,7 @@ export default {
         minimal: '0.7px',
         DEFAULT: '1px',
         second: '1.25px',
+        medium: '1.5px',
       },
       keyframes: {
         fadeIn: {
