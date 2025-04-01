@@ -30,6 +30,7 @@ export default {
           disabled: '#d0d5dd',
           success: '#11b86a',
           error: '#f04439',
+          icon: '#667085',
         },
         border: {
           DEFAULT: '#D1D5DB',
