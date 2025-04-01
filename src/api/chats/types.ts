@@ -5,7 +5,7 @@ export interface Chat {
   partner_avatar?: string;
   partner_id: string;
   partner_name: string;
-  last_message_time: Date;
+  last_message_time?: Date;
   last_seen?: Date;
 }
 

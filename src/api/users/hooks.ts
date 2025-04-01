@@ -1,11 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  createUser,
-  deleteUser,
-  getUsers,
-  updateLastSeen,
-  updateUser,
-} from './requests';
+import { createUser, deleteUser, getUsers, updateUser } from './requests';
 import { GetUsersQueryType } from './types';
 
 export const useUsersQuery = (params: GetUsersQueryType['Params']) => {
@@ -43,16 +37,5 @@ export const useDeleteUserMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
     },
-  });
-};
-
-export const useUpdateLastSeen = () => {
-  return useQuery({
-    queryKey: ['update-last-seen'],
-    queryFn: updateLastSeen,
-    refetchInterval: 30_000,
-    enabled: true,
-    staleTime: Infinity,
-    retry: false,
   });
 };

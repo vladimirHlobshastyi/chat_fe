@@ -10,7 +10,6 @@ const DialogItem = ({ chat }: DialogItemProps) => {
   const navigate = useNavigate();
   const onlineUsers = useChatStore((s) => s.onlineUsers);
   const isOnlineCurrentU = onlineUsers.has(chat.partner_id);
-
   return (
     <div
       key={chat.partner_id}
@@ -30,12 +29,14 @@ const DialogItem = ({ chat }: DialogItemProps) => {
         </span>
       </div>
       <div className='flex h-full items-start'>
-        <ReactTimeAgo
-          className='text-xs text-gray-400'
-          date={chat.last_message_time}
-          locale='en'
-          timeStyle='twitter'
-        />
+        {chat.last_message_time && (
+          <ReactTimeAgo
+            className='text-xs text-gray-400'
+            date={chat.last_message_time}
+            locale='en'
+            timeStyle='twitter'
+          />
+        )}
       </div>
     </div>
   );

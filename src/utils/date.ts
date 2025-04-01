@@ -39,11 +39,11 @@ export const getUserStatus = (
   isOnline: boolean,
   lastSeen?: string | Date | null,
 ): UserStatus => {
+  if (isOnline) return 'online';
+
   if (!lastSeen) return 'offline';
 
   const diff = dayjs().diff(dayjs.utc(lastSeen).tz(dayjs.tz.guess()), 'minute');
 
-  if (isOnline) return 'online';
-  if (diff < 2) return 'recently';
-  return 'offline';
+  return diff < 2 ? 'recently' : 'offline';
 };

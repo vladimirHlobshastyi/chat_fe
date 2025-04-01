@@ -20,11 +20,6 @@ export const getUsers = async (params: GetUsersQueryType['Params']) => {
   return response.data;
 };
 
-export const updateLastSeen = async () => {
-  const response = await axiosClient.post('/users/update-last-seen');
-  return response.data;
-};
-
 export const createUser = async (params: CreateUserQueryType['Params']) => {
   const response = await axiosClient.post<CreateUserQueryType['Data']>(
     '/users',

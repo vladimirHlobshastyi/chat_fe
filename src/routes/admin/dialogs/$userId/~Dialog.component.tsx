@@ -13,6 +13,7 @@ import useUniversalKeyboardShortcuts from '@/hooks/useUniversalKeyboardShortcuts
 import { useChatStore } from '@/store/chatStore/useChatStore';
 import { getUserStatus } from '@/utils/date';
 import { useWebSocket } from '@/providers/WebSocketProvider/useWebSocket';
+import Loader from '@/components/Loader';
 
 function DialogPage() {
   const [message, setMessage] = useState('');
@@ -30,7 +31,7 @@ function DialogPage() {
   const currentUserId = myProfile?.data.userId;
   const { data: currentChat } = useChatByIdQuery(chatId);
 
-  const { data: messagesData = [] } = useQuery<Message[]>({
+  const { data: messagesData = [], isFetched } = useQuery<Message[]>({
     queryKey: ['dialog', chatId],
     queryFn: () => getMessages(chatId),
     enabled: !!chatId,
@@ -104,12 +105,19 @@ function DialogPage() {
         <Span className='text-sm'>{currentChat?.partner_name}</Span>
       </div>
       <div className='flex-1 overflow-y-auto bg-white p-5 rounded'>
-        <MessageGroup
-          messages={messagesData}
-          currentUserId={currentUserId as string}
-          partnerAvatar={currentChat?.partner_avatar}
-          partnerName={currentChat?.partner_name}
-        />
+        {!isFetched ? (
+          <Loader />
+        ) : messagesData.length > 0 ? (
+          <MessageGroup
+            messages={messagesData}
+            currentUserId={currentUserId as string}
+            partnerAvatar={currentChat?.partner_avatar}
+            partnerName={currentChat?.partner_name}
+          />
+        ) : (
+          <div className='text-sm text-gray-400'>No messages yet...</div>
+        )}
+
         <div ref={bottomRef} />
       </div>
       <div className='w-full flex gap-2 p-3 border-t border-gray-200'>
