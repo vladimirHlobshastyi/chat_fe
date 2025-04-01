@@ -10,7 +10,7 @@ export const useLoginMutation = () => {
     mutationFn: login,
     onSuccess: () => {
       setIsAuthenticated(true);
-      navigate({ to: '/admin/users' });
+      navigate({ to: '/admin' });
     },
     onError: (error) => {
       console.error('Login failed:', error);

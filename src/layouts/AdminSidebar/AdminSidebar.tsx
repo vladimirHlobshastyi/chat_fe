@@ -9,6 +9,7 @@ import { useState, useRef, RefObject } from 'react';
 import useOutsideClick from '@/hooks/useOutsideClick';
 import { useLogOutMutation } from '@/api/auth/hooks';
 import Icon from '@/components/Icon';
+import { useQueryClient } from '@tanstack/react-query';
 
 const AdminSidebar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -19,9 +20,11 @@ const AdminSidebar = () => {
   const navigate = useNavigate();
   const myProfileQuery = useMyProfileQuery();
   const logOutMutation = useLogOutMutation();
+  const queryClient = useQueryClient();
 
   const handleLogout = () => {
     logOutMutation.mutate();
+    queryClient.clear();
   };
 
   const myProfile = myProfileQuery?.data?.data;
@@ -83,8 +86,7 @@ const AdminSidebar = () => {
                   {myProfile?.name}
                 </span>
                 <span className='mt-0.5 block text-xs text-gray-500'>
-                  johndoe@example.com
-                  {/*  {myProfile?.email} TODO will change */}
+                  {myProfile?.email}
                 </span>
               </div>
 

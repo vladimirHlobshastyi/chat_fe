@@ -8,6 +8,7 @@ import DialogItem from './DialogItem/DialogItem';
 const DialogsLayout = () => {
   const [searchChat, setSearchChat] = useState(''); //TODO will add debounce
   const { data: chats = [] } = useChatsQuery({ search: searchChat });
+
   return (
     <div className='p-4 w-full h-full flex'>
       <div className='max-w-72 w-full h-full p-4 flex flex-col border bg-white border-gray-200 rounded-xl'>
