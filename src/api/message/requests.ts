@@ -1,24 +1,17 @@
 import axiosClient from '../axiosClient';
 import { GetMessageQueryType } from './types';
 
-export const getMessages = async (chatId: GetMessageQueryType['Params']) => {
-  const response = await axiosClient.get(`/messages/${chatId}`);
-  return response.data;
-};
-
-export const sendMessage = async ({
+export const getMessages = async ({
   chatId,
-  recipientId,
-  text,
-}: {
-  chatId: string;
-  recipientId: string;
-  text: string;
-}) => {
-  const response = await axiosClient.post('/messages', {
-    chatId,
-    recipientId,
-    text,
-  });
+  before,
+  limit = 25,
+}: GetMessageQueryType['Params']) => {
+  const response = await axiosClient.get<GetMessageQueryType['Data']>(
+    `/messages/${chatId}`,
+    {
+      params: { before, limit },
+    },
+  );
+
   return response.data;
 };

@@ -1,9 +1,7 @@
 import { useParams } from '@tanstack/react-router';
 import { useState, useEffect, useRef, RefObject } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getMessages } from '@/api/message/requests';
+import { InfiniteData, useQueryClient } from '@tanstack/react-query';
 import { useMyProfileQuery } from '@/api/me/hooks';
-import { Message } from '@/types/messages';
 import Avatar from '@/components/Avatar';
 import { useChatByIdQuery } from '@/api/chats/hooks';
 import { getInitials } from '@/utils/typography';
@@ -14,11 +12,15 @@ import { useChatStore } from '@/store/chatStore/useChatStore';
 import { getUserStatus } from '@/utils/date';
 import { useWebSocket } from '@/providers/WebSocketProvider/useWebSocket';
 import Loader from '@/components/Loader';
+import { useMessagesInfiniteQuery } from '@/api/message/hooks';
+import { Message } from '@/types/messages';
 
 function DialogPage() {
   const [message, setMessage] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const ws = useWebSocket();
 
   const { userId: partnerId } = useParams({ from: '/admin/dialogs/$userId' });
@@ -31,11 +33,10 @@ function DialogPage() {
   const currentUserId = myProfile?.data.userId;
   const { data: currentChat } = useChatByIdQuery(chatId);
 
-  const { data: messagesData = [], isFetched } = useQuery<Message[]>({
-    queryKey: ['dialog', chatId],
-    queryFn: () => getMessages(chatId),
-    enabled: !!chatId,
-  });
+  const { data, isFetched, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useMessagesInfiniteQuery(chatId);
+
+  const messagesData = (data?.pages ?? []).flat();
 
   useEffect(() => {
     if (!ws || !chatId) return;
@@ -43,18 +44,24 @@ function DialogPage() {
     const handleMessage = (event: MessageEvent) => {
       const msg = JSON.parse(event.data);
       if (msg.type === 'new_message' && msg.data.chat_id === chatId) {
-        queryClient.setQueryData(['dialog', chatId], (old: Message[] = []) => [
-          ...old,
-          msg.data,
-        ]);
+        queryClient.setQueryData<InfiniteData<Message[]>>(
+          ['messages', chatId],
+          (old) => {
+            if (!old) return { pages: [[msg.data]], pageParams: [] };
+            return {
+              ...old,
+              pages: [
+                ...old.pages.slice(0, -1),
+                [...old.pages.at(-1)!, msg.data],
+              ],
+            };
+          },
+        );
       }
     };
 
     ws.addEventListener('message', handleMessage);
-
-    return () => {
-      ws.removeEventListener('message', handleMessage);
-    };
+    return () => ws.removeEventListener('message', handleMessage);
   }, [ws, chatId, queryClient]);
 
   const handleSend = () => {
@@ -65,7 +72,6 @@ function DialogPage() {
       ws?.readyState !== WebSocket.OPEN
     )
       return;
-
     try {
       ws.send(
         JSON.stringify({
@@ -82,17 +88,37 @@ function DialogPage() {
   };
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    queryClient.invalidateQueries({ queryKey: ['chats'] });
-  }, [messagesData]);
+    if (!observerRef.current || !hasNextPage || isFetchingNextPage) return;
+
+    const container = scrollContainerRef.current;
+    const prevScrollHeight = container?.scrollHeight || 0;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasNextPage) {
+        fetchNextPage().then(() => {
+          requestAnimationFrame(() => {
+            if (container) {
+              const newScrollHeight = container.scrollHeight;
+              container.scrollTop += newScrollHeight - prevScrollHeight;
+            }
+          });
+        });
+      }
+    });
+
+    observer.observe(observerRef.current);
+
+    return () => observer.disconnect();
+  }, [observerRef.current, hasNextPage, isFetchingNextPage]);
 
   useUniversalKeyboardShortcuts({
     shortcuts: [{ key: 'Enter', action: handleSend }],
     ref: mainRef as RefObject<HTMLElement>,
   });
+
   return (
     <div
-      className='w-full h-full flex flex-col border border-gray-200 rounded-xl ml-6 bg-white'
+      className='w-full h-full flex flex-col border border-gray-200 rounded-xl ml-6 bg-white overflow-hidden'
       ref={mainRef}
     >
       <div className='px-5 py-4 flex gap-3 items-center border-b border-gray-200'>
@@ -104,21 +130,26 @@ function DialogPage() {
         />
         <Span className='text-sm'>{currentChat?.partner_name}</Span>
       </div>
-      <div className='flex-1 overflow-y-auto bg-white p-5 rounded'>
+      <div
+        className='flex-1 overflow-x-hidden overflow-y-auto bg-white p-5 rounded flex flex-col-reverse'
+        ref={scrollContainerRef}
+      >
         {!isFetched ? (
           <Loader />
         ) : messagesData.length > 0 ? (
-          <MessageGroup
-            messages={messagesData}
-            currentUserId={currentUserId as string}
-            partnerAvatar={currentChat?.partner_avatar}
-            partnerName={currentChat?.partner_name}
-          />
+          <>
+            <div ref={bottomRef} />
+            <MessageGroup
+              messages={messagesData}
+              currentUserId={currentUserId as string}
+              partnerAvatar={currentChat?.partner_avatar}
+              partnerName={currentChat?.partner_name}
+            />
+            <div ref={observerRef} className='h-1' />
+          </>
         ) : (
           <div className='text-sm text-gray-400'>No messages yet...</div>
         )}
-
-        <div ref={bottomRef} />
       </div>
       <div className='w-full flex gap-2 p-3 border-t border-gray-200'>
         <input

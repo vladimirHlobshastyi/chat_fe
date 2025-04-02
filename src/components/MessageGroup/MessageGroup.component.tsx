@@ -59,7 +59,7 @@ export const MessageGroup = ({
                     : 'bg-primary text-white',
                 )}
               >
-                <Text className='text-sm'>{msg.text}</Text>
+                <Text className='text-sm break-words'>{msg.text}</Text>
               </div>
             </div>
 

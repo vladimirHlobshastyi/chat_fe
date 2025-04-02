@@ -10,7 +10,7 @@ const DialogsLayout = () => {
   const { data: chats = [] } = useChatsQuery({ search: searchChat });
 
   return (
-    <div className='p-4 w-full h-full flex'>
+    <div className='p-4 w-full h-full flex overflow-hidden'>
       <div className='max-w-72 w-full h-full p-4 flex flex-col border bg-white border-gray-200 rounded-xl'>
         <H1 className='text-2xl'>Chats</H1>
         <InputField

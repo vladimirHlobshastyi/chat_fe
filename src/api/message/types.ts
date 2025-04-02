@@ -1,6 +1,10 @@
 import { Message } from '@/types/messages';
 
 export type GetMessageQueryType = {
-  Params: string;
-  Data: { data: Message[] };
+  Params: {
+    chatId: string;
+    before?: string;
+    limit?: number;
+  };
+  Data: Message[];
 };
