@@ -7,8 +7,8 @@ export const useChatsQuery = (search: GetChatQueryType['Params']) => {
     queryKey: ['chats', search],
     queryFn: () => getChats(search),
     placeholderData: (prev) => prev,
-    staleTime: 15_000, //TODO will wix it
-    refetchInterval: 15_000,
+    staleTime: 60_000, //TODO will wix it
+    refetchInterval: 60_000,
   });
 };
 
@@ -28,7 +28,7 @@ export const useChatByIdQuery = (chatId: string) => {
     queryKey: ['chat', chatId],
     queryFn: () => getChatById(chatId),
     enabled: !!chatId,
-    staleTime: 15_000, //TODO will wix it
-    refetchInterval: 15_000,
+    staleTime: 60_000, //TODO will wix it
+    refetchInterval: 60_000,
   });
 };

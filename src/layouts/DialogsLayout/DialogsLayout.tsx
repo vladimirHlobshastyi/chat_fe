@@ -21,7 +21,11 @@ const DialogsLayout = () => {
         />
         <div className='flex flex-col gap-3 overflow-auto'>
           {chats.map((chat) => (
-            <DialogItem key={chat.partner_id} chat={chat} />
+            <DialogItem
+              searchChat={searchChat}
+              key={chat.partner_id}
+              chat={chat}
+            />
           ))}
         </div>
       </div>

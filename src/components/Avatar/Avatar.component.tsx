@@ -34,7 +34,7 @@ const Avatar = ({
 
   const dotColor = {
     online: 'bg-green-500',
-    recently: 'bg-gray-400',
+    recently: 'bg-orange',
     offline: '',
   };
 

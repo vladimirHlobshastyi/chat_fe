@@ -1,5 +1,5 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { getMessages } from './requests';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
+import { getMessages, markMessagesAsRead } from './requests';
 import { Message } from '@/types/messages';
 
 export const useMessagesInfiniteQuery = (chatId: string) => {
@@ -17,5 +17,14 @@ export const useMessagesInfiniteQuery = (chatId: string) => {
     },
     initialPageParam: undefined,
     enabled: !!chatId,
+  });
+};
+
+export const useMarkMessagesAsReadMutation = () => {
+  return useMutation({
+    mutationFn: (chatId: string) => markMessagesAsRead(chatId),
+    onSuccess: () => {
+      console.log('Marked message as read successfully');
+    },
   });
 };

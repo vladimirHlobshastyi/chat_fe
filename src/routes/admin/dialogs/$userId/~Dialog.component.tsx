@@ -12,7 +12,10 @@ import { useChatStore } from '@/store/chatStore/useChatStore';
 import { getUserStatus } from '@/utils/date';
 import { useWebSocket } from '@/providers/WebSocketProvider/useWebSocket';
 import Loader from '@/components/Loader';
-import { useMessagesInfiniteQuery } from '@/api/message/hooks';
+import {
+  useMarkMessagesAsReadMutation,
+  useMessagesInfiniteQuery,
+} from '@/api/message/hooks';
 import { Message } from '@/types/messages';
 
 function DialogPage() {
@@ -22,6 +25,7 @@ function DialogPage() {
   const observerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;
 
   const ws = useWebSocket();
@@ -29,7 +33,9 @@ function DialogPage() {
   const { userId: partnerId } = useParams({ from: '/admin/dialogs/$userId' });
   const queryClient = useQueryClient();
   const { data: myProfile } = useMyProfileQuery();
+  const { mutate } = useMarkMessagesAsReadMutation();
   const onlineUsers = useChatStore((s) => s.onlineUsers);
+
   const isOnlineCurrentU = onlineUsers.has(partnerId);
   const myId = myProfile?.data.userId;
 
@@ -74,8 +80,10 @@ function DialogPage() {
       !chatId ||
       !partnerId ||
       ws?.readyState !== WebSocket.OPEN
-    )
+    ) {
       return;
+    }
+
     try {
       ws.send(
         JSON.stringify({
@@ -90,6 +98,13 @@ function DialogPage() {
       console.error('Error sending message:', error);
     }
   };
+
+  useEffect(() => {
+    if (chatId && isFetched && messagesData.length > 0) {
+      mutate(chatId);
+      console.log('mutated');
+    }
+  }, [chatId, isFetched, messagesData.length]);
 
   useEffect(() => {
     if (!ws || !chatId) return;
