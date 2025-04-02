@@ -2,6 +2,7 @@ import { useEffect, useRef, useCallback, useState, ReactNode } from 'react';
 import { useChatStore } from '@/store/chatStore/useChatStore';
 import { WebSocketContext } from './useWebSocket';
 import { useAuthStore } from '@/store/authStore/useAuthStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const [ws, setWs] = useState<WebSocket | null>(null);
@@ -10,6 +11,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const myId = useChatStore((s) => s.myProfile?.userId);
   const setOnlineUsers = useChatStore((s) => s.setOnlineUsers);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const queryClient = useQueryClient();
 
   const connect = useCallback(() => {
     if (!isAuthenticated || ws) return;
@@ -27,6 +29,16 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
       const msg = JSON.parse(event.data);
       if (msg.type === 'online_users') {
         setOnlineUsers(msg.data);
+      }
+
+      if (msg.type === 'new_message') {
+        queryClient.invalidateQueries({ queryKey: ['unread-total'] });
+        queryClient.invalidateQueries({ queryKey: ['unread-per-chat'] });
+      }
+
+      if (msg.type === 'read_message') {
+        queryClient.invalidateQueries({ queryKey: ['unread-total'] });
+        queryClient.invalidateQueries({ queryKey: ['unread-per-chat'] });
       }
     };
 

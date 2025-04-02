@@ -17,5 +17,7 @@ export const getMessages = async ({
 };
 
 export const markMessagesAsRead = async (chatId: string) => {
-  await axiosClient.patch(`/messages/${chatId}/read`);
+  const response = await axiosClient.patch(`/messages/${chatId}/read`);
+
+  return response;
 };

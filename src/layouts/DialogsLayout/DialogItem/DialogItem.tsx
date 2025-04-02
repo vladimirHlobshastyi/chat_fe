@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { cn } from '@/utils/styles';
 import { Chat } from '@/api/chats/types';
+import { useUnreadPerChatQuery } from '@/api/chats/hooks';
+import MessageCounter from '@/components/MessageCounter';
 
 const DialogItem = ({ chat, searchChat }: DialogItemProps) => {
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
@@ -18,6 +20,9 @@ const DialogItem = ({ chat, searchChat }: DialogItemProps) => {
   const isOnlineCurrentU = onlineUsers.has(chat.partner_id);
   const queryClient = useQueryClient();
   const chatId = chat.chat_id;
+
+  const { data: unreadByChat } = useUnreadPerChatQuery();
+  const unreadMessageCount = unreadByChat?.[chatId] || 0;
 
   const ws = useWebSocket();
 
@@ -77,7 +82,7 @@ const DialogItem = ({ chat, searchChat }: DialogItemProps) => {
             : chat.last_message || 'No messages yet...'}
         </span>
       </div>
-      <div className='flex h-full items-start'>
+      <div className='flex h-full flex-col justify-between items-start'>
         {chat.last_message_time && (
           <ReactTimeAgo
             className='text-xs text-gray-400'
@@ -85,6 +90,9 @@ const DialogItem = ({ chat, searchChat }: DialogItemProps) => {
             locale='en'
             timeStyle='twitter'
           />
+        )}
+        {unreadMessageCount > 0 && (
+          <MessageCounter value={unreadMessageCount} />
         )}
       </div>
     </div>

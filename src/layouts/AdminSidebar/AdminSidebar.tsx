@@ -10,6 +10,8 @@ import useOutsideClick from '@/hooks/useOutsideClick';
 import { useLogOutMutation } from '@/api/auth/hooks';
 import Icon from '@/components/Icon';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTotalUnreadQuery } from '@/api/chats/hooks';
+import MessageCounter from '@/components/MessageCounter';
 
 const AdminSidebar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -21,6 +23,7 @@ const AdminSidebar = () => {
   const myProfileQuery = useMyProfileQuery();
   const logOutMutation = useLogOutMutation();
   const queryClient = useQueryClient();
+  const { data: totalUnreadMessages } = useTotalUnreadQuery();
 
   const handleLogout = () => {
     logOutMutation.mutate();
@@ -142,6 +145,12 @@ const AdminSidebar = () => {
               >
                 {title}
               </Span>
+              {path === '/admin/dialogs' && !!totalUnreadMessages && (
+                <MessageCounter
+                  className='ml-auto'
+                  value={totalUnreadMessages}
+                />
+              )}
             </Link>
           );
         })}

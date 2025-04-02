@@ -63,6 +63,7 @@ export default {
         blue: {
           50: '#ecf3ff',
         },
+        orange: { DEFAULT: '#f79007' },
       },
       fontFamily: {
         outfit: ['Outfit', 'sans-serif'],

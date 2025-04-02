@@ -1,5 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getChats, createChat, getChatById } from '@/api/chats/requests';
+import {
+  getChats,
+  createChat,
+  getChatById,
+  getTotalUnreadCount,
+  getUnreadByChat,
+} from '@/api/chats/requests';
 import { GetChatQueryType } from './types';
 
 export const useChatsQuery = (search: GetChatQueryType['Params']) => {
@@ -30,5 +36,23 @@ export const useChatByIdQuery = (chatId: string) => {
     enabled: !!chatId,
     staleTime: 60_000, //TODO will wix it
     refetchInterval: 60_000,
+  });
+};
+
+export const useTotalUnreadQuery = () => {
+  return useQuery({
+    queryKey: ['unread-total'],
+    queryFn: getTotalUnreadCount,
+    refetchInterval: 30_000,
+    staleTime: 30_000,
+  });
+};
+
+export const useUnreadPerChatQuery = () => {
+  return useQuery({
+    queryKey: ['unread-per-chat'],
+    queryFn: getUnreadByChat,
+    refetchInterval: 30_000,
+    staleTime: 30_000,
   });
 };

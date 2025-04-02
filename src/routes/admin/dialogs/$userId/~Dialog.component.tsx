@@ -101,8 +101,12 @@ function DialogPage() {
 
   useEffect(() => {
     if (chatId && isFetched && messagesData.length > 0) {
-      mutate(chatId);
-      console.log('mutated');
+      mutate(chatId, {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ['unread-per-chat'] });
+          queryClient.invalidateQueries({ queryKey: ['unread-total'] });
+        },
+      });
     }
   }, [chatId, isFetched, messagesData.length]);
 
