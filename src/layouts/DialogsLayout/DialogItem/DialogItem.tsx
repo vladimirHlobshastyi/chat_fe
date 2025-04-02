@@ -1,6 +1,6 @@
 import Avatar from '@/components/Avatar';
 import { getInitials } from '@/utils/typography';
-import { useNavigate } from '@tanstack/react-router';
+import { useMatchRoute, useNavigate } from '@tanstack/react-router';
 import ReactTimeAgo from 'react-time-ago';
 import { DialogItemProps } from './DialogItem.types';
 import { useChatStore } from '@/store/chatStore/useChatStore';
@@ -17,14 +17,20 @@ const DialogItem = ({ chat, searchChat }: DialogItemProps) => {
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const navigate = useNavigate();
   const onlineUsers = useChatStore((s) => s.onlineUsers);
-  const isOnlineCurrentU = onlineUsers.has(chat.partner_id);
   const queryClient = useQueryClient();
-  const chatId = chat.chat_id;
-
-  const { data: unreadByChat } = useUnreadPerChatQuery();
-  const unreadMessageCount = unreadByChat?.[chatId] || 0;
+  const matchRoute = useMatchRoute();
 
   const ws = useWebSocket();
+
+  const { data: unreadByChat } = useUnreadPerChatQuery();
+
+  const chatId = chat.chat_id;
+  const unreadMessageCount = unreadByChat?.[chatId] || 0;
+  const isOnlineCurrentU = onlineUsers.has(chat.partner_id);
+  const isActive = matchRoute({
+    to: '/admin/dialogs/$userId',
+    params: { userId: chat.partner_id },
+  });
 
   useEffect(() => {
     if (!ws || !chatId) return;
@@ -60,10 +66,16 @@ const DialogItem = ({ chat, searchChat }: DialogItemProps) => {
   return (
     <div
       key={chat.partner_id}
-      className='flex items-center gap-3 cursor-pointer hover:bg-gray-150 rounded-xl p-3'
+      className={cn(
+        'flex items-center gap-3 cursor-pointer rounded-xl p-3',
+        isActive ? 'bg-blue-50 text-primary' : 'hover:bg-gray-150',
+      )}
       onClick={() => navigate({ to: `/admin/dialogs/${chat.partner_id}` })}
     >
       <Avatar
+        className={cn(
+          isActive && !chat.partner_avatar && 'ring-1 ring-offset-ring-success',
+        )}
         userStatus={getUserStatus(isOnlineCurrentU, chat.last_seen)}
         size='md'
         src={chat.partner_avatar}

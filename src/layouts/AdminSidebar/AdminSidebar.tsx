@@ -12,6 +12,7 @@ import Icon from '@/components/Icon';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTotalUnreadQuery } from '@/api/chats/hooks';
 import MessageCounter from '@/components/MessageCounter';
+import { IconNamesType } from '@/components/Icon/Icon.types';
 
 const AdminSidebar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -124,8 +125,8 @@ const AdminSidebar = () => {
       </div>
 
       <nav className='w-full h-full flex flex-col gap-4 p-5 overflow-auto'>
-        {MENU_ITEMS.map(({ icon, title, path }) => {
-          const isActive = !!matchRoute({ to: path });
+        {MENU_ITEMS.map(({ iconName, title, path }) => {
+          const isActive = !!matchRoute({ to: path, fuzzy: true });
 
           return (
             <Link
@@ -136,7 +137,15 @@ const AdminSidebar = () => {
                 isActive ? 'bg-blue-50 text-primary' : 'hover:bg-gray-150',
               )}
             >
-              {icon && icon}
+              {iconName && (
+                <Icon
+                  name={iconName as IconNamesType}
+                  className={cn(
+                    'w-6 h-6',
+                    isActive ? 'text-primary' : 'text-text-icon',
+                  )}
+                />
+              )}
               <Span
                 weight='medium'
                 className={cn(
