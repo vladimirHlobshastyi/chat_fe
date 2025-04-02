@@ -17,10 +17,13 @@ import { Message } from '@/types/messages';
 
 function DialogPage() {
   const [message, setMessage] = useState('');
+  const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  let typingTimeout: ReturnType<typeof setTimeout> | null = null;
+
   const ws = useWebSocket();
 
   const { userId: partnerId } = useParams({ from: '/admin/dialogs/$userId' });
@@ -28,9 +31,10 @@ function DialogPage() {
   const { data: myProfile } = useMyProfileQuery();
   const onlineUsers = useChatStore((s) => s.onlineUsers);
   const isOnlineCurrentU = onlineUsers.has(partnerId);
+  const myId = myProfile?.data.userId;
 
-  const chatId = [myProfile?.data.userId, partnerId].sort().join('_');
-  const currentUserId = myProfile?.data.userId;
+  const chatId = [myId, partnerId].sort().join('_');
+  const currentUserId = myId;
   const { data: currentChat } = useChatByIdQuery(chatId);
 
   const { data, isFetched, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -38,31 +42,31 @@ function DialogPage() {
 
   const messagesData = (data?.pages ?? []).flat();
 
-  useEffect(() => {
-    if (!ws || !chatId) return;
+  const handleTyping = () => {
+    if (ws?.readyState !== WebSocket.OPEN) return;
 
-    const handleMessage = (event: MessageEvent) => {
-      const msg = JSON.parse(event.data);
-      if (msg.type === 'new_message' && msg.data.chat_id === chatId) {
-        queryClient.setQueryData<InfiniteData<Message[]>>(
-          ['messages', chatId],
-          (old) => {
-            if (!old) return { pages: [[msg.data]], pageParams: [] };
-            return {
-              ...old,
-              pages: [
-                ...old.pages.slice(0, -1),
-                [...old.pages.at(-1)!, msg.data],
-              ],
-            };
-          },
-        );
-      }
-    };
+    ws.send(
+      JSON.stringify({
+        type: 'typing',
+        chatId,
+        senderId: myId,
+        isTyping: true,
+      }),
+    );
 
-    ws.addEventListener('message', handleMessage);
-    return () => ws.removeEventListener('message', handleMessage);
-  }, [ws, chatId, queryClient]);
+    if (typingTimeout) clearTimeout(typingTimeout);
+
+    typingTimeout = setTimeout(() => {
+      ws.send(
+        JSON.stringify({
+          type: 'typing',
+          chatId,
+          senderId: myId,
+          isTyping: false,
+        }),
+      );
+    }, 2000);
+  };
 
   const handleSend = () => {
     if (
@@ -86,6 +90,36 @@ function DialogPage() {
       console.error('Error sending message:', error);
     }
   };
+
+  useEffect(() => {
+    if (!ws || !chatId) return;
+
+    const handleMessage = (event: MessageEvent) => {
+      const msg = JSON.parse(event.data);
+      if (msg.type === 'new_message' && msg.data.chat_id === chatId) {
+        queryClient.setQueryData<InfiniteData<Message[]>>(
+          ['messages', chatId],
+          (old) => {
+            if (!old) return { pages: [[msg.data]], pageParams: [] };
+            return {
+              ...old,
+              pages: [
+                ...old.pages.slice(0, -1),
+                [...old.pages.at(-1)!, msg.data],
+              ],
+            };
+          },
+        );
+      }
+
+      if (msg.type === 'typing' && msg.chatId === chatId) {
+        setIsPartnerTyping(msg.isTyping);
+      }
+    };
+
+    ws.addEventListener('message', handleMessage);
+    return () => ws.removeEventListener('message', handleMessage);
+  }, [ws, chatId, queryClient]);
 
   useEffect(() => {
     if (!observerRef.current || !hasNextPage || isFetchingNextPage) return;
@@ -134,6 +168,14 @@ function DialogPage() {
         className='flex-1 overflow-x-hidden overflow-y-auto bg-white p-5 rounded flex flex-col-reverse'
         ref={scrollContainerRef}
       >
+        <div className='min-h-5'>
+          {isPartnerTyping && (
+            <span className='text-sm text-gray-400 animate-pulse block'>
+              typing...
+            </span>
+          )}
+        </div>
+
         {!isFetched ? (
           <Loader />
         ) : messagesData.length > 0 ? (
@@ -155,6 +197,7 @@ function DialogPage() {
         <input
           className='border-none w-full focus:outline-none'
           value={message}
+          onInput={handleTyping}
           onChange={(e) => setMessage(e.target.value)}
           placeholder='Type a message...'
         />
