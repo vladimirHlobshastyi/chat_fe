@@ -35,7 +35,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsReady(true);
   }, [isAuthenticated, myProfile?.data]);
 
-  if (!isReady || isLoading) return <Loader />;
+  if (!isReady || isLoading) return <Loader />; //TODO will check Loader blinking
   return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
       {children}

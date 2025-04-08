@@ -6,7 +6,8 @@ export type IconNamesType =
   | 'GiftIcon'
   | 'ProfileIcon'
   | 'LogoutIcon'
-  | 'SearchIcon';
+  | 'SearchIcon'
+  | 'LetterIcon';
 
 export type IconProps = {
   name: IconNamesType;

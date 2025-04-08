@@ -34,6 +34,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
       if (msg.type === 'new_message') {
         queryClient.invalidateQueries({ queryKey: ['unread-total'] });
         queryClient.invalidateQueries({ queryKey: ['unread-per-chat'] });
+        queryClient.invalidateQueries({ queryKey: ['chats'] });
       }
 
       if (msg.type === 'read_message') {

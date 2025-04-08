@@ -10,11 +10,11 @@ import { GetChatQueryType } from './types';
 
 export const useChatsQuery = (search: GetChatQueryType['Params']) => {
   return useQuery({
-    queryKey: ['chats', search],
+    queryKey: ['chats'],
     queryFn: () => getChats(search),
     placeholderData: (prev) => prev,
-    staleTime: 60_000, //TODO will wix it
-    refetchInterval: 60_000,
+    staleTime: 30_000, //TODO will wix it
+    refetchInterval: 30_000,
   });
 };
 
@@ -33,9 +33,8 @@ export const useChatByIdQuery = (chatId: string) => {
   return useQuery({
     queryKey: ['chat', chatId],
     queryFn: () => getChatById(chatId),
-    enabled: !!chatId,
-    staleTime: 60_000, //TODO will wix it
-    refetchInterval: 60_000,
+    staleTime: 30_000, //TODO will wix it
+    refetchInterval: 30_000,
   });
 };
 

@@ -1,6 +1,6 @@
 import { useParams } from '@tanstack/react-router';
 import { useState, useEffect, useRef, RefObject } from 'react';
-import { InfiniteData, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useMyProfileQuery } from '@/api/me/hooks';
 import Avatar from '@/components/Avatar';
 import { useChatByIdQuery } from '@/api/chats/hooks';
@@ -16,37 +16,40 @@ import {
   useMarkMessagesAsReadMutation,
   useMessagesInfiniteQuery,
 } from '@/api/message/hooks';
-import { Message } from '@/types/messages';
+import ReactTimeAgo from 'react-time-ago';
+import { useMessagesStore } from '@/store/messagesStore/useMessagesStore';
 
 function DialogPage() {
   const [message, setMessage] = useState('');
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<HTMLDivElement>(null);
+  const topRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
+  const initialScrollDone = useRef(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;
 
   const ws = useWebSocket();
-
   const { userId: partnerId } = useParams({ from: '/admin/dialogs/$userId' });
   const queryClient = useQueryClient();
   const { data: myProfile } = useMyProfileQuery();
-  const { mutate } = useMarkMessagesAsReadMutation();
+  const { mutate: mutateMarkedMessages } = useMarkMessagesAsReadMutation();
   const onlineUsers = useChatStore((s) => s.onlineUsers);
+  const { messages, setMessages } = useMessagesStore();
 
   const isOnlineCurrentU = onlineUsers.has(partnerId);
   const myId = myProfile?.data.userId;
-
   const chatId = [myId, partnerId].sort().join('_');
   const currentUserId = myId;
   const { data: currentChat } = useChatByIdQuery(chatId);
 
   const { data, isFetched, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useMessagesInfiniteQuery(chatId);
+    useMessagesInfiniteQuery(chatId, messages.length);
 
-  const messagesData = (data?.pages ?? []).flat();
+  const messagesData = (data?.pages ?? []).reduceRight(
+    (acc, page) => [...acc, ...page],
+    [],
+  );
+  const lastSeenPartner = currentChat?.last_seen;
 
   const handleTyping = () => {
     if (ws?.readyState !== WebSocket.OPEN) return;
@@ -80,9 +83,8 @@ function DialogPage() {
       !chatId ||
       !partnerId ||
       ws?.readyState !== WebSocket.OPEN
-    ) {
+    )
       return;
-    }
 
     try {
       ws.send(
@@ -101,14 +103,15 @@ function DialogPage() {
 
   useEffect(() => {
     if (chatId && isFetched && messagesData.length > 0) {
-      mutate(chatId, {
+      mutateMarkedMessages(chatId, {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ['unread-per-chat'] });
           queryClient.invalidateQueries({ queryKey: ['unread-total'] });
         },
       });
+      queryClient.invalidateQueries({ queryKey: ['chat', chatId] });
     }
-  }, [chatId, isFetched, messagesData.length]);
+  }, [chatId, isFetched]);
 
   useEffect(() => {
     if (!ws || !chatId) return;
@@ -116,19 +119,8 @@ function DialogPage() {
     const handleMessage = (event: MessageEvent) => {
       const msg = JSON.parse(event.data);
       if (msg.type === 'new_message' && msg.data.chat_id === chatId) {
-        queryClient.setQueryData<InfiniteData<Message[]>>(
-          ['messages', chatId],
-          (old) => {
-            if (!old) return { pages: [[msg.data]], pageParams: [] };
-            return {
-              ...old,
-              pages: [
-                ...old.pages.slice(0, -1),
-                [...old.pages.at(-1)!, msg.data],
-              ],
-            };
-          },
-        );
+        setMessages(msg.data);
+        scrollToBottom();
       }
 
       if (msg.type === 'typing' && msg.chatId === chatId) {
@@ -140,14 +132,27 @@ function DialogPage() {
     return () => ws.removeEventListener('message', handleMessage);
   }, [ws, chatId, queryClient]);
 
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      scrollContainerRef.current?.scrollTo({
+        top: scrollContainerRef.current.scrollHeight,
+      });
+    }, 0);
+  };
+
   useEffect(() => {
-    if (!observerRef.current || !hasNextPage || isFetchingNextPage) return;
+    if (!topRef.current || !hasNextPage || isFetchingNextPage) return;
 
     const container = scrollContainerRef.current;
     const prevScrollHeight = container?.scrollHeight || 0;
 
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && hasNextPage) {
+        if (!initialScrollDone.current) {
+          initialScrollDone.current = true;
+          return;
+        }
+
         fetchNextPage().then(() => {
           requestAnimationFrame(() => {
             if (container) {
@@ -159,15 +164,26 @@ function DialogPage() {
       }
     });
 
-    observer.observe(observerRef.current);
-
+    observer.observe(topRef.current);
     return () => observer.disconnect();
-  }, [observerRef.current, hasNextPage, isFetchingNextPage]);
+  }, [hasNextPage, isFetchingNextPage]);
+
+  useEffect(() => {
+    if (isFetched) scrollToBottom();
+  }, [isFetched, chatId]);
 
   useUniversalKeyboardShortcuts({
     shortcuts: [{ key: 'Enter', action: handleSend }],
     ref: mainRef as RefObject<HTMLElement>,
   });
+  const getPartnerStatus = () => {
+    if (isOnlineCurrentU) return 'Online';
+    if (lastSeenPartner)
+      return (
+        <ReactTimeAgo date={lastSeenPartner} locale='en-US' timeStyle='round' />
+      );
+    return 'Offline';
+  };
 
   return (
     <div
@@ -176,17 +192,21 @@ function DialogPage() {
     >
       <div className='px-5 py-4 flex gap-3 items-center border-b border-gray-200'>
         <Avatar
-          userStatus={getUserStatus(isOnlineCurrentU, currentChat?.last_seen)}
+          userStatus={getUserStatus(isOnlineCurrentU, lastSeenPartner)}
           size='md'
           src={currentChat?.partner_avatar}
           initials={getInitials(currentChat?.partner_name || 'avatar')}
         />
-        <Span className='text-sm'>{currentChat?.partner_name}</Span>
+        <div className='flex flex-col'>
+          <Span className='text-sm'>{currentChat?.partner_name}</Span>
+          <Span className='text-xs text-gray-400'>{getPartnerStatus()}</Span>
+        </div>
       </div>
       <div
-        className='flex-1 overflow-x-hidden overflow-y-auto bg-white p-5 rounded flex flex-col-reverse'
+        className='flex-1 overflow-x-hidden overflow-y-auto bg-white p-5 rounded flex flex-col'
         ref={scrollContainerRef}
       >
+        <div ref={topRef} className='h-1' />
         <div className='min-h-5'>
           {isPartnerTyping && (
             <span className='text-sm text-gray-400 animate-pulse block'>
@@ -198,18 +218,22 @@ function DialogPage() {
         {!isFetched ? (
           <Loader />
         ) : messagesData.length > 0 ? (
-          <>
-            <div ref={bottomRef} />
-            <MessageGroup
-              messages={messagesData}
-              currentUserId={currentUserId as string}
-              partnerAvatar={currentChat?.partner_avatar}
-              partnerName={currentChat?.partner_name}
-            />
-            <div ref={observerRef} className='h-1' />
-          </>
+          <MessageGroup
+            messages={messagesData}
+            currentUserId={currentUserId as string}
+            partnerAvatar={currentChat?.partner_avatar}
+            partnerName={currentChat?.partner_name}
+          />
         ) : (
           <div className='text-sm text-gray-400'>No messages yet...</div>
+        )}
+        {messages && (
+          <MessageGroup
+            messages={messages}
+            currentUserId={currentUserId as string}
+            partnerAvatar={currentChat?.partner_avatar}
+            partnerName={currentChat?.partner_name}
+          />
         )}
       </div>
       <div className='w-full flex gap-2 p-3 border-t border-gray-200'>

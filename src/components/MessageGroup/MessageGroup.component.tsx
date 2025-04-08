@@ -31,7 +31,7 @@ export const MessageGroup = ({
         );
 
         return (
-          <div key={msg.id} className='flex flex-col'>
+          <div key={msg.id + msg.created_at} className='flex flex-col'>
             <div
               className={cn(
                 'flex',

@@ -13,7 +13,7 @@ import { Chat } from '@/api/chats/types';
 import { useUnreadPerChatQuery } from '@/api/chats/hooks';
 import MessageCounter from '@/components/MessageCounter';
 
-const DialogItem = ({ chat, searchChat }: DialogItemProps) => {
+const DialogItem = ({ chat }: DialogItemProps) => {
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const navigate = useNavigate();
   const onlineUsers = useChatStore((s) => s.onlineUsers);
@@ -42,20 +42,17 @@ const DialogItem = ({ chat, searchChat }: DialogItemProps) => {
       }
 
       if (msg.type === 'new_message' && msg.data.chat_id === chatId) {
-        queryClient.setQueryData(
-          ['chats', { search: searchChat }],
-          (old: Chat[] = []) => {
-            return old.map((chat) =>
-              chat.chat_id === msg.data.chat_id
-                ? {
-                    ...chat,
-                    last_message: msg.data.text,
-                    last_message_time: new Date(msg.data.created_at),
-                  }
-                : chat,
-            );
-          },
-        );
+        queryClient.setQueryData(['chats'], (old: Chat[] = []) => {
+          return old.map((chat) =>
+            chat.chat_id === msg.data.chat_id
+              ? {
+                  ...chat,
+                  last_message: msg.data.text,
+                  last_message_time: new Date(msg.data.created_at),
+                }
+              : chat,
+          );
+        });
       }
     };
 
