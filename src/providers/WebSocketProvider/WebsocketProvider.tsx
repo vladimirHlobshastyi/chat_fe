@@ -18,7 +18,8 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const connect = useCallback(() => {
     if (!isAuthenticated || ws) return;
 
-    const socket = new WebSocket('ws://localhost:3000');
+    //const socket = new WebSocket('ws://localhost:3000');
+    const socket = new WebSocket('wss://chat-be-d83t.onrender.com');
 
     socket.onopen = () => {
       console.log('✅ WebSocket connected');
