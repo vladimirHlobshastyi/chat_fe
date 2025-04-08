@@ -37,10 +37,11 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
         queryClient.invalidateQueries({ queryKey: ['chats'] });
       }
 
-      if (msg.type === 'read_message') {
+      /*       if (msg.type === 'read_message') {
+        //TODO will recheck this key
         queryClient.invalidateQueries({ queryKey: ['unread-total'] });
         queryClient.invalidateQueries({ queryKey: ['unread-per-chat'] });
-      }
+      } */
     };
 
     socket.onerror = (err) => {

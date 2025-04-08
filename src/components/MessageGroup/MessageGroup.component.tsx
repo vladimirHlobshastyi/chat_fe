@@ -12,6 +12,8 @@ export const MessageGroup = ({
   partnerAvatar,
   partnerName,
   currentUserId,
+  lastPartnerMessageId,
+  lastMessageRef,
 }: MessageGroupProps) => {
   if (!messages.length) return null;
 
@@ -32,7 +34,11 @@ export const MessageGroup = ({
         );
 
         return (
-          <div key={msg.id + msg.created_at} className='flex flex-col'>
+          <div
+            key={msg.id + msg.created_at}
+            className='flex flex-col'
+            ref={msg.id === lastPartnerMessageId ? lastMessageRef : undefined}
+          >
             <div
               className={cn(
                 'flex',

@@ -24,6 +24,7 @@ function DialogPage() {
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
   const initialScrollDone = useRef(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   let typingTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -34,7 +35,10 @@ function DialogPage() {
   const { data: myProfile } = useMyProfileQuery();
   const { mutate: mutateMarkedMessages } = useMarkMessagesAsReadMutation();
   const onlineUsers = useChatStore((s) => s.onlineUsers);
-  const { messages, setMessages } = useMessagesStore();
+  const { messages, setMessages, setMessagesRead } = useMessagesStore();
+  const lastMessage = messages
+    .slice()
+    .find((m) => m.sender_id === partnerId && !m.is_read);
 
   const isOnlineCurrentU = onlineUsers.has(partnerId);
   const myId = myProfile?.data.userId;
@@ -101,17 +105,58 @@ function DialogPage() {
     }
   };
 
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      scrollContainerRef.current?.scrollTo({
+        top: scrollContainerRef.current.scrollHeight,
+      });
+    }, 0);
+  };
+
+  const getPartnerStatus = () => {
+    if (isOnlineCurrentU) return 'Online';
+    if (lastSeenPartner)
+      return (
+        <ReactTimeAgo date={lastSeenPartner} locale='en-US' timeStyle='round' />
+      );
+    return 'Offline';
+  };
+
+  const handleMarkedMessages = () => {
+    mutateMarkedMessages(chatId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['unread-per-chat'] });
+        queryClient.invalidateQueries({ queryKey: ['unread-total'] });
+        if (ws?.readyState !== WebSocket.OPEN) return;
+
+        ws.send(
+          JSON.stringify({
+            type: 'read_messages',
+            chatId,
+            readerId: myId,
+          }),
+        );
+      },
+    });
+    queryClient.invalidateQueries({ queryKey: ['chat', chatId] });
+  };
+
   useEffect(() => {
     if (chatId && isFetched && messagesData.length > 0) {
-      mutateMarkedMessages(chatId, {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['unread-per-chat'] });
-          queryClient.invalidateQueries({ queryKey: ['unread-total'] });
-        },
-      });
-      queryClient.invalidateQueries({ queryKey: ['chat', chatId] });
+      handleMarkedMessages();
     }
   }, [chatId, isFetched]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        handleMarkedMessages();
+      }
+    });
+
+    if (lastMessageRef.current) observer.observe(lastMessageRef.current);
+    return () => observer.disconnect();
+  }, [messages]);
 
   useEffect(() => {
     if (!ws || !chatId) return;
@@ -123,6 +168,10 @@ function DialogPage() {
         scrollToBottom();
       }
 
+      if (msg.type === 'read_messages') {
+        setMessagesRead();
+      }
+
       if (msg.type === 'typing' && msg.chatId === chatId) {
         setIsPartnerTyping(msg.isTyping);
       }
@@ -131,14 +180,6 @@ function DialogPage() {
     ws.addEventListener('message', handleMessage);
     return () => ws.removeEventListener('message', handleMessage);
   }, [ws, chatId, queryClient]);
-
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      scrollContainerRef.current?.scrollTo({
-        top: scrollContainerRef.current.scrollHeight,
-      });
-    }, 0);
-  };
 
   useEffect(() => {
     if (!topRef.current || !hasNextPage || isFetchingNextPage) return;
@@ -176,14 +217,6 @@ function DialogPage() {
     shortcuts: [{ key: 'Enter', action: handleSend }],
     ref: mainRef as RefObject<HTMLElement>,
   });
-  const getPartnerStatus = () => {
-    if (isOnlineCurrentU) return 'Online';
-    if (lastSeenPartner)
-      return (
-        <ReactTimeAgo date={lastSeenPartner} locale='en-US' timeStyle='round' />
-      );
-    return 'Offline';
-  };
 
   return (
     <div
@@ -227,12 +260,15 @@ function DialogPage() {
         ) : (
           <div className='text-sm text-gray-400'>No messages yet...</div>
         )}
+
         {messages && (
           <MessageGroup
             messages={messages}
             currentUserId={currentUserId as string}
             partnerAvatar={currentChat?.partner_avatar}
             partnerName={currentChat?.partner_name}
+            lastMessageRef={lastMessageRef}
+            lastPartnerMessageId={lastMessage?.id}
           />
         )}
       </div>
