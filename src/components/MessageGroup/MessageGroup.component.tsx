@@ -5,6 +5,7 @@ import { getInitials } from '@/utils/typography';
 import { cn } from '@/utils/styles';
 import { MessageGroupProps } from './MessageGroup.types';
 import ReactTimeAgo from 'react-time-ago';
+import Icon from '../Icon';
 
 export const MessageGroup = ({
   messages,
@@ -64,14 +65,28 @@ export const MessageGroup = ({
             </div>
 
             {showTimestamp && (
-              <ReactTimeAgo
+              <div
                 className={cn(
-                  'flex text-gray-400 text-xs mt-1',
+                  'flex justify-end items-center my-1',
                   isPartnerMessage ? 'justify-start ml-12' : 'justify-end',
                 )}
-                date={msg.created_at}
-                locale='en'
-              />
+              >
+                {!isPartnerMessage && msg.is_read && (
+                  <div className='flex items-start'>
+                    <Icon
+                      width={15}
+                      height={15}
+                      name='OpenYeyIcon'
+                      className='text-gray-400 mr-1'
+                    />
+                  </div>
+                )}
+                <ReactTimeAgo
+                  className='flex text-gray-400 text-xs'
+                  date={msg.created_at}
+                  locale='en'
+                />
+              </div>
             )}
           </div>
         );

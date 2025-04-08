@@ -7,7 +7,8 @@ export type IconNamesType =
   | 'ProfileIcon'
   | 'LogoutIcon'
   | 'SearchIcon'
-  | 'LetterIcon';
+  | 'LetterIcon'
+  | 'OpenYeyIcon';
 
 export type IconProps = {
   name: IconNamesType;

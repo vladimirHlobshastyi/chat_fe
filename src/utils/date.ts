@@ -27,7 +27,7 @@ export const shouldShowTimestamp = (
   const currentTime = dayjs(current);
   const nextTime = dayjs(next);
 
-  const timeDiff = nextTime.diff(currentTime, 'minute');
+  const timeDiff = nextTime.diff(currentTime, 'seconds');
   const senderChanged = currentSender !== nextSender;
 
   return senderChanged || timeDiff >= thresholdMinutes;
