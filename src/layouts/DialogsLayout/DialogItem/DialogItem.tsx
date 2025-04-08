@@ -13,7 +13,7 @@ import { Chat } from '@/api/chats/types';
 import { useUnreadPerChatQuery } from '@/api/chats/hooks';
 import MessageCounter from '@/components/MessageCounter';
 
-const DialogItem = ({ chat }: DialogItemProps) => {
+const DialogItem = ({ chat, role }: DialogItemProps) => {
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const navigate = useNavigate();
   const onlineUsers = useChatStore((s) => s.onlineUsers);
@@ -28,7 +28,7 @@ const DialogItem = ({ chat }: DialogItemProps) => {
   const unreadMessageCount = unreadByChat?.[chatId] || 0;
   const isOnlineCurrentU = onlineUsers.has(chat.partner_id);
   const isActive = matchRoute({
-    to: '/admin/dialogs/$userId',
+    to: `/${role}/dialogs/$userId`,
     params: { userId: chat.partner_id },
   });
 
@@ -67,7 +67,7 @@ const DialogItem = ({ chat }: DialogItemProps) => {
         'flex items-center gap-3 cursor-pointer rounded-xl p-3',
         isActive ? 'bg-blue-50 text-primary' : 'hover:bg-gray-150',
       )}
-      onClick={() => navigate({ to: `/admin/dialogs/${chat.partner_id}` })}
+      onClick={() => navigate({ to: `/${role}/dialogs/${chat.partner_id}` })}
     >
       <Avatar
         className={cn(

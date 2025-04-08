@@ -8,3 +8,5 @@ export { default as LogoutIcon } from './LogoutIcon';
 export { default as SearchIcon } from './SearchIcon';
 export { default as LetterIcon } from './SearchIcon';
 export { default as OpenYeyIcon } from './OpenYeyIcon';
+export { default as UsersIcon } from './UsersIcon';
+export { default as PlusIcon } from './PlusIcon';

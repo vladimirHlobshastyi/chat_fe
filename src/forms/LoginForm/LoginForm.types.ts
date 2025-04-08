@@ -5,5 +5,6 @@ export interface LoginFormDate {
 
 export interface LoginFormProps {
   onSubmit: (data: LoginFormDate) => void;
+  onSignIn: () => void;
   errorMessage?: string;
 }

@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { LoginFormDate, LoginFormProps } from './LoginForm.types';
 import { validators } from './LoginForm.data';
-import { H3 } from '@/components/Typography/Typography.component';
+import { H3, Span } from '@/components/Typography/Typography.component';
 import InputField from '@/components/Inputs/InputField';
 import Button from '@/components/Button';
 
-const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
+const LoginForm = ({ errorMessage, onSubmit, onSignIn }: LoginFormProps) => {
   const {
     register,
     handleSubmit,
@@ -47,9 +47,19 @@ const LoginForm = ({ errorMessage, onSubmit }: LoginFormProps) => {
         />
 
         {errorMessage && <span className='error-text'>{errorMessage}</span>}
+
         <Button fullScreen disabled={!isDirty} type='submit'>
           Log In
         </Button>
+        <div className='w-full'>
+          <Span className='mr-1 text-sm text-gray-500'>Not registered?</Span>
+          <button
+            className='inline-block text-primary cursor-pointer'
+            onClick={onSignIn}
+          >
+            Create an account.
+          </button>
+        </div>
       </div>
     </form>
   );
