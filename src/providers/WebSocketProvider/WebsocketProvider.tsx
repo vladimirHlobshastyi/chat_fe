@@ -3,6 +3,7 @@ import { useChatStore } from '@/store/chatStore/useChatStore';
 import { WebSocketContext } from './useWebSocket';
 import { useAuthStore } from '@/store/authStore/useAuthStore';
 import { useQueryClient } from '@tanstack/react-query';
+import { useNotificationSound } from '@/hooks/useNotificationsSound';
 
 export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const [ws, setWs] = useState<WebSocket | null>(null);
@@ -12,6 +13,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const setOnlineUsers = useChatStore((s) => s.setOnlineUsers);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const queryClient = useQueryClient();
+  const playSound = useNotificationSound();
 
   const connect = useCallback(() => {
     if (!isAuthenticated || ws) return;
@@ -35,6 +37,8 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
         queryClient.invalidateQueries({ queryKey: ['unread-total'] });
         queryClient.invalidateQueries({ queryKey: ['unread-per-chat'] });
         queryClient.invalidateQueries({ queryKey: ['chats'] });
+
+        if (msg.data.recipient_id === myId) playSound();
       }
 
       /*       if (msg.type === 'read_message') {
