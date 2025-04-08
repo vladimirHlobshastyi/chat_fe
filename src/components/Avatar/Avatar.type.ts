@@ -1,3 +1,4 @@
+import { UserStatus } from '@/utils/date';
 import { HTMLAttributes } from 'react';
 
 export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
@@ -6,4 +7,5 @@ export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
   size?: 'default' | 'md' | 'xl';
   initials?: string;
   className?: string;
+  userStatus?: UserStatus;
 }

@@ -6,5 +6,6 @@ export type Message = {
   text: string | null;
   gift_id: number | null;
   image_url?: string;
-  created_at: string;
+  is_read?: boolean;
+  created_at: Date;
 };

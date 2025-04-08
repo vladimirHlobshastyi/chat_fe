@@ -30,6 +30,7 @@ export default {
           disabled: '#d0d5dd',
           success: '#11b86a',
           error: '#f04439',
+          icon: '#667085',
         },
         border: {
           DEFAULT: '#D1D5DB',
@@ -42,6 +43,9 @@ export default {
           DEFAULT: '#3641F519',
           error: '#ffecec',
           success: '#12B76A1A',
+        },
+        success: {
+          DEFAULT: '#11b86a',
         },
         gray: {
           50: '#F9FAFB',
@@ -59,6 +63,7 @@ export default {
         blue: {
           50: '#ecf3ff',
         },
+        orange: { DEFAULT: '#f79007' },
       },
       fontFamily: {
         outfit: ['Outfit', 'sans-serif'],
@@ -74,6 +79,7 @@ export default {
         minimal: '0.7px',
         DEFAULT: '1px',
         second: '1.25px',
+        medium: '1.5px',
       },
       keyframes: {
         fadeIn: {

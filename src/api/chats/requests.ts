@@ -26,3 +26,17 @@ export const getChatById = async (chatId: GetSingleChatQueryType['Params']) => {
   );
   return response.data;
 };
+
+export const getTotalUnreadCount = async () => {
+  const { data } = await axiosClient.get<{ total: number }>(
+    '/messages/unread-count/total',
+  );
+  return data.total;
+};
+
+export const getUnreadByChat = async () => {
+  const { data } = await axiosClient.get<Record<string, number>>(
+    '/messages/unread-count/by-chat',
+  );
+  return data;
+};

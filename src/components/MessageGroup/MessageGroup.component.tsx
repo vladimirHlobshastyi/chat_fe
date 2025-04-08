@@ -1,15 +1,19 @@
-import { getRelativeTimeFromUtc, shouldShowTimestamp } from '@/utils/date';
+import { shouldShowTimestamp } from '@/utils/date';
 import Avatar from '@/components/Avatar';
 import { Text } from '@/components/Typography/Typography.component';
 import { getInitials } from '@/utils/typography';
 import { cn } from '@/utils/styles';
 import { MessageGroupProps } from './MessageGroup.types';
+import ReactTimeAgo from 'react-time-ago';
+import Icon from '../Icon';
 
 export const MessageGroup = ({
   messages,
   partnerAvatar,
   partnerName,
   currentUserId,
+  lastPartnerMessageId,
+  lastMessageRef,
 }: MessageGroupProps) => {
   if (!messages.length) return null;
 
@@ -30,7 +34,11 @@ export const MessageGroup = ({
         );
 
         return (
-          <div key={msg.id} className='flex flex-col'>
+          <div
+            key={msg.id + msg.created_at}
+            className='flex flex-col'
+            ref={msg.id === lastPartnerMessageId ? lastMessageRef : undefined}
+          >
             <div
               className={cn(
                 'flex',
@@ -58,19 +66,33 @@ export const MessageGroup = ({
                     : 'bg-primary text-white',
                 )}
               >
-                <Text className='text-sm'>{msg.text}</Text>
+                <Text className='text-sm break-words'>{msg.text}</Text>
               </div>
             </div>
 
             {showTimestamp && (
-              <Text
+              <div
                 className={cn(
-                  'flex text-gray-400 text-xs mt-1',
+                  'flex justify-end items-center my-1',
                   isPartnerMessage ? 'justify-start ml-12' : 'justify-end',
                 )}
               >
-                {getRelativeTimeFromUtc(msg.created_at)}
-              </Text>
+                {!isPartnerMessage && msg.is_read && (
+                  <div className='flex items-start'>
+                    <Icon
+                      width={15}
+                      height={15}
+                      name='OpenYeyIcon'
+                      className='text-gray-400 mr-1'
+                    />
+                  </div>
+                )}
+                <ReactTimeAgo
+                  className='flex text-gray-400 text-xs'
+                  date={msg.created_at}
+                  locale='en'
+                />
+              </div>
             )}
           </div>
         );

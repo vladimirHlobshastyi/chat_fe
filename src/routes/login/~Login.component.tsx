@@ -12,7 +12,7 @@ const Login = () => {
   const onSubmit = (data: LoginQueryType['Params']) => {
     loginMutation.mutate(data, {
       onSuccess: () => {
-        navigate({ to: '/admin/users' });
+        navigate({ to: '/admin' });
       },
       onError: (error) => {
         setErrorMessage(error.message);

@@ -1,10 +1,12 @@
-interface Chat {
+export interface Chat {
   chat_created_at: string;
   chat_id: string;
   last_message: string;
   partner_avatar?: string;
   partner_id: string;
   partner_name: string;
+  last_message_time?: Date;
+  last_seen?: Date;
 }
 
 export interface AddChatQueryType {

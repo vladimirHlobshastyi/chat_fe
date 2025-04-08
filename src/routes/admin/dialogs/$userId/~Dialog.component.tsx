@@ -1,110 +1,282 @@
 import { useParams } from '@tanstack/react-router';
-import { useState, useEffect, useRef } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getMessages } from '@/api/message/requests';
+import { useState, useEffect, useRef, RefObject } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useMyProfileQuery } from '@/api/me/hooks';
-import { Message } from '@/types/messages';
 import Avatar from '@/components/Avatar';
 import { useChatByIdQuery } from '@/api/chats/hooks';
 import { getInitials } from '@/utils/typography';
 import { Span } from '@/components/Typography/Typography.component';
 import MessageGroup from '@/components/MessageGroup';
+import useUniversalKeyboardShortcuts from '@/hooks/useUniversalKeyboardShortcuts';
+import { useChatStore } from '@/store/chatStore/useChatStore';
+import { getUserStatus } from '@/utils/date';
+import { useWebSocket } from '@/providers/WebSocketProvider/useWebSocket';
+import Loader from '@/components/Loader';
+import {
+  useMarkMessagesAsReadMutation,
+  useMessagesInfiniteQuery,
+} from '@/api/message/hooks';
+import ReactTimeAgo from 'react-time-ago';
+import { useMessagesStore } from '@/store/messagesStore/useMessagesStore';
 
 function DialogPage() {
   const [message, setMessage] = useState('');
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const ws = useRef<WebSocket | null>(null);
+  const [isPartnerTyping, setIsPartnerTyping] = useState(false);
+  const topRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
+  const initialScrollDone = useRef(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  let typingTimeout: ReturnType<typeof setTimeout> | null = null;
 
+  const ws = useWebSocket();
   const { userId: partnerId } = useParams({ from: '/admin/dialogs/$userId' });
   const queryClient = useQueryClient();
   const { data: myProfile } = useMyProfileQuery();
+  const { mutate: mutateMarkedMessages } = useMarkMessagesAsReadMutation();
+  const onlineUsers = useChatStore((s) => s.onlineUsers);
+  const { messages, setMessages, setMessagesRead } = useMessagesStore();
+  const lastMessage = messages
+    .slice()
+    .find((m) => m.sender_id === partnerId && !m.is_read);
 
-  const chatId = [myProfile?.data.userId, partnerId].sort().join('_');
+  const isOnlineCurrentU = onlineUsers.has(partnerId);
+  const myId = myProfile?.data.userId;
+  const chatId = [myId, partnerId].sort().join('_');
+  const currentUserId = myId;
   const { data: currentChat } = useChatByIdQuery(chatId);
 
-  const { data: messagesData = [] } = useQuery<Message[]>({
-    queryKey: ['dialog', chatId],
-    queryFn: () => getMessages(chatId),
-    enabled: !!chatId,
-  });
+  const { data, isFetched, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useMessagesInfiniteQuery(chatId, messages.length);
 
-  useEffect(() => {
-    if (!myProfile?.data) return;
+  const messagesData = (data?.pages ?? []).reduceRight(
+    (acc, page) => [...acc, ...page],
+    [],
+  );
+  const lastSeenPartner = currentChat?.last_seen;
 
-    ws.current = new WebSocket('ws://localhost:3001');
+  const handleTyping = () => {
+    if (ws?.readyState !== WebSocket.OPEN) return;
 
-    ws.current.onopen = () => {
-      ws.current?.send(
-        JSON.stringify({ type: 'init', userId: myProfile.data.userId }),
+    ws.send(
+      JSON.stringify({
+        type: 'typing',
+        chatId,
+        senderId: myId,
+        isTyping: true,
+      }),
+    );
+
+    if (typingTimeout) clearTimeout(typingTimeout);
+
+    typingTimeout = setTimeout(() => {
+      ws.send(
+        JSON.stringify({
+          type: 'typing',
+          chatId,
+          senderId: myId,
+          isTyping: false,
+        }),
       );
-    };
-
-    ws.current.onmessage = (event) => {
-      const msg = JSON.parse(event.data);
-      if (msg.type === 'new_message' && msg.data.chat_id === chatId) {
-        queryClient.setQueryData(['dialog', chatId], (old: Message[] = []) => [
-          ...old,
-          msg.data,
-        ]);
-      }
-    };
-
-    return () => {
-      ws.current?.close();
-    };
-  }, [myProfile, chatId, queryClient]);
+    }, 2000);
+  };
 
   const handleSend = () => {
-    if (!message.trim() || !chatId || !partnerId) return;
+    if (
+      !message.trim() ||
+      !chatId ||
+      !partnerId ||
+      ws?.readyState !== WebSocket.OPEN
+    )
+      return;
 
-    if (ws.current?.readyState === WebSocket.OPEN) {
-      try {
-        ws.current.send(
-          JSON.stringify({
-            type: 'message',
-            chatId,
-            recipientId: partnerId,
-            text: message,
-          }),
-        );
-        queryClient.invalidateQueries({ queryKey: ['chats'] });
-        setMessage('');
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      ws.send(
+        JSON.stringify({
+          type: 'message',
+          chatId,
+          recipientId: partnerId,
+          text: message,
+        }),
+      );
+      setMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error);
     }
   };
 
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    queryClient.invalidateQueries({ queryKey: ['chats'] });
-  }, [messagesData]);
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      scrollContainerRef.current?.scrollTo({
+        top: scrollContainerRef.current.scrollHeight,
+      });
+    }, 0);
+  };
 
-  const currentUserId = myProfile?.data.userId;
+  const getPartnerStatus = () => {
+    if (isOnlineCurrentU) return 'Online';
+    if (lastSeenPartner)
+      return (
+        <ReactTimeAgo date={lastSeenPartner} locale='en-US' timeStyle='round' />
+      );
+    return 'Offline';
+  };
+
+  const handleMarkedMessages = () => {
+    mutateMarkedMessages(chatId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['unread-per-chat'] });
+        queryClient.invalidateQueries({ queryKey: ['unread-total'] });
+        if (ws?.readyState !== WebSocket.OPEN) return;
+
+        ws.send(
+          JSON.stringify({
+            type: 'read_messages',
+            chatId,
+            readerId: myId,
+          }),
+        );
+      },
+    });
+    queryClient.invalidateQueries({ queryKey: ['chat', chatId] });
+  };
+
+  useEffect(() => {
+    if (chatId && isFetched && messagesData.length > 0) {
+      handleMarkedMessages();
+    }
+  }, [chatId, isFetched]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        handleMarkedMessages();
+      }
+    });
+
+    if (lastMessageRef.current) observer.observe(lastMessageRef.current);
+    return () => observer.disconnect();
+  }, [messages]);
+
+  useEffect(() => {
+    if (!ws || !chatId) return;
+
+    const handleMessage = (event: MessageEvent) => {
+      const msg = JSON.parse(event.data);
+      if (msg.type === 'new_message' && msg.data.chat_id === chatId) {
+        setMessages(msg.data);
+        scrollToBottom();
+      }
+
+      if (msg.type === 'read_messages') {
+        setMessagesRead();
+      }
+
+      if (msg.type === 'typing' && msg.chatId === chatId) {
+        setIsPartnerTyping(msg.isTyping);
+      }
+    };
+
+    ws.addEventListener('message', handleMessage);
+    return () => ws.removeEventListener('message', handleMessage);
+  }, [ws, chatId, queryClient]);
+
+  useEffect(() => {
+    if (!topRef.current || !hasNextPage || isFetchingNextPage) return;
+
+    const container = scrollContainerRef.current;
+    const prevScrollHeight = container?.scrollHeight || 0;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasNextPage) {
+        if (!initialScrollDone.current) {
+          initialScrollDone.current = true;
+          return;
+        }
+
+        fetchNextPage().then(() => {
+          requestAnimationFrame(() => {
+            if (container) {
+              const newScrollHeight = container.scrollHeight;
+              container.scrollTop += newScrollHeight - prevScrollHeight;
+            }
+          });
+        });
+      }
+    });
+
+    observer.observe(topRef.current);
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage]);
+
+  useEffect(() => {
+    if (isFetched) scrollToBottom();
+  }, [isFetched, chatId]);
+
+  useUniversalKeyboardShortcuts({
+    shortcuts: [{ key: 'Enter', action: handleSend }],
+    ref: mainRef as RefObject<HTMLElement>,
+  });
 
   return (
-    <div className='w-full h-full flex flex-col border border-gray-200 rounded-xl ml-6 bg-white'>
+    <div
+      className='w-full h-full flex flex-col border border-gray-200 rounded-xl ml-6 bg-white overflow-hidden'
+      ref={mainRef}
+    >
       <div className='px-5 py-4 flex gap-3 items-center border-b border-gray-200'>
         <Avatar
+          userStatus={getUserStatus(isOnlineCurrentU, lastSeenPartner)}
           size='md'
           src={currentChat?.partner_avatar}
           initials={getInitials(currentChat?.partner_name || 'avatar')}
         />
-        <Span className='text-sm'>{currentChat?.partner_name}</Span>
+        <div className='flex flex-col'>
+          <Span className='text-sm'>{currentChat?.partner_name}</Span>
+          <Span className='text-xs text-gray-400'>{getPartnerStatus()}</Span>
+        </div>
       </div>
-      <div className='flex-1 overflow-y-auto bg-white p-5 rounded'>
-        <MessageGroup
-          messages={messagesData}
-          currentUserId={currentUserId as string}
-          partnerAvatar={currentChat?.partner_avatar}
-          partnerName={currentChat?.partner_name}
-        />
-        <div ref={bottomRef} />
+      <div
+        className='flex-1 overflow-x-hidden overflow-y-auto bg-white p-5 rounded flex flex-col'
+        ref={scrollContainerRef}
+      >
+        <div ref={topRef} className='h-1' />
+        <div className='min-h-5'>
+          {isPartnerTyping && (
+            <span className='text-sm text-gray-400 animate-pulse block'>
+              typing...
+            </span>
+          )}
+        </div>
+
+        {!isFetched ? (
+          <Loader />
+        ) : messagesData.length > 0 ? (
+          <MessageGroup
+            messages={messagesData}
+            currentUserId={currentUserId as string}
+            partnerAvatar={currentChat?.partner_avatar}
+            partnerName={currentChat?.partner_name}
+          />
+        ) : (
+          <div className='text-sm text-gray-400'>No messages yet...</div>
+        )}
+
+        {messages && (
+          <MessageGroup
+            messages={messages}
+            currentUserId={currentUserId as string}
+            partnerAvatar={currentChat?.partner_avatar}
+            partnerName={currentChat?.partner_name}
+            lastMessageRef={lastMessageRef}
+            lastPartnerMessageId={lastMessage?.id}
+          />
+        )}
       </div>
       <div className='w-full flex gap-2 p-3 border-t border-gray-200'>
         <input
           className='border-none w-full focus:outline-none'
           value={message}
+          onInput={handleTyping}
           onChange={(e) => setMessage(e.target.value)}
           placeholder='Type a message...'
         />

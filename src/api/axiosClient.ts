@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/store/authStore/useAuthStore';
 import axios, { AxiosInstance } from 'axios';
 
 const axiosClient: AxiosInstance = axios.create({
@@ -12,7 +13,10 @@ axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('isAuthenticated');
+      const { setIsAuthenticated } = useAuthStore.getState();
+
+      setIsAuthenticated(false);
+
       if (window.location.pathname !== '/login') {
         window.location.href = '/login';
       }

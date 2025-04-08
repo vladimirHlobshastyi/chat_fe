@@ -9,6 +9,7 @@ const Avatar = ({
   size = 'default',
   initials,
   className,
+  userStatus = 'offline',
   ...rest
 }: AvatarProps) => {
   const [isError, setIsError] = useState(false);
@@ -24,6 +25,20 @@ const Avatar = ({
     md: 'text-2xl',
     xl: 'text-4xl',
   };
+
+  const dotSize = {
+    default: 'h-2.5 w-2.5',
+    md: 'h-3 w-3',
+    xl: 'h-4 w-4',
+  };
+
+  const dotColor = {
+    online: 'bg-green-500',
+    recently: 'bg-orange',
+    offline: '',
+  };
+
+  const shouldShowDot = userStatus !== 'offline';
 
   return (
     <span
@@ -46,6 +61,15 @@ const Avatar = ({
         <Span className={cn('text-text-secondary', textSizeClasses[size])}>
           {initials}
         </Span>
+      )}
+      {shouldShowDot && (
+        <span
+          className={cn(
+            'absolute bottom-0 right-0 rounded-full border-[1.5px] border-white',
+            dotSize[size],
+            dotColor[userStatus],
+          )}
+        />
       )}
     </span>
   );
