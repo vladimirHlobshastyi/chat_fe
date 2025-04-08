@@ -1,13 +1,22 @@
 import { useLoginMutation } from '@/api/auth/hooks';
 import { LoginQueryType } from '@/api/auth/types';
+import { useCreateUserMutation } from '@/api/users/hooks';
+import { CreateUserParams } from '@/api/users/types';
+import AddUserForm from '@/forms/AddUserForm';
 import LoginForm from '@/forms/LoginForm';
 import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
+  const [addNewUserError, setAddNewUserError] = useState<string | undefined>();
+
+  const [isAddNewUserOpen, setIsAddNewUserOpen] = useState(false);
+  const [isLoginForm, setIsLoginForm] = useState(true);
+
   const loginMutation = useLoginMutation();
   const navigate = useNavigate({ from: '/login' });
+  const createUser = useCreateUserMutation();
 
   const onSubmit = (data: LoginQueryType['Params']) => {
     loginMutation.mutate(data, {
@@ -21,10 +30,48 @@ const Login = () => {
     });
   };
 
+  const handleOnSignIn = () => {
+    setIsLoginForm(false);
+    setIsAddNewUserOpen(true);
+  };
+
+  const handleCloseAddUser = () => {
+    setIsLoginForm(true);
+    setIsAddNewUserOpen(false);
+  };
+
+  const handleCreateUser = (data: CreateUserParams) => {
+    createUser.mutate(
+      { ...data, role: 'user' },
+      {
+        onSuccess: () => {
+          setAddNewUserError(undefined);
+          onSubmit({ email: data.email, password: data.password });
+        },
+        onError: () =>
+          setAddNewUserError('Сan`t create a user, try again later'),
+      },
+    );
+  };
+
   return (
     <div className='w-full h-screen flex justify-center items-center bg-gray-100'>
       <div className='max-w-[400px] w-full'>
-        <LoginForm errorMessage={errorMessage} onSubmit={onSubmit} />
+        {isLoginForm && (
+          <LoginForm
+            onSignIn={handleOnSignIn}
+            errorMessage={errorMessage}
+            onSubmit={onSubmit}
+          />
+        )}
+
+        {isAddNewUserOpen && (
+          <AddUserForm
+            errorMessage={addNewUserError}
+            onSubmit={handleCreateUser}
+            onClose={handleCloseAddUser}
+          />
+        )}
       </div>
     </div>
   );

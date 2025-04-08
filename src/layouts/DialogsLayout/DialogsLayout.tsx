@@ -5,7 +5,8 @@ import { Outlet } from '@tanstack/react-router';
 import { useState } from 'react';
 import DialogItem from './DialogItem/DialogItem';
 
-const DialogsLayout = () => {
+const DialogsLayout = ({ role }: { role: 'admin' | 'user' }) => {
+  //TODO WILL move roll to the local storage
   const [searchChat, setSearchChat] = useState(''); //TODO will add debounce
   const { data: chats = [] } = useChatsQuery({ search: searchChat });
 
@@ -21,7 +22,7 @@ const DialogsLayout = () => {
         />
         <div className='flex flex-col gap-3 overflow-auto'>
           {chats.map((chat) => (
-            <DialogItem key={chat.partner_id} chat={chat} />
+            <DialogItem role={role} key={chat.partner_id} chat={chat} />
           ))}
         </div>
       </div>

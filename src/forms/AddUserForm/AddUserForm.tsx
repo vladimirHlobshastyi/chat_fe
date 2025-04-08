@@ -8,13 +8,10 @@ import Checkbox from '@/components/Checkbox';
 import Button from '@/components/Button';
 import TextArea from '@/components/Inputs/TextArea';
 import { COUNTRIES_OPTIONS } from '@/common/options';
-import { useState } from 'react';
 import FileUploaderURL from '@/features/Files/FileUploaderURL';
 import { cn } from '@/utils/styles';
 
 const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
-  const [showPassword, setShowPassword] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -39,7 +36,7 @@ const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className='overflow-hidden border border-gray-100 rounded-lg'
+      className='overflow-hidden border bg-white border-gray-100 rounded-lg'
     >
       <div className='w-full border-b border-gray-100'>
         <H3 className='px-6 py-5'>Add new User</H3>
@@ -62,22 +59,9 @@ const AddUserForm = ({ onClose, onSubmit, errorMessage }: AddUserFormProps) => {
           error={!!errors?.password}
           helperText={errors.password?.message}
           id='password'
-          type={showPassword ? 'text' : 'password'}
+          type='password'
           {...register('password', validators.password)}
         />
-
-        <div className='flex items-center gap-2'>
-          <Checkbox
-            checked={showPassword}
-            onChange={() => setShowPassword((prev) => !prev)}
-          />
-          <span
-            className='cursor-pointer'
-            onClick={() => setShowPassword((prev) => !prev)}
-          >
-            {showPassword ? 'Hide' : 'Show'}
-          </span>
-        </div>
 
         <InputField
           placeholder='Enter name...'

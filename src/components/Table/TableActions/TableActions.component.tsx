@@ -1,14 +1,31 @@
 import { cn } from '@/utils/styles';
 import { TableActionsProps } from './TableActions.types';
+import Icon from '@/components/Icon';
 
 const TableActions = ({
   deleteDisabled,
   editDisabled,
+  addDisabled,
+  onAdd,
   onEdit,
   onDelete,
 }: TableActionsProps) => {
   return (
     <span className='flex w-full items-center gap-2'>
+      {onAdd && (
+        <button
+          className={cn(
+            addDisabled
+              ? 'text-text-disabled'
+              : 'text-gray-500 hover:text-gray-800',
+          )}
+          disabled={addDisabled}
+          onClick={onAdd}
+        >
+          <Icon name='PlusIcon' />
+        </button>
+      )}
+
       {onDelete && (
         <button
           className={cn(

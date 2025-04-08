@@ -11,8 +11,13 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as UserRouteImport } from './routes/user/route'
 import { Route as LoginRouteImport } from './routes/login/route'
 import { Route as AdminRouteImport } from './routes/admin/route'
+import { Route as UserUsersRouteImport } from './routes/user/users/route'
+import { Route as UserModelsRouteImport } from './routes/user/models/route'
+import { Route as UserGiftsRouteImport } from './routes/user/gifts/route'
+import { Route as UserDialogsRouteImport } from './routes/user/dialogs/route'
 import { Route as AdminUsersRouteImport } from './routes/admin/users/route'
 import { Route as AdminTransactionsRouteImport } from './routes/admin/transactions/route'
 import { Route as AdminTariffsRouteImport } from './routes/admin/tariffs/route'
@@ -22,9 +27,16 @@ import { Route as AdminGiftsRouteImport } from './routes/admin/gifts/route'
 import { Route as AdminDialogsRouteImport } from './routes/admin/dialogs/route'
 import { Route as AdminChattersRouteImport } from './routes/admin/chatters/route'
 import { Route as AdminAdminsRouteImport } from './routes/admin/admins/route'
+import { Route as UserDialogsUserIdRouteImport } from './routes/user/dialogs/$userId/route'
 import { Route as AdminDialogsUserIdRouteImport } from './routes/admin/dialogs/$userId/route'
 
 // Create/Update Routes
+
+const UserRouteRoute = UserRouteImport.update({
+  id: '/user',
+  path: '/user',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRouteRoute = LoginRouteImport.update({
   id: '/login',
@@ -36,6 +48,30 @@ const AdminRouteRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => rootRoute,
+} as any)
+
+const UserUsersRouteRoute = UserUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => UserRouteRoute,
+} as any)
+
+const UserModelsRouteRoute = UserModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
+  getParentRoute: () => UserRouteRoute,
+} as any)
+
+const UserGiftsRouteRoute = UserGiftsRouteImport.update({
+  id: '/gifts',
+  path: '/gifts',
+  getParentRoute: () => UserRouteRoute,
+} as any)
+
+const UserDialogsRouteRoute = UserDialogsRouteImport.update({
+  id: '/dialogs',
+  path: '/dialogs',
+  getParentRoute: () => UserRouteRoute,
 } as any)
 
 const AdminUsersRouteRoute = AdminUsersRouteImport.update({
@@ -92,6 +128,12 @@ const AdminAdminsRouteRoute = AdminAdminsRouteImport.update({
   getParentRoute: () => AdminRouteRoute,
 } as any)
 
+const UserDialogsUserIdRouteRoute = UserDialogsUserIdRouteImport.update({
+  id: '/$userId',
+  path: '/$userId',
+  getParentRoute: () => UserDialogsRouteRoute,
+} as any)
+
 const AdminDialogsUserIdRouteRoute = AdminDialogsUserIdRouteImport.update({
   id: '/$userId',
   path: '/$userId',
@@ -114,6 +156,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/user': {
+      id: '/user'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof UserRouteImport
       parentRoute: typeof rootRoute
     }
     '/admin/admins': {
@@ -179,12 +228,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersRouteImport
       parentRoute: typeof AdminRouteImport
     }
+    '/user/dialogs': {
+      id: '/user/dialogs'
+      path: '/dialogs'
+      fullPath: '/user/dialogs'
+      preLoaderRoute: typeof UserDialogsRouteImport
+      parentRoute: typeof UserRouteImport
+    }
+    '/user/gifts': {
+      id: '/user/gifts'
+      path: '/gifts'
+      fullPath: '/user/gifts'
+      preLoaderRoute: typeof UserGiftsRouteImport
+      parentRoute: typeof UserRouteImport
+    }
+    '/user/models': {
+      id: '/user/models'
+      path: '/models'
+      fullPath: '/user/models'
+      preLoaderRoute: typeof UserModelsRouteImport
+      parentRoute: typeof UserRouteImport
+    }
+    '/user/users': {
+      id: '/user/users'
+      path: '/users'
+      fullPath: '/user/users'
+      preLoaderRoute: typeof UserUsersRouteImport
+      parentRoute: typeof UserRouteImport
+    }
     '/admin/dialogs/$userId': {
       id: '/admin/dialogs/$userId'
       path: '/$userId'
       fullPath: '/admin/dialogs/$userId'
       preLoaderRoute: typeof AdminDialogsUserIdRouteImport
       parentRoute: typeof AdminDialogsRouteImport
+    }
+    '/user/dialogs/$userId': {
+      id: '/user/dialogs/$userId'
+      path: '/$userId'
+      fullPath: '/user/dialogs/$userId'
+      preLoaderRoute: typeof UserDialogsUserIdRouteImport
+      parentRoute: typeof UserDialogsRouteImport
     }
   }
 }
@@ -230,9 +314,39 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface UserDialogsRouteRouteChildren {
+  UserDialogsUserIdRouteRoute: typeof UserDialogsUserIdRouteRoute
+}
+
+const UserDialogsRouteRouteChildren: UserDialogsRouteRouteChildren = {
+  UserDialogsUserIdRouteRoute: UserDialogsUserIdRouteRoute,
+}
+
+const UserDialogsRouteRouteWithChildren =
+  UserDialogsRouteRoute._addFileChildren(UserDialogsRouteRouteChildren)
+
+interface UserRouteRouteChildren {
+  UserDialogsRouteRoute: typeof UserDialogsRouteRouteWithChildren
+  UserGiftsRouteRoute: typeof UserGiftsRouteRoute
+  UserModelsRouteRoute: typeof UserModelsRouteRoute
+  UserUsersRouteRoute: typeof UserUsersRouteRoute
+}
+
+const UserRouteRouteChildren: UserRouteRouteChildren = {
+  UserDialogsRouteRoute: UserDialogsRouteRouteWithChildren,
+  UserGiftsRouteRoute: UserGiftsRouteRoute,
+  UserModelsRouteRoute: UserModelsRouteRoute,
+  UserUsersRouteRoute: UserUsersRouteRoute,
+}
+
+const UserRouteRouteWithChildren = UserRouteRoute._addFileChildren(
+  UserRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRouteRoute
+  '/user': typeof UserRouteRouteWithChildren
   '/admin/admins': typeof AdminAdminsRouteRoute
   '/admin/chatters': typeof AdminChattersRouteRoute
   '/admin/dialogs': typeof AdminDialogsRouteRouteWithChildren
@@ -242,12 +356,18 @@ export interface FileRoutesByFullPath {
   '/admin/tariffs': typeof AdminTariffsRouteRoute
   '/admin/transactions': typeof AdminTransactionsRouteRoute
   '/admin/users': typeof AdminUsersRouteRoute
+  '/user/dialogs': typeof UserDialogsRouteRouteWithChildren
+  '/user/gifts': typeof UserGiftsRouteRoute
+  '/user/models': typeof UserModelsRouteRoute
+  '/user/users': typeof UserUsersRouteRoute
   '/admin/dialogs/$userId': typeof AdminDialogsUserIdRouteRoute
+  '/user/dialogs/$userId': typeof UserDialogsUserIdRouteRoute
 }
 
 export interface FileRoutesByTo {
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRouteRoute
+  '/user': typeof UserRouteRouteWithChildren
   '/admin/admins': typeof AdminAdminsRouteRoute
   '/admin/chatters': typeof AdminChattersRouteRoute
   '/admin/dialogs': typeof AdminDialogsRouteRouteWithChildren
@@ -257,13 +377,19 @@ export interface FileRoutesByTo {
   '/admin/tariffs': typeof AdminTariffsRouteRoute
   '/admin/transactions': typeof AdminTransactionsRouteRoute
   '/admin/users': typeof AdminUsersRouteRoute
+  '/user/dialogs': typeof UserDialogsRouteRouteWithChildren
+  '/user/gifts': typeof UserGiftsRouteRoute
+  '/user/models': typeof UserModelsRouteRoute
+  '/user/users': typeof UserUsersRouteRoute
   '/admin/dialogs/$userId': typeof AdminDialogsUserIdRouteRoute
+  '/user/dialogs/$userId': typeof UserDialogsUserIdRouteRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRouteRoute
+  '/user': typeof UserRouteRouteWithChildren
   '/admin/admins': typeof AdminAdminsRouteRoute
   '/admin/chatters': typeof AdminChattersRouteRoute
   '/admin/dialogs': typeof AdminDialogsRouteRouteWithChildren
@@ -273,7 +399,12 @@ export interface FileRoutesById {
   '/admin/tariffs': typeof AdminTariffsRouteRoute
   '/admin/transactions': typeof AdminTransactionsRouteRoute
   '/admin/users': typeof AdminUsersRouteRoute
+  '/user/dialogs': typeof UserDialogsRouteRouteWithChildren
+  '/user/gifts': typeof UserGiftsRouteRoute
+  '/user/models': typeof UserModelsRouteRoute
+  '/user/users': typeof UserUsersRouteRoute
   '/admin/dialogs/$userId': typeof AdminDialogsUserIdRouteRoute
+  '/user/dialogs/$userId': typeof UserDialogsUserIdRouteRoute
 }
 
 export interface FileRouteTypes {
@@ -281,6 +412,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/admin'
     | '/login'
+    | '/user'
     | '/admin/admins'
     | '/admin/chatters'
     | '/admin/dialogs'
@@ -290,11 +422,17 @@ export interface FileRouteTypes {
     | '/admin/tariffs'
     | '/admin/transactions'
     | '/admin/users'
+    | '/user/dialogs'
+    | '/user/gifts'
+    | '/user/models'
+    | '/user/users'
     | '/admin/dialogs/$userId'
+    | '/user/dialogs/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/admin'
     | '/login'
+    | '/user'
     | '/admin/admins'
     | '/admin/chatters'
     | '/admin/dialogs'
@@ -304,11 +442,17 @@ export interface FileRouteTypes {
     | '/admin/tariffs'
     | '/admin/transactions'
     | '/admin/users'
+    | '/user/dialogs'
+    | '/user/gifts'
+    | '/user/models'
+    | '/user/users'
     | '/admin/dialogs/$userId'
+    | '/user/dialogs/$userId'
   id:
     | '__root__'
     | '/admin'
     | '/login'
+    | '/user'
     | '/admin/admins'
     | '/admin/chatters'
     | '/admin/dialogs'
@@ -318,18 +462,25 @@ export interface FileRouteTypes {
     | '/admin/tariffs'
     | '/admin/transactions'
     | '/admin/users'
+    | '/user/dialogs'
+    | '/user/gifts'
+    | '/user/models'
+    | '/user/users'
     | '/admin/dialogs/$userId'
+    | '/user/dialogs/$userId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   LoginRouteRoute: typeof LoginRouteRoute
+  UserRouteRoute: typeof UserRouteRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   AdminRouteRoute: AdminRouteRouteWithChildren,
   LoginRouteRoute: LoginRouteRoute,
+  UserRouteRoute: UserRouteRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -343,7 +494,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/admin",
-        "/login"
+        "/login",
+        "/user"
       ]
     },
     "/admin": {
@@ -362,6 +514,15 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login/route.tsx"
+    },
+    "/user": {
+      "filePath": "user/route.tsx",
+      "children": [
+        "/user/dialogs",
+        "/user/gifts",
+        "/user/models",
+        "/user/users"
+      ]
     },
     "/admin/admins": {
       "filePath": "admin/admins/route.tsx",
@@ -402,9 +563,32 @@ export const routeTree = rootRoute
       "filePath": "admin/users/route.tsx",
       "parent": "/admin"
     },
+    "/user/dialogs": {
+      "filePath": "user/dialogs/route.tsx",
+      "parent": "/user",
+      "children": [
+        "/user/dialogs/$userId"
+      ]
+    },
+    "/user/gifts": {
+      "filePath": "user/gifts/route.tsx",
+      "parent": "/user"
+    },
+    "/user/models": {
+      "filePath": "user/models/route.tsx",
+      "parent": "/user"
+    },
+    "/user/users": {
+      "filePath": "user/users/route.tsx",
+      "parent": "/user"
+    },
     "/admin/dialogs/$userId": {
       "filePath": "admin/dialogs/$userId/route.tsx",
       "parent": "/admin/dialogs"
+    },
+    "/user/dialogs/$userId": {
+      "filePath": "user/dialogs/$userId/route.tsx",
+      "parent": "/user/dialogs"
     }
   }
 }

@@ -8,9 +8,9 @@ export const useLoginMutation = () => {
   const navigate = useNavigate();
   return useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: (data) => {
       setIsAuthenticated(true);
-      navigate({ to: '/admin' });
+      navigate({ to: data.role === 'admin' ? '/admin' : '/user' });
     },
     onError: (error) => {
       console.error('Login failed:', error);

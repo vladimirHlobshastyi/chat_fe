@@ -1,12 +1,15 @@
 import { Outlet } from '@tanstack/react-router';
-import AdminSidebar from './AdminSidebar';
+import SideBar from './SideBar';
+import RoleProvider from '@/providers/RoleProvider';
 
 const AdminLayout = () => {
   return (
-    <div className='w-full h-screen flex bg-secondary-dark'>
-      <AdminSidebar />
-      <Outlet />
-    </div>
+    <RoleProvider requiredRole='admin'>
+      <div className='w-full h-screen flex bg-secondary-dark'>
+        <SideBar variant='admin' />
+        <Outlet />
+      </div>
+    </RoleProvider>
   );
 };
 
