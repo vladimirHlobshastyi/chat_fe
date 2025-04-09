@@ -82,7 +82,7 @@ const DialogItem = ({ chat, role }: DialogItemProps) => {
         <span className='font-medium'>{chat.partner_name}</span>
         <span
           className={cn(
-            'text-gray-500 truncate max-w-[150px]',
+            'text-gray-500 truncate max-w-32',
             isPartnerTyping && 'animate-pulse',
           )}
         >

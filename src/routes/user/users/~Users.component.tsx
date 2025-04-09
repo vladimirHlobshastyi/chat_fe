@@ -53,7 +53,7 @@ export const Users = () => {
           <Table
             onPerPageChange={setPerPage}
             headers={USERS_TABLE_HEADER}
-            newItemLabel='Add New User'
+            //newItemLabel='Add New User'
             onAddNewItem={() => {} /* setIsAddUserModalOpen(true) */} //TODO will change
             onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
