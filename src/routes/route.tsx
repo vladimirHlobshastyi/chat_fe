@@ -3,6 +3,9 @@ import { H1 } from '@/components/Typography/Typography.component';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/')({
+  beforeLoad: ({ navigate }) => {
+    return navigate({ to: '/user' });
+  },
   component: RouteComponent,
 });
 
@@ -15,7 +18,7 @@ function RouteComponent() {
         className='flex flex-col items-center cursor-pointer py-14 px-6 hover:rounded-full hover:border-medium hover:border-border-focus'
         onClick={() => navigate({ to: '/user', from: '/' })}
       >
-        <Avatar src='/public/flyChat.svg' size='xl' alt='FlyChatLogo' />
+        <Avatar src='flyChat.svg' size='xl' alt='FlyChatLogo' />
         <H1>Welcome to the FlyChat!</H1>
       </div>
     </div>
