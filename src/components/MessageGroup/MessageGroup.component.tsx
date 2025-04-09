@@ -66,7 +66,9 @@ export const MessageGroup = ({
                     : 'bg-primary text-white',
                 )}
               >
-                <Text className='text-sm break-words'>{msg.text}</Text>
+                <Text className='text-sm break-words whitespace-pre-wrap'>
+                  {msg.text}
+                </Text>
               </div>
             </div>
 

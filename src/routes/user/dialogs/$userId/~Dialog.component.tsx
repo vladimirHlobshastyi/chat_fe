@@ -18,6 +18,7 @@ import {
 } from '@/api/message/hooks';
 import ReactTimeAgo from 'react-time-ago';
 import { useMessagesStore } from '@/store/messagesStore/useMessagesStore';
+import TextArea from '@/components/Inputs/TextArea';
 
 function DialogPage() {
   const [message, setMessage] = useState('');
@@ -272,17 +273,23 @@ function DialogPage() {
           />
         )}
       </div>
-      <div className='w-full flex gap-2 p-3 border-t border-gray-200'>
-        <input
-          className='border-none w-full focus:outline-none'
+      <div className='w-full flex items-end gap-2 p-3 border-t border-gray-200'>
+        <TextArea
           value={message}
-          onInput={handleTyping}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder='Type a message...'
+          onInput={handleTyping}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
+          rows={3}
         />
+
         <button
           onClick={handleSend}
-          className='bg-blue-600 text-white h-9 w-9 flex items-center justify-center rounded-md'
+          className='bg-blue-600 text-white h-9 w-9 flex items-center justify-center rounded-md mb-1.5'
         >
           <svg
             width='20'

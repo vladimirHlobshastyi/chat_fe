@@ -50,7 +50,7 @@ const Gifts = () => {
           <Table
             onPerPageChange={setPerPage}
             headers={GIFTS_TABLE_HEADER}
-            newItemLabel='Add New Gift'
+            //newItemLabel='Add New Gift'
             onAddNewItem={() => {}} /* setIsAddNewGiftModalOpen(true) */
             onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}

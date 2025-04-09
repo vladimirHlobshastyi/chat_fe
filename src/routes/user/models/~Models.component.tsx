@@ -51,7 +51,7 @@ export const Models = () => {
           <Table
             onPerPageChange={setPerPage}
             headers={MODELS_TABLE_HEADER}
-            newItemLabel='Add New Model'
+            //newItemLabel='Add New Model'
             onAddNewItem={() => setIsAddModelModalOpen(true)}
             onSearch={(searchTerm) => setSearchValue(searchTerm)}
             onPageChange={(page) => setPage(page)}
