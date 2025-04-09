@@ -35,7 +35,7 @@ export const MessageGroup = ({
 
         return (
           <div
-            key={msg.id + msg.created_at}
+            key={msg.id + msg.created_at + msg.chat_id}
             className='flex flex-col'
             ref={msg.id === lastPartnerMessageId ? lastMessageRef : undefined}
           >

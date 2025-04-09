@@ -99,7 +99,7 @@ const SideBar = ({ variant }: { variant: 'admin' | 'user' }) => {
                 <div
                   className='flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 cursor-pointer'
                   onClick={() => {
-                    navigate({ to: '/admin/profile' });
+                    navigate({ to: '/user/profile' });
                     setIsDropdownOpen(false);
                   }}
                 >
@@ -155,7 +155,7 @@ const SideBar = ({ variant }: { variant: 'admin' | 'user' }) => {
               >
                 {title}
               </Span>
-              {path === '/admin/dialogs' && !!totalUnreadMessages && (
+              {path === '/user/dialogs' && !!totalUnreadMessages && (
                 <MessageCounter
                   className='ml-auto'
                   value={totalUnreadMessages}

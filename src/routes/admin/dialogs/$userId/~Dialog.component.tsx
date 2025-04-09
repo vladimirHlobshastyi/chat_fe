@@ -17,7 +17,7 @@ import {
   useMessagesInfiniteQuery,
 } from '@/api/message/hooks';
 import ReactTimeAgo from 'react-time-ago';
-import { useMessagesStore } from '@/store/messagesStore/useMessagesStore';
+import { useMessagesStore } from '@/store/messagesStore/useMessagesStore'; //TODO will change on the useState
 
 function DialogPage() {
   const [message, setMessage] = useState('');

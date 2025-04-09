@@ -11,6 +11,9 @@ import { AddAdminFormData } from '@/forms/AddAdminForm/AddAdminForm.types';
 import { SortState } from '@/types/common';
 import { useQueryClient } from '@tanstack/react-query';
 import { initialSortProps, updatedAtSortProps } from '@/common/common';
+import { useCreateChatMutation } from '@/api/chats/hooks';
+import { useMyProfileQuery } from '@/api/me/hooks';
+import { useNavigate } from '@tanstack/react-router';
 
 export const useAdmins = () => {
   const [page, setPage] = useState(1);
@@ -54,6 +57,26 @@ export const useAdmins = () => {
   const createAdmin = useCreateUserMutation();
   const updateAdmin = useUpdateUserMutation();
   const deleteAdmin = useDeleteUserMutation();
+  const addChat = useCreateChatMutation();
+  const { data: myProfile } = useMyProfileQuery();
+  const navigate = useNavigate();
+
+  const myId = myProfile?.data.userId;
+
+  const handleAddChat = (recipientId: string) => {
+    if (myId) {
+      addChat.mutate(
+        { senderId: myId, recipientId },
+        {
+          onSuccess: () => {
+            navigate({ to: `/admin/dialogs/${recipientId}` });
+            console.log('success add chat');
+          },
+          onError: () => console.log('Error add chat'),
+        },
+      );
+    }
+  };
 
   const onDeleteAdmin = (adminId: string) => {
     deleteAdmin.mutate(adminId, {
@@ -119,6 +142,7 @@ export const useAdmins = () => {
     editAdminError,
     sort,
     searchValue,
+    handleAddChat,
     setSearchValue,
     onSort,
     setPerPage,

@@ -16,6 +16,7 @@ import { Route as LoginRouteImport } from './routes/login/route'
 import { Route as AdminRouteImport } from './routes/admin/route'
 import { Route as RouteImport } from './routes/route'
 import { Route as UserUsersRouteImport } from './routes/user/users/route'
+import { Route as UserProfileRouteImport } from './routes/user/profile/route'
 import { Route as UserModelsRouteImport } from './routes/user/models/route'
 import { Route as UserGiftsRouteImport } from './routes/user/gifts/route'
 import { Route as UserDialogsRouteImport } from './routes/user/dialogs/route'
@@ -60,6 +61,12 @@ const RouteRoute = RouteImport.update({
 const UserUsersRouteRoute = UserUsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => UserRouteRoute,
+} as any)
+
+const UserProfileRouteRoute = UserProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => UserRouteRoute,
 } as any)
 
@@ -263,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UserModelsRouteImport
       parentRoute: typeof UserRouteImport
     }
+    '/user/profile': {
+      id: '/user/profile'
+      path: '/profile'
+      fullPath: '/user/profile'
+      preLoaderRoute: typeof UserProfileRouteImport
+      parentRoute: typeof UserRouteImport
+    }
     '/user/users': {
       id: '/user/users'
       path: '/users'
@@ -343,6 +357,7 @@ interface UserRouteRouteChildren {
   UserDialogsRouteRoute: typeof UserDialogsRouteRouteWithChildren
   UserGiftsRouteRoute: typeof UserGiftsRouteRoute
   UserModelsRouteRoute: typeof UserModelsRouteRoute
+  UserProfileRouteRoute: typeof UserProfileRouteRoute
   UserUsersRouteRoute: typeof UserUsersRouteRoute
 }
 
@@ -350,6 +365,7 @@ const UserRouteRouteChildren: UserRouteRouteChildren = {
   UserDialogsRouteRoute: UserDialogsRouteRouteWithChildren,
   UserGiftsRouteRoute: UserGiftsRouteRoute,
   UserModelsRouteRoute: UserModelsRouteRoute,
+  UserProfileRouteRoute: UserProfileRouteRoute,
   UserUsersRouteRoute: UserUsersRouteRoute,
 }
 
@@ -374,6 +390,7 @@ export interface FileRoutesByFullPath {
   '/user/dialogs': typeof UserDialogsRouteRouteWithChildren
   '/user/gifts': typeof UserGiftsRouteRoute
   '/user/models': typeof UserModelsRouteRoute
+  '/user/profile': typeof UserProfileRouteRoute
   '/user/users': typeof UserUsersRouteRoute
   '/admin/dialogs/$userId': typeof AdminDialogsUserIdRouteRoute
   '/user/dialogs/$userId': typeof UserDialogsUserIdRouteRoute
@@ -396,6 +413,7 @@ export interface FileRoutesByTo {
   '/user/dialogs': typeof UserDialogsRouteRouteWithChildren
   '/user/gifts': typeof UserGiftsRouteRoute
   '/user/models': typeof UserModelsRouteRoute
+  '/user/profile': typeof UserProfileRouteRoute
   '/user/users': typeof UserUsersRouteRoute
   '/admin/dialogs/$userId': typeof AdminDialogsUserIdRouteRoute
   '/user/dialogs/$userId': typeof UserDialogsUserIdRouteRoute
@@ -419,6 +437,7 @@ export interface FileRoutesById {
   '/user/dialogs': typeof UserDialogsRouteRouteWithChildren
   '/user/gifts': typeof UserGiftsRouteRoute
   '/user/models': typeof UserModelsRouteRoute
+  '/user/profile': typeof UserProfileRouteRoute
   '/user/users': typeof UserUsersRouteRoute
   '/admin/dialogs/$userId': typeof AdminDialogsUserIdRouteRoute
   '/user/dialogs/$userId': typeof UserDialogsUserIdRouteRoute
@@ -443,6 +462,7 @@ export interface FileRouteTypes {
     | '/user/dialogs'
     | '/user/gifts'
     | '/user/models'
+    | '/user/profile'
     | '/user/users'
     | '/admin/dialogs/$userId'
     | '/user/dialogs/$userId'
@@ -464,6 +484,7 @@ export interface FileRouteTypes {
     | '/user/dialogs'
     | '/user/gifts'
     | '/user/models'
+    | '/user/profile'
     | '/user/users'
     | '/admin/dialogs/$userId'
     | '/user/dialogs/$userId'
@@ -485,6 +506,7 @@ export interface FileRouteTypes {
     | '/user/dialogs'
     | '/user/gifts'
     | '/user/models'
+    | '/user/profile'
     | '/user/users'
     | '/admin/dialogs/$userId'
     | '/user/dialogs/$userId'
@@ -547,6 +569,7 @@ export const routeTree = rootRoute
         "/user/dialogs",
         "/user/gifts",
         "/user/models",
+        "/user/profile",
         "/user/users"
       ]
     },
@@ -602,6 +625,10 @@ export const routeTree = rootRoute
     },
     "/user/models": {
       "filePath": "user/models/route.tsx",
+      "parent": "/user"
+    },
+    "/user/profile": {
+      "filePath": "user/profile/route.tsx",
       "parent": "/user"
     },
     "/user/users": {
