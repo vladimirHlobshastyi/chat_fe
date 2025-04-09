@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as UserRouteImport } from './routes/user/route'
 import { Route as LoginRouteImport } from './routes/login/route'
 import { Route as AdminRouteImport } from './routes/admin/route'
+import { Route as RouteImport } from './routes/route'
 import { Route as UserUsersRouteImport } from './routes/user/users/route'
 import { Route as UserModelsRouteImport } from './routes/user/models/route'
 import { Route as UserGiftsRouteImport } from './routes/user/gifts/route'
@@ -47,6 +48,12 @@ const LoginRouteRoute = LoginRouteImport.update({
 const AdminRouteRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RouteRoute = RouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -144,6 +151,13 @@ const AdminDialogsUserIdRouteRoute = AdminDialogsUserIdRouteImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof RouteImport
+      parentRoute: typeof rootRoute
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -344,6 +358,7 @@ const UserRouteRouteWithChildren = UserRouteRoute._addFileChildren(
 )
 
 export interface FileRoutesByFullPath {
+  '/': typeof RouteRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRouteRoute
   '/user': typeof UserRouteRouteWithChildren
@@ -365,6 +380,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '/': typeof RouteRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRouteRoute
   '/user': typeof UserRouteRouteWithChildren
@@ -387,6 +403,7 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/': typeof RouteRoute
   '/admin': typeof AdminRouteRouteWithChildren
   '/login': typeof LoginRouteRoute
   '/user': typeof UserRouteRouteWithChildren
@@ -410,6 +427,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/admin'
     | '/login'
     | '/user'
@@ -430,6 +448,7 @@ export interface FileRouteTypes {
     | '/user/dialogs/$userId'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/admin'
     | '/login'
     | '/user'
@@ -450,6 +469,7 @@ export interface FileRouteTypes {
     | '/user/dialogs/$userId'
   id:
     | '__root__'
+    | '/'
     | '/admin'
     | '/login'
     | '/user'
@@ -472,12 +492,14 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
+  RouteRoute: typeof RouteRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
   LoginRouteRoute: typeof LoginRouteRoute
   UserRouteRoute: typeof UserRouteRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  RouteRoute: RouteRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
   LoginRouteRoute: LoginRouteRoute,
   UserRouteRoute: UserRouteRouteWithChildren,
@@ -493,10 +515,14 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/",
         "/admin",
         "/login",
         "/user"
       ]
+    },
+    "/": {
+      "filePath": "route.tsx"
     },
     "/admin": {
       "filePath": "admin/route.tsx",
