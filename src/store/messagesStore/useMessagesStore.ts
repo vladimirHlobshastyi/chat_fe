@@ -16,4 +16,10 @@ export const useMessagesStore = create<MessagesStore>((set) => ({
         messages: newState,
       };
     }),
+  setClearMessages: () =>
+    set(() => {
+      return {
+        messages: [],
+      };
+    }),
 }));

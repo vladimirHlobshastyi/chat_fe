@@ -24,6 +24,7 @@ export const Admins = () => {
     total,
     totalPages,
     searchValue,
+    handleAddChat,
     setSearchValue,
     onSort,
     setPerPage,
@@ -75,6 +76,9 @@ export const Admins = () => {
                 action: (
                   <TableActions
                     deleteDisabled
+                    onAdd={() => {
+                      if (admin.userId) handleAddChat(admin.userId);
+                    }}
                     onDelete={() => onDeleteAdmin(admin.id)}
                     onEdit={() => setSelectedAdmin(admin)}
                   />

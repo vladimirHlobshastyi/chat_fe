@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, RefObject } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMyProfileQuery } from '@/api/me/hooks';
 import Avatar from '@/components/Avatar';
-import { useChatByIdQuery } from '@/api/chats/hooks';
+import { useChatByIdQuery, useUnreadPerChatQuery } from '@/api/chats/hooks';
 import { getInitials } from '@/utils/typography';
 import { Span } from '@/components/Typography/Typography.component';
 import MessageGroup from '@/components/MessageGroup';
@@ -17,11 +17,12 @@ import {
   useMessagesInfiniteQuery,
 } from '@/api/message/hooks';
 import ReactTimeAgo from 'react-time-ago';
-import { useMessagesStore } from '@/store/messagesStore/useMessagesStore';
 import TextArea from '@/components/Inputs/TextArea';
+import { Message } from '@/types/messages';
 
 function DialogPage() {
   const [message, setMessage] = useState('');
+  const [wsMess, setWsMess] = useState<Message[]>([]);
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
@@ -36,24 +37,33 @@ function DialogPage() {
   const { data: myProfile } = useMyProfileQuery();
   const { mutate: mutateMarkedMessages } = useMarkMessagesAsReadMutation();
   const onlineUsers = useChatStore((s) => s.onlineUsers);
-  const { messages, setMessages, setMessagesRead } = useMessagesStore();
-  const lastMessage = messages
+  const { data: unreadByChat } = useUnreadPerChatQuery();
+
+  const lastMessage = wsMess
     .slice()
     .find((m) => m.sender_id === partnerId && !m.is_read);
 
   const isOnlineCurrentU = onlineUsers.has(partnerId);
   const myId = myProfile?.data.userId;
   const chatId = [myId, partnerId].sort().join('_');
+  const unreadMessageCount = unreadByChat?.[chatId] || 0;
   const currentUserId = myId;
   const { data: currentChat } = useChatByIdQuery(chatId);
 
-  const { data, isFetched, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useMessagesInfiniteQuery(chatId, messages.length);
+  const {
+    data,
+    isFetched,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useMessagesInfiniteQuery(chatId, wsMess.length);
 
   const messagesData = (data?.pages ?? []).reduceRight(
     (acc, page) => [...acc, ...page],
     [],
   );
+  const isRestMessages = messagesData.length > 0;
   const lastSeenPartner = currentChat?.last_seen;
 
   const handleTyping = () => {
@@ -79,7 +89,7 @@ function DialogPage() {
           isTyping: false,
         }),
       );
-    }, 2000);
+    }, 1000);
   };
 
   const handleSend = () => {
@@ -143,10 +153,24 @@ function DialogPage() {
   };
 
   useEffect(() => {
-    if (chatId && isFetched && messagesData.length > 0) {
+    if (chatId && isFetched && isRestMessages && unreadMessageCount) {
       handleMarkedMessages();
     }
+
+    if (isFetched) {
+      scrollToBottom();
+    }
   }, [chatId, isFetched]);
+
+  useEffect(() => {
+    if (wsMess.length > 0 && wsMess[0]?.chat_id !== chatId) {
+      setWsMess([]);
+    }
+    queryClient.invalidateQueries({ queryKey: ['chat', chatId] });
+    scrollToBottom();
+
+    setMessage('');
+  }, [chatId]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
@@ -157,7 +181,7 @@ function DialogPage() {
 
     if (lastMessageRef.current) observer.observe(lastMessageRef.current);
     return () => observer.disconnect();
-  }, [messages]);
+  }, [wsMess]);
 
   useEffect(() => {
     if (!ws || !chatId) return;
@@ -165,12 +189,16 @@ function DialogPage() {
     const handleMessage = (event: MessageEvent) => {
       const msg = JSON.parse(event.data);
       if (msg.type === 'new_message' && msg.data.chat_id === chatId) {
-        setMessages(msg.data);
+        setWsMess((prev) => [...prev, msg.data]);
         scrollToBottom();
       }
 
       if (msg.type === 'read_messages') {
-        setMessagesRead();
+        setWsMess((prev) =>
+          prev.map((ms) => {
+            return { ...ms, is_read: true };
+          }),
+        );
       }
 
       if (msg.type === 'typing' && msg.chatId === chatId) {
@@ -210,10 +238,6 @@ function DialogPage() {
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage]);
 
-  useEffect(() => {
-    if (isFetched) scrollToBottom();
-  }, [isFetched, chatId]);
-
   useUniversalKeyboardShortcuts({
     shortcuts: [{ key: 'Enter', action: handleSend }],
     ref: mainRef as RefObject<HTMLElement>,
@@ -236,35 +260,28 @@ function DialogPage() {
           <Span className='text-xs text-gray-400'>{getPartnerStatus()}</Span>
         </div>
       </div>
+
       <div
         className='flex-1 overflow-x-hidden overflow-y-auto bg-white p-5 rounded flex flex-col'
         ref={scrollContainerRef}
       >
+        {(!isFetched || isFetching) && <Loader />}
         <div ref={topRef} className='h-1' />
-        <div className='min-h-5'>
-          {isPartnerTyping && (
-            <span className='text-sm text-gray-400 animate-pulse block'>
-              typing...
-            </span>
-          )}
-        </div>
 
-        {!isFetched ? (
-          <Loader />
-        ) : messagesData.length > 0 ? (
+        {isRestMessages && isFetched && (
           <MessageGroup
             messages={messagesData}
             currentUserId={currentUserId as string}
             partnerAvatar={currentChat?.partner_avatar}
             partnerName={currentChat?.partner_name}
+            lastMessageRef={lastMessageRef} //TODO will fix isRead need to handle wsMessage and restMessage
+            lastPartnerMessageId={lastMessage?.id}
           />
-        ) : (
-          <div className='text-sm text-gray-400'>No messages yet...</div>
         )}
 
-        {messages && (
+        {wsMess && (
           <MessageGroup
-            messages={messages}
+            messages={wsMess}
             currentUserId={currentUserId as string}
             partnerAvatar={currentChat?.partner_avatar}
             partnerName={currentChat?.partner_name}
@@ -272,6 +289,18 @@ function DialogPage() {
             lastPartnerMessageId={lastMessage?.id}
           />
         )}
+
+        {!isRestMessages && wsMess.length === 0 && (
+          <div className='text-sm text-gray-400'>No messages yet...</div>
+        )}
+
+        <div className='min-h-5'>
+          {isPartnerTyping && (
+            <span className='text-sm text-gray-400 animate-pulse block'>
+              typing...
+            </span>
+          )}
+        </div>
       </div>
       <div className='w-full flex items-end gap-2 p-3 border-t border-gray-200'>
         <TextArea
