@@ -18,6 +18,9 @@ const refreshAccessToken = async () => {
   const axiosTemp = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
     withCredentials: true,
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
   const response = await axiosTemp.post('/auth/refresh-token');
   return response.data;

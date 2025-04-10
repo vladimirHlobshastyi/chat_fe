@@ -4,7 +4,6 @@ import { useCreateUserMutation } from '@/api/users/hooks';
 import { CreateUserParams } from '@/api/users/types';
 import AddUserForm from '@/forms/AddUserForm';
 import LoginForm from '@/forms/LoginForm';
-import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
 const Login = () => {
@@ -15,14 +14,10 @@ const Login = () => {
   const [isLoginForm, setIsLoginForm] = useState(true);
 
   const loginMutation = useLoginMutation();
-  const navigate = useNavigate({ from: '/login' });
   const createUser = useCreateUserMutation();
 
   const onSubmit = (data: LoginQueryType['Params']) => {
     loginMutation.mutate(data, {
-      onSuccess: () => {
-        navigate({ to: '/admin' });
-      },
       onError: (error) => {
         setErrorMessage(error.message);
         console.error(error);
