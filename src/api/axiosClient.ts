@@ -1,4 +1,4 @@
-/* import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/store/authStore/useAuthStore';
 
 let isRefreshing = false;
@@ -74,35 +74,3 @@ const axiosClient = axios.create({
 setupAxiosInterceptors(axiosClient);
 
 export default axiosClient;
- */
-
-import { useAuthStore } from '@/store/authStore/useAuthStore';
-import axios, { AxiosInstance } from 'axios';
-
-const axiosClient: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true,
-});
-
-axiosClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      const { setIsAuthenticated } = useAuthStore.getState();
-
-      setIsAuthenticated(false);
-
-      /*  if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
-      } */
-      console.warn(error);
-    }
-    return Promise.reject(error.response?.data);
-  },
-);
-
-export default axiosClient;
-//TODO WILL CHANGE BACK
