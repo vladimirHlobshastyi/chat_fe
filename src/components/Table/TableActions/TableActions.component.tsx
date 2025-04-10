@@ -22,7 +22,7 @@ const TableActions = ({
           disabled={addDisabled}
           onClick={onAdd}
         >
-          <Icon name='PlusIcon' />
+          <Icon name='ChatIcon' />
         </button>
       )}
 

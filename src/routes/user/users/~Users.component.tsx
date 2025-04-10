@@ -71,9 +71,7 @@ export const Users = () => {
                 ),
                 name: user.name,
                 geo: getCountryValue(user.geo),
-                is_verified: user.isVerified ? 'Yes' : 'No',
-                telegram_id: user.telegramId,
-                is_banned: user.isBanned ? 'Yes' : 'No',
+                email: user.email,
                 created_at: convertUtcToLocal(user.createdAt),
                 updated_at: convertUtcToLocal(user.updatedAt),
                 action: (

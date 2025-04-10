@@ -18,20 +18,9 @@ export const USERS_TABLE_HEADER: TableHeader[] = [
     width: 'min-w-18',
   },
   {
-    key: 'is_verified',
-    title: 'Verified',
-    width: 'min-w-14',
-  },
-  {
-    key: 'telegram_id',
-    title: 'Telegram ID',
-    width: 'min-w-26',
-  },
-  {
-    key: 'is_banned',
-    title: 'Banned',
-    width: 'min-w-20',
-    sortable: true,
+    key: 'email',
+    title: 'Email',
+    width: 'min-w-33 max-w-40',
   },
   {
     key: 'created_at',
