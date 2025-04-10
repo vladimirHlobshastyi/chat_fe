@@ -9,6 +9,7 @@ export const useLoginMutation = () => {
   return useMutation({
     mutationFn: login,
     onSuccess: (data) => {
+      debugger;
       setIsAuthenticated(true);
       navigate({ to: data.role === 'admin' ? '/admin' : '/user' });
     },
