@@ -95,9 +95,9 @@ axiosClient.interceptors.response.use(
 
       setIsAuthenticated(false);
 
-      if (window.location.pathname !== '/login') {
+      /*  if (window.location.pathname !== '/login') {
         window.location.href = '/login';
-      }
+      } */
       console.warn(error);
     }
     return Promise.reject(error.response?.data);
