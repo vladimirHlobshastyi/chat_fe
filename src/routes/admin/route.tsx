@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import AdminLayout from '@/layouts/AdminLayout';
+import RootLayout from '@/layouts/RootLayout';
 
 export const Route = createFileRoute('/admin')({
-  component: AdminLayout,
+  component: () => <RootLayout variant='admin' />,
 });
