@@ -39,10 +39,6 @@ function DialogPage() {
   const onlineUsers = useChatStore((s) => s.onlineUsers);
   const { data: unreadByChat } = useUnreadPerChatQuery();
 
-  const lastMessage = wsMess
-    .slice()
-    .find((m) => m.sender_id === partnerId && !m.is_read);
-
   const isOnlineCurrentU = onlineUsers.has(partnerId);
   const myId = myProfile?.data.userId;
   const chatId = [myId, partnerId].sort().join('_');
@@ -132,6 +128,15 @@ function DialogPage() {
       );
     return 'Offline';
   };
+
+  const allMessages = [...messagesData, ...wsMess].sort(
+    (a, b) =>
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+  );
+
+  const lastUnreadPartnerMessageId = allMessages
+    .filter((m) => m.sender_id === partnerId && !m.is_read)
+    .at(-1)?.id;
 
   const handleMarkedMessages = () => {
     mutateMarkedMessages(chatId, {
@@ -262,37 +267,28 @@ function DialogPage() {
       </div>
 
       <div
-        className='flex-1 overflow-x-hidden overflow-y-auto bg-white p-5 rounded flex flex-col'
+        className='relative flex-1 overflow-x-hidden overflow-y-auto bg-white p-5 rounded flex flex-col justify-between'
         ref={scrollContainerRef}
       >
         {(!isFetched || isFetching) && <Loader />}
-        <div ref={topRef} className='h-1' />
+        <div>
+          <div ref={topRef} className='h-1' />
 
-        {isRestMessages && isFetched && (
-          <MessageGroup
-            messages={messagesData}
-            currentUserId={currentUserId as string}
-            partnerAvatar={currentChat?.partner_avatar}
-            partnerName={currentChat?.partner_name}
-            lastMessageRef={lastMessageRef} //TODO will fix isRead need to handle wsMessage and restMessage
-            lastPartnerMessageId={lastMessage?.id}
-          />
-        )}
+          {allMessages && (
+            <MessageGroup
+              messages={allMessages}
+              currentUserId={currentUserId as string}
+              partnerAvatar={currentChat?.partner_avatar}
+              partnerName={currentChat?.partner_name}
+              lastMessageRef={lastMessageRef}
+              lastPartnerMessageId={lastUnreadPartnerMessageId}
+            />
+          )}
 
-        {wsMess && (
-          <MessageGroup
-            messages={wsMess}
-            currentUserId={currentUserId as string}
-            partnerAvatar={currentChat?.partner_avatar}
-            partnerName={currentChat?.partner_name}
-            lastMessageRef={lastMessageRef}
-            lastPartnerMessageId={lastMessage?.id}
-          />
-        )}
-
-        {!isRestMessages && wsMess.length === 0 && (
-          <div className='text-sm text-gray-400'>No messages yet...</div>
-        )}
+          {!isRestMessages && wsMess.length === 0 && isFetched && (
+            <div className='text-sm text-gray-400'>No messages yet...</div>
+          )}
+        </div>
 
         <div className='min-h-5'>
           {isPartnerTyping && (
