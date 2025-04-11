@@ -6,13 +6,13 @@ import { RequiredRole } from '@/providers/RoleProvider/RoleProvider.types';
 import Header from './Header';
 
 const RootLayout = ({ variant }: { variant: RequiredRole }) => {
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHidden, setIsHidden] = useState(true);
 
   return (
     <RoleProvider requiredRole={variant}>
       <div className='w-full h-screen flex flex-row bg-secondary-dark'>
         <SideBar variant={variant} isHidden={isHidden} />
-        <div className='w-full h-full flex flex-col'>
+        <div className='w-full h-full flex flex-col overflow-hidden'>
           <Header
             role={variant}
             isHidden={isHidden}

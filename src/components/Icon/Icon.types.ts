@@ -11,7 +11,8 @@ export type IconNamesType =
   | 'OpenYeyIcon'
   | 'UsersIcon'
   | 'PlusIcon'
-  | 'RowsIcon';
+  | 'RowsIcon'
+  | 'StraightLinesIcons';
 
 export type IconProps = {
   name: IconNamesType;

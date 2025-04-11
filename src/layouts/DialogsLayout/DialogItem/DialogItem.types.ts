@@ -1,6 +1,9 @@
 import { Chat } from '@/api/chats/types';
+import { RequiredRole } from '@/providers/RoleProvider/RoleProvider.types';
 
 export interface DialogItemProps {
   chat: Chat;
-  role: 'admin' | 'user';
+  role: RequiredRole;
+  className?: string;
+  onSelect: () => void;
 } //TODO will improve
