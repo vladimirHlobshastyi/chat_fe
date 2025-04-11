@@ -1,52 +1,49 @@
-# React + TypeScript + Vite
+# FlyChat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+FlyChat is a modern real-time chat application built with React, Vite, Zustand, TanStack Router & Query, and Supabase.  
+It is designed for both desktop and mobile usage, and is fully PWA-compatible.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🔐 JWT-based Authentication
+- 💬 Real-time WebSocket chat with message sync
+- 👥 Chat creation and two-user dialog system
+- ✅ Read/unread message tracking
+- 🟢 Online presence system
+- 🧠 AI chatbot integration (via OpenRouter / OpenAI – WIP)
+- 🎁 Future feature: Gift system support
+- 📱 Mobile-first responsive design
+- ☁️ Supabase for database and storage
+- 📦 Fully prepared for PWA installation
 
-## Expanding the ESLint configuration
+## 🚀 Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Frontend**: React 19, Vite, TypeScript, TailwindCSS
+- **State Management**: Zustand
+- **Routing & Data**: TanStack Router + React Query
+- **Real-time**: WebSocket
+- **Backend**: Node.js + Express, Supabase
+- **PWA Support**: Manifest, icons, meta tags
 
-- Configure the top-level `parserOptions` property like this:
+## 📱 PWA & Meta
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+- App can be installed to your home screen
+- Fully functional offline fallback (coming soon)
+- Optimized manifest and helmet configuration
+
+## 🔧 Setup
+
+```bash
+npm install
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## 📫 Contact
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react';
+- **Author**: Vladimir Hlobchastyi
+- **Email**: [vladimirhlobchastyi@gmail.com](mailto:vladimirhlobchastyi@gmail.com)
+- **LinkedIn**: [linkedin.com/in/vladimir-globchastyi](https://www.linkedin.com/in/vladimir-globchastyi/)
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-});
-```
+## 📄 License
 
-> > > > > > > c5d9743 (Initial commit)
+This project is for demonstration purposes and portfolio usage.
