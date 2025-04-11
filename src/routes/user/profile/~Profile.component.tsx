@@ -80,14 +80,14 @@ const Profile = () => {
                     onClick={() => setIsEditModalOpen(true)}
                     color='secondary'
                   >
-                    Edit my Profile
+                    Edit
                   </Button>
                 </div>
               </div>
 
               <div className='p-6 mb-6 border border-gray-200 rounded-2xl'>
                 <div className='w-1/2'>
-                  <h4 className='text-lg font-semibold text-gray-800 lg:mb-6'>
+                  <h4 className='text-lg font-semibold text-gray-800 lg:mb-6 whitespace-nowrap mb-2 md:mb-0'>
                     Personal Information
                   </h4>
                   <div className='grid grid-cols-2 gap-7'>

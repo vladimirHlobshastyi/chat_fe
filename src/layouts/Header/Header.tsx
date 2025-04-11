@@ -95,7 +95,7 @@ const Header = ({ isHidden, role, className, setIsHidden }: HeaderTypes) => {
         </div>
 
         {isDropdownOpen && (
-          <div className='absolute top-14 -left-16 z-10 border border-gray-200 rounded-lg shadow-lg bg-white min-w-52'>
+          <div className='absolute top-14 -left-16 z-30 border border-gray-200 rounded-lg shadow-lg bg-white min-w-52'>
             <div className='p-3 w-full flex flex-1 flex-col'>
               <div>
                 <span className='block text-sm font-medium text-gray-700'>

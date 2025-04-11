@@ -10,7 +10,7 @@ const RoleProvider = ({
   requiredRole: 'user' | 'admin';
   children: React.ReactNode;
 }) => {
-  const { data: myProfile } = useMyProfileQuery();
+  const { data: myProfile, isLoading } = useMyProfileQuery();
   const navigate = useNavigate();
   const myRole = myProfile?.data.role;
 
@@ -20,7 +20,7 @@ const RoleProvider = ({
     }
   }, [myRole, requiredRole, navigate]);
 
-  if (!myRole) return <Loader />;
+  if (isLoading) return <Loader />;
 
   return children;
 };

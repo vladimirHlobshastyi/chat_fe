@@ -39,7 +39,15 @@ const DialogsLayout = ({ role }: { role: 'admin' | 'user' }) => {
           />
         </div>
 
-        <div className='flex flex-col gap-3 overflow-auto'>
+        <div
+          className={cn(
+            'flex flex-col gap-3 overflow-auto transition-all duration-300 ease-in-out',
+            'origin-top transform',
+            isDialogsHidden
+              ? 'scale-y-0 opacity-0 md:scale-y-100 md:opacity-100'
+              : 'scale-y-100 opacity-100',
+          )}
+        >
           {chats.length > 0 ? (
             chats.map((chat) => (
               <DialogItem
