@@ -30,9 +30,11 @@ const SideBar = ({
   return (
     <div
       className={cn(
-        'flex flex-col z-30 h-full border-r border-gray-200 bg-white',
+        'flex flex-col z-30 h-full border-r border-gray-200 bg-white transition-all duration-300 ease-in-out',
         'fixed top-[77px] left-0 md:relative md:top-0 md:left-0',
-        isHidden ? 'hidden md:flex' : 'block md:flex md:min-w-60',
+        isHidden
+          ? 'translate-x-[-100%] md:translate-x-0 md:w-24'
+          : 'translate-x-0 md:w-60',
         className,
       )}
     >

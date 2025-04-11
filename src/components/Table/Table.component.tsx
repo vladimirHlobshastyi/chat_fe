@@ -99,7 +99,7 @@ const Table = ({
           <span className='text-gray-500'>entries</span>
         </div>
 
-        <div className='min-w-80 relative flex items-center'>
+        <div className='max-w-80 w-full relative flex items-center'>
           <svg
             className='fill-gray-500 absolute left-4 top-1/2 -translate-y-1/2'
             width='20'
@@ -115,9 +115,9 @@ const Table = ({
             />
           </svg>
 
-          <div className='flex gap-2'>
+          <div className='flex gap-2 w-full'>
             <InputField
-              className='pl-10 h-11 z-10 min-w-80'
+              className='pl-10 h-11 z-10 w-full'
               placeholder='Search...'
               value={inputValue}
               onPaste={handleOnPast}
