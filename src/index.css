@@ -44,11 +44,17 @@
   height: 100%;
 }
 
+html,
 body {
   @apply font-outfit;
   color: var(--foreground);
   background: var(--background);
   font-family: 'Outfit', sans-serif !important; /* TODO will check */
+  height: 100%;
   width: 100%;
-  height: 100vh;
+  overflow: hidden;
+}
+
+#__root {
+  height: 100dvh; /* Dynamic viewport height */
 }
