@@ -6,7 +6,6 @@ import { H3 } from '@/components/Typography/Typography.component';
 import Table from '@/components/Table';
 import TableActions from '@/components/Table/TableActions';
 import TableImage from '@/components/Table/TableImage';
-import { convertUtcToLocal } from '@/utils/date';
 import ErrorPage from '@/components/ErrorPage';
 //import { MOCK_GEO_OPTIONS } from '@/common/mock';
 
@@ -62,8 +61,6 @@ const Gifts = () => {
                 price: gift.price,
                 restricted_countries: 'MOCK country', //TODO will change
                 is_active: gift.isActive ? 'Yes' : 'No',
-                created_at: convertUtcToLocal(gift.createdAt),
-                updated_at: convertUtcToLocal(gift.updatedAt),
                 action: (
                   <TableActions
                     editDisabled

@@ -11,7 +11,11 @@ const RootLayout = ({ variant }: { variant: RequiredRole }) => {
   return (
     <RoleProvider requiredRole={variant}>
       <div className='w-full h-screen flex flex-row bg-secondary-dark'>
-        <SideBar variant={variant} isHidden={isHidden} />
+        <SideBar
+          variant={variant}
+          isHidden={isHidden}
+          setIsHidden={() => setIsHidden(true)}
+        />
         <div className='w-full h-full flex flex-col overflow-hidden'>
           <Header
             role={variant}

@@ -310,6 +310,7 @@ function DialogPage() {
             }
           }}
           rows={3}
+          className='border-none focus:ring-0 shadow-none'
         />
 
         <button

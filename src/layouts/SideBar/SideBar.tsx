@@ -13,10 +13,13 @@ const SideBar = ({
   variant,
   isHidden,
   className,
+  setIsHidden,
 }: {
   variant: RequiredRole;
   isHidden: boolean;
-  className?: string; //TODO will move types
+  className?: string;
+  setIsHidden: () => void;
+  //TODO will move types
 }) => {
   const matchRoute = useMatchRoute();
   const { data: totalUnreadMessages } = useTotalUnreadQuery();
@@ -58,6 +61,7 @@ const SideBar = ({
                 isActive ? 'bg-blue-50 text-primary' : 'hover:bg-gray-150',
                 isHidden && 'md:justify-center',
               )}
+              onClick={setIsHidden}
             >
               {iconName && (
                 <Icon

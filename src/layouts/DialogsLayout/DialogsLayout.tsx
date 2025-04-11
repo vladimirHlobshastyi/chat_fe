@@ -10,7 +10,7 @@ import { cn } from '@/utils/styles';
 const DialogsLayout = ({ role }: { role: 'admin' | 'user' }) => {
   //TODO WILL move roll to the local storage
   const [searchChat, setSearchChat] = useState(''); //TODO will add debounce
-  const [isDialogsHidden, setIsDialogsHidden] = useState(true);
+  const [isDialogsHidden, setIsDialogsHidden] = useState(false);
 
   const { data: chats = [] } = useChatsQuery({ search: searchChat });
 

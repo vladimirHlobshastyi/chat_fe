@@ -70,9 +70,7 @@ export const Models = () => {
                 name: model.name,
                 geo: getCountryValue(model.geo),
                 about: model.about || 'Empty field...',
-                created_by: model.createdBy,
                 created_at: convertUtcToLocal(model.createdAt),
-                updated_at: convertUtcToLocal(model.updatedAt),
                 action: (
                   <TableActions
                     editDisabled
