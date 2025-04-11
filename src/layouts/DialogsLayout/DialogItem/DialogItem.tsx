@@ -13,7 +13,7 @@ import { Chat } from '@/api/chats/types';
 import { useUnreadPerChatQuery } from '@/api/chats/hooks';
 import MessageCounter from '@/components/MessageCounter';
 
-const DialogItem = ({ chat, role }: DialogItemProps) => {
+const DialogItem = ({ chat, role, className, onSelect }: DialogItemProps) => {
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const navigate = useNavigate();
   const onlineUsers = useChatStore((s) => s.onlineUsers);
@@ -66,8 +66,12 @@ const DialogItem = ({ chat, role }: DialogItemProps) => {
       className={cn(
         'flex items-center gap-3 cursor-pointer rounded-xl p-3',
         isActive ? 'bg-blue-50 text-primary' : 'hover:bg-gray-150',
+        className,
       )}
-      onClick={() => navigate({ to: `/${role}/dialogs/${chat.partner_id}` })}
+      onClick={() => {
+        onSelect();
+        navigate({ to: `/${role}/dialogs/${chat.partner_id}` });
+      }}
     >
       <Avatar
         className={cn(

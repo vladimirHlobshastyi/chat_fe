@@ -41,7 +41,7 @@ export const Models = () => {
   if (error) return <ErrorPage label='Error loading models' />;
 
   return (
-    <div className='w-full h-full p-6 bg-gray-50'>
+    <div className='w-full h-full p-4 bg-gray-50 overflow-hidden'>
       <div className='w-full h-full container mx-auto rounded-xl overflow-hidden border border-gray-200 bg-white flex flex-col'>
         <div className='px-5 py-6 border-b border-gray-100'>
           <H3 className='font-medium text-gray-800'>Models</H3>
@@ -70,9 +70,7 @@ export const Models = () => {
                 name: model.name,
                 geo: getCountryValue(model.geo),
                 about: model.about || 'Empty field...',
-                created_by: model.createdBy,
                 created_at: convertUtcToLocal(model.createdAt),
-                updated_at: convertUtcToLocal(model.updatedAt),
                 action: (
                   <TableActions
                     editDisabled

@@ -4,7 +4,7 @@ export const MODELS_TABLE_HEADER: TableHeader[] = [
   {
     key: 'avatar',
     title: 'Avatar',
-    width: 'min-w-14',
+    width: 'w-4',
   },
   {
     key: 'name',
@@ -23,21 +23,9 @@ export const MODELS_TABLE_HEADER: TableHeader[] = [
     width: 'min-w-32 max-w-40',
   },
   {
-    key: 'created_by',
-    title: 'Created By',
-    width: 'min-w-14',
-    sortable: true,
-  },
-  {
     key: 'created_at',
     title: 'Created At',
-    width: 'min-w-14',
-    sortable: true,
-  },
-  {
-    key: 'updated_at',
-    title: 'Updated At',
-    width: 'min-w-14',
+    width: 'w-8',
     sortable: true,
   },
   /*   {

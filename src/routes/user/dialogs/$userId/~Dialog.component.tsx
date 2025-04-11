@@ -250,7 +250,7 @@ function DialogPage() {
 
   return (
     <div
-      className='w-full h-full flex flex-col border border-gray-200 rounded-xl ml-6 bg-white overflow-hidden'
+      className='w-full h-full flex flex-col border border-gray-200 rounded-xl bg-white overflow-hidden'
       ref={mainRef}
     >
       <div className='px-5 py-4 flex gap-3 items-center border-b border-gray-200'>
@@ -310,6 +310,7 @@ function DialogPage() {
             }
           }}
           rows={3}
+          className='border-none focus:ring-0 shadow-none'
         />
 
         <button

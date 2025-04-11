@@ -4,7 +4,7 @@ export const GIFTS_TABLE_HEADER: TableHeader[] = [
   {
     key: 'image',
     title: 'Image',
-    width: 'min-w-14',
+    width: 'w-4',
   },
   {
     key: 'name',
@@ -30,7 +30,7 @@ export const GIFTS_TABLE_HEADER: TableHeader[] = [
     width: 'min-w-26',
     sortable: true,
   },
-  {
+  /*   {
     key: 'created_at',
     title: 'Created At',
     width: 'min-w-14',
@@ -40,7 +40,7 @@ export const GIFTS_TABLE_HEADER: TableHeader[] = [
     key: 'updated_at',
     title: 'Updated At',
     width: 'min-w-14',
-  },
+  }, */
   /*   {
     key: 'action',
     title: 'Action',

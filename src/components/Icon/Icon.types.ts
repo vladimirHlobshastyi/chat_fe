@@ -10,7 +10,10 @@ export type IconNamesType =
   | 'LetterIcon'
   | 'OpenYeyIcon'
   | 'UsersIcon'
-  | 'PlusIcon';
+  | 'PlusIcon'
+  | 'RowsIcon'
+  | 'StraightLinesIcons'
+  | 'FaceExplodeIcon';
 
 export type IconProps = {
   name: IconNamesType;

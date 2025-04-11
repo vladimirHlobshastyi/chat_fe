@@ -1,30 +1,25 @@
-import { Span } from '@/components/Typography/Typography.component';
-import { Link, useMatchRoute, useNavigate } from '@tanstack/react-router';
-import { MENU_ITEMS } from './AdminSidebar.data';
-import { cn } from '@/utils/styles';
 import Avatar from '@/components/Avatar';
+import { Span } from '@/components/Typography/Typography.component';
 import { getInitials } from '@/utils/typography';
+import { useNavigate } from '@tanstack/react-router';
+import { cn } from '@/utils/styles';
 import { useMyProfileQuery } from '@/api/me/hooks';
 import { useState, useRef, RefObject } from 'react';
 import useOutsideClick from '@/hooks/useOutsideClick';
 import { useLogOutMutation } from '@/api/auth/hooks';
 import Icon from '@/components/Icon';
 import { useQueryClient } from '@tanstack/react-query';
-import { useTotalUnreadQuery } from '@/api/chats/hooks';
-import MessageCounter from '@/components/MessageCounter';
-import { IconNamesType } from '@/components/Icon/Icon.types';
+import { HeaderTypes } from './Header.types';
 
-const AdminSidebar = () => {
+const Header = ({ isHidden, role, className, setIsHidden }: HeaderTypes) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const matchRoute = useMatchRoute();
   const navigate = useNavigate();
   const myProfileQuery = useMyProfileQuery();
   const logOutMutation = useLogOutMutation();
   const queryClient = useQueryClient();
-  const { data: totalUnreadMessages } = useTotalUnreadQuery();
 
   const handleLogout = () => {
     logOutMutation.mutate();
@@ -42,12 +37,29 @@ const AdminSidebar = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
-
   return (
-    <div className='min-w-60 h-full flex flex-col border-r border-gray-200'>
-      <div className='relative min-h-[88px]' ref={dropdownRef}>
+    <div
+      className={cn(
+        'bg-background w-full py-4 px-6 flex justify-between items-center gap-2 border-b',
+        className,
+      )}
+    >
+      <button
+        className='flex h-10 w-10 justify-center items-center rounded-lg border  border-gray-200'
+        onClick={() => setIsHidden(!isHidden)}
+      >
+        <Icon
+          width={16}
+          height={12}
+          viewBox='0 0 16 12'
+          name='RowsIcon'
+          fill='text-text-icon'
+        />
+        {/* TODO will move to the component */}
+      </button>
+      <div className='relative' ref={dropdownRef}>
         <div
-          className='py-6 px-4 flex h-full items-center gap-4 border-b cursor-pointer'
+          className='flex h-full items-center gap-4 cursor-pointer'
           onClick={toggleDropdown}
         >
           {myProfile && (
@@ -83,8 +95,8 @@ const AdminSidebar = () => {
         </div>
 
         {isDropdownOpen && (
-          <div className='absolute top-full left-0 w-full z-10 bg-white border-border rounded-b-lg shadow-lg'>
-            <div className='p-3 flex flex-col w-full'>
+          <div className='absolute top-14 -left-16 z-10 border border-gray-200 rounded-lg shadow-lg bg-white min-w-52'>
+            <div className='p-3 w-full flex flex-1 flex-col'>
               <div>
                 <span className='block text-sm font-medium text-gray-700'>
                   {myProfile?.name}
@@ -98,7 +110,7 @@ const AdminSidebar = () => {
                 <div
                   className='flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 cursor-pointer'
                   onClick={() => {
-                    navigate({ to: '/admin/profile' });
+                    navigate({ to: `/${role}/profile` });
                     setIsDropdownOpen(false);
                   }}
                 >
@@ -123,49 +135,8 @@ const AdminSidebar = () => {
           </div>
         )}
       </div>
-
-      <nav className='w-full h-full flex flex-col gap-4 p-5 overflow-auto'>
-        {MENU_ITEMS.map(({ iconName, title, path }) => {
-          const isActive = !!matchRoute({ to: path, fuzzy: true });
-
-          return (
-            <Link
-              key={path}
-              to={path}
-              className={cn(
-                'px-2 py-3 rounded-lg text-sm flex gap-2.5 items-center',
-                isActive ? 'bg-blue-50 text-primary' : 'hover:bg-gray-150',
-              )}
-            >
-              {iconName && (
-                <Icon
-                  name={iconName as IconNamesType}
-                  className={cn(
-                    'w-6 h-6',
-                    isActive ? 'text-primary' : 'text-text-icon',
-                  )}
-                />
-              )}
-              <Span
-                weight='medium'
-                className={cn(
-                  isActive ? 'text-primary' : 'text-text-secondary',
-                )}
-              >
-                {title}
-              </Span>
-              {path === '/admin/dialogs' && !!totalUnreadMessages && (
-                <MessageCounter
-                  className='ml-auto'
-                  value={totalUnreadMessages}
-                />
-              )}
-            </Link>
-          );
-        })}
-      </nav>
     </div>
   );
 };
 
-export default AdminSidebar;
+export default Header;

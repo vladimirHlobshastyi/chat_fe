@@ -5,7 +5,6 @@ import EditUserModal from '@/features/Admin/Users/EditUserModal';
 import Table from '@/components/Table/Table.component';
 import TableActions from '@/components/Table/TableActions';
 import { H3 } from '@/components/Typography/Typography.component';
-import { convertUtcToLocal } from '@/utils/date';
 import ErrorPage from '@/components/ErrorPage';
 import Avatar from '@/components/Avatar';
 import { getInitials } from '@/utils/typography';
@@ -43,7 +42,7 @@ export const Users = () => {
   if (error) return <ErrorPage label='Error loading users' />;
 
   return (
-    <div className='w-full h-full p-6 bg-gray-50'>
+    <div className='w-full h-full p-4 bg-gray-50 overflow-hidden'>
       <div className='w-full h-full container mx-auto rounded-xl overflow-hidden border border-gray-200 bg-white flex flex-col'>
         <div className='px-5 py-6 border-b border-gray-100'>
           <H3 className='font-medium text-gray-800'>Users</H3>
@@ -62,6 +61,14 @@ export const Users = () => {
             searchValue={searchValue}
             data={users.map((user) => {
               return {
+                action: (
+                  <TableActions
+                    addDisabled={user.userId === myId}
+                    onAdd={() => {
+                      if (user.userId) handleAddChat(user.userId);
+                    }}
+                  />
+                ),
                 avatar: (
                   <Avatar
                     src={user.avatar}
@@ -72,16 +79,7 @@ export const Users = () => {
                 name: user.name,
                 geo: getCountryValue(user.geo),
                 email: user.email,
-                created_at: convertUtcToLocal(user.createdAt),
-                updated_at: convertUtcToLocal(user.updatedAt),
-                action: (
-                  <TableActions
-                    addDisabled={user.userId === myId}
-                    onAdd={() => {
-                      if (user.userId) handleAddChat(user.userId);
-                    }}
-                  />
-                ),
+                about: user.about || 'Empty field...',
               };
             })}
             sortProps={sort}
