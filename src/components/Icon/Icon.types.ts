@@ -12,7 +12,8 @@ export type IconNamesType =
   | 'UsersIcon'
   | 'PlusIcon'
   | 'RowsIcon'
-  | 'StraightLinesIcons';
+  | 'StraightLinesIcons'
+  | 'FaceExplodeIcon';
 
 export type IconProps = {
   name: IconNamesType;

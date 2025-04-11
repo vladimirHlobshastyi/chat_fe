@@ -41,7 +41,10 @@ const Profile = () => {
 
   const { error, isLoading } = useMyProfileQuery();
 
-  if (error) return <ErrorPage label='Error loading admins try later...' />;
+  if (error)
+    return (
+      <ErrorPage label='Error loading your profile, please try again later...' />
+    );
   if (isLoading) return <Loader />;
 
   return (

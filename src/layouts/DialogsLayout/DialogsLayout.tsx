@@ -1,6 +1,6 @@
 import { useChatsQuery } from '@/api/chats/hooks';
 import InputField from '@/components/Inputs/InputField';
-import { H1 } from '@/components/Typography/Typography.component';
+import { H1, Span } from '@/components/Typography/Typography.component';
 import { Outlet } from '@tanstack/react-router';
 import { useState } from 'react';
 import DialogItem from './DialogItem/DialogItem';
@@ -40,15 +40,21 @@ const DialogsLayout = ({ role }: { role: 'admin' | 'user' }) => {
         </div>
 
         <div className='flex flex-col gap-3 overflow-auto'>
-          {chats.map((chat) => (
-            <DialogItem
-              role={role}
-              key={chat.partner_id}
-              chat={chat}
-              onSelect={() => setIsDialogsHidden(true)}
-              className={cn(isDialogsHidden && 'hidden md:flex')}
-            />
-          ))}
+          {chats.length > 0 ? (
+            chats.map((chat) => (
+              <DialogItem
+                role={role}
+                key={chat.partner_id}
+                chat={chat}
+                onSelect={() => setIsDialogsHidden(true)}
+                className={cn(isDialogsHidden && 'hidden md:flex')}
+              />
+            ))
+          ) : (
+            <div className={cn('mt-2', isDialogsHidden && 'hidden')}>
+              <Span>Empty chats...</Span>
+            </div>
+          )}
         </div>
       </div>
       {isDialogsHidden && <Outlet />}
