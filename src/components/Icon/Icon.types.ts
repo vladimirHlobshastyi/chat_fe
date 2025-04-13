@@ -13,7 +13,9 @@ export type IconNamesType =
   | 'PlusIcon'
   | 'RowsIcon'
   | 'StraightLinesIcons'
-  | 'FaceExplodeIcon';
+  | 'FaceExplodeIcon'
+  | 'DotsIcon'
+  | 'MoonIcon';
 
 export type IconProps = {
   name: IconNamesType;

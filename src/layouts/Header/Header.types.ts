@@ -1,8 +1,10 @@
 import { RequiredRole } from '@/providers/RoleProvider/RoleProvider.types';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface HeaderTypes {
   role: RequiredRole;
   className?: string;
   isHidden: boolean;
-  setIsHidden: (val: boolean) => void;
+  onHide: (val: boolean) => void;
+  onMobHeaderHide: Dispatch<SetStateAction<boolean>>;
 }

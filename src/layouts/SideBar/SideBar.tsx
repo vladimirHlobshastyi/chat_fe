@@ -59,9 +59,9 @@ const SideBar = ({
               key={path}
               to={path}
               className={cn(
-                'px-2 py-3 rounded-lg text-sm flex gap-2.5 items-center',
+                'relative px-2 py-3 rounded-lg text-sm flex gap-2.5 items-center',
                 isActive ? 'bg-blue-50 text-primary' : 'hover:bg-gray-150',
-                isHidden && 'md:justify-center',
+                isHidden && 'md:justify-center gap-0',
               )}
               onClick={setIsHidden}
             >
@@ -85,12 +85,16 @@ const SideBar = ({
                 {title}
               </Span>
 
-              {path === '/user/dialogs' && !!totalUnreadMessages && (
-                <MessageCounter
-                  className='ml-auto'
-                  value={totalUnreadMessages}
-                />
-              )}
+              {(path === '/user/dialogs' || path === '/admin/dialogs') &&
+                !!totalUnreadMessages && (
+                  <MessageCounter
+                    className={cn(
+                      'ml-auto',
+                      isHidden && 'md:absolute md:top-1 md:right-1',
+                    )}
+                    value={totalUnreadMessages}
+                  />
+                )}
             </Link>
           );
         })}

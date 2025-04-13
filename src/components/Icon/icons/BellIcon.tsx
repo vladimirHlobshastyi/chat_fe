@@ -17,6 +17,7 @@ const BellIcon = (props: SVGProps<SVGSVGElement>) => (
       d='M14.079 6.839a3 3 0 0 0-4.255.1...'
     />
   </svg>
+  /*  */
 );
 
 export default BellIcon;

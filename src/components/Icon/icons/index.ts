@@ -13,3 +13,5 @@ export { default as PlusIcon } from './PlusIcon';
 export { default as RowsIcon } from './RowsIcon';
 export { default as StraightLinesIcons } from './StraightLinesIcons';
 export { default as FaceExplodeIcon } from './FaceExplodeIcon';
+export { default as DotsIcon } from './DotsIcon';
+export { default as MoonIcon } from './MoonIcon';
