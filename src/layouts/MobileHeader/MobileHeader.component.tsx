@@ -9,17 +9,9 @@ import useOutsideClick from '@/hooks/useOutsideClick';
 import { useLogOutMutation } from '@/api/auth/hooks';
 import Icon from '@/components/Icon';
 import { useQueryClient } from '@tanstack/react-query';
-import { HeaderTypes } from './Header.types';
-import MessageCounter from '@/components/MessageCounter';
-import { useTotalUnreadQuery } from '@/api/chats/hooks';
+import { MobileHeaderTypes } from './MobileHeader.types';
 
-const Header = ({
-  isHidden,
-  role,
-  className,
-  onHide,
-  onMobHeaderHide,
-}: HeaderTypes) => {
+const MobileHeader = ({ role, className }: MobileHeaderTypes) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -28,7 +20,6 @@ const Header = ({
   const myProfileQuery = useMyProfileQuery();
   const logOutMutation = useLogOutMutation();
   const queryClient = useQueryClient();
-  const { data: totalUnreadMessages } = useTotalUnreadQuery();
 
   const handleLogout = () => {
     logOutMutation.mutate();
@@ -49,42 +40,17 @@ const Header = ({
   return (
     <div
       className={cn(
-        'bg-background w-full py-4 px-6 flex justify-between items-center gap-2 border-b',
+        'visible bg-background w-full py-4 px-6 flex justify-between items-center gap-2 border-b md:hidden',
         className,
       )}
     >
-      <button
-        className='relative flex h-10 w-10 justify-center items-center rounded-lg border  border-gray-200'
-        onClick={() => onHide(!isHidden)}
-      >
-        <Icon
-          width={16}
-          height={12}
-          viewBox='0 0 16 12'
-          name='RowsIcon'
-          fill='text-text-icon'
-        />
-
-        {totalUnreadMessages && (
-          <MessageCounter
-            className='absolute -top-1 -right-2'
-            value={totalUnreadMessages}
-          />
-        )}
-        {/* TODO will move to the component */}
+      <button className='hover:text-dark-900 relative flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700'>
+        <Icon name='MoonIcon' width={20} height={20} viewBox='0 0 20 20' />
       </button>
-
-      <div
-        className={cn('flex md:hidden items-center gap-1 cursor-pointer')}
-        onClick={() => navigate({ to: `/${role}` })}
-      >
-        <Avatar size='md' src='/flyChat.svg' alt='FlyChat' initials='FC' />
-        <Span className={cn('truncate max-w-28')}>FlyChat</Span>
-      </div>
 
       <div className='relative' ref={dropdownRef}>
         <div
-          className='hidden h-full items-center gap-4 cursor-pointer md:flex'
+          className='flex h-full items-center gap-4 cursor-pointer'
           onClick={toggleDropdown}
         >
           {myProfile && (
@@ -118,15 +84,6 @@ const Header = ({
             </>
           )}
         </div>
-
-        <button
-          className={cn(
-            'flex h-10 w-10 justify-center items-center rounded-lg border border-gray-200 md:hidden',
-          )}
-          onClick={() => onMobHeaderHide((prev) => !prev)}
-        >
-          <Icon fill='text-text-icon' name='DotsIcon' />
-        </button>
 
         {isDropdownOpen && (
           <div className='absolute top-14 -left-16 z-30 border border-gray-200 rounded-lg shadow-lg bg-white min-w-52'>
@@ -173,4 +130,4 @@ const Header = ({
   );
 };
 
-export default Header;
+export default MobileHeader;
