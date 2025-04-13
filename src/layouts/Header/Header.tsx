@@ -65,9 +65,9 @@ const Header = ({
           fill='text-text-icon'
         />
 
-        {totalUnreadMessages && (
+        {!!totalUnreadMessages && (
           <MessageCounter
-            className='absolute -top-1 -right-2'
+            className='absolute -top-1 -right-2 md:hidden'
             value={totalUnreadMessages}
           />
         )}
