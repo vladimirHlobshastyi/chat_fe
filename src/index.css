@@ -52,7 +52,8 @@ body {
   font-family: 'Outfit', sans-serif !important; /* TODO will check */
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 #__root {
