@@ -46,6 +46,7 @@ const Header = ({
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
+
   return (
     <div
       className={cn(

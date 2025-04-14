@@ -1,14 +1,13 @@
 import { useParams } from '@tanstack/react-router';
 import { useState, useEffect, useRef, RefObject } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useMyProfileQuery } from '@/api/me/hooks';
 import Avatar from '@/components/Avatar';
 import { useChatByIdQuery, useUnreadPerChatQuery } from '@/api/chats/hooks';
 import { getInitials } from '@/utils/typography';
 import { Span } from '@/components/Typography/Typography.component';
 import MessageGroup from '@/components/MessageGroup';
 import useUniversalKeyboardShortcuts from '@/hooks/useUniversalKeyboardShortcuts';
-import { useChatStore } from '@/store/chatStore/useChatStore';
+import { useUsersStore } from '@/store/usersStore/useUsersStore';
 import { getUserStatus } from '@/utils/date';
 import { useWebSocket } from '@/providers/WebSocketProvider/useWebSocket';
 import Loader from '@/components/Loader';
@@ -19,6 +18,7 @@ import {
 import ReactTimeAgo from 'react-time-ago';
 import TextArea from '@/components/Inputs/TextArea';
 import { Message } from '@/types/messages';
+import { useMyProfileStore } from '@/store/myProfileStore/useMyProfileStore';
 
 function DialogPage() {
   const [message, setMessage] = useState('');
@@ -34,13 +34,13 @@ function DialogPage() {
   const ws = useWebSocket();
   const { userId: partnerId } = useParams({ from: '/user/dialogs/$userId' });
   const queryClient = useQueryClient();
-  const { data: myProfile } = useMyProfileQuery();
+  const myProfile = useMyProfileStore((s) => s.myProfile);
   const { mutate: mutateMarkedMessages } = useMarkMessagesAsReadMutation();
-  const onlineUsers = useChatStore((s) => s.onlineUsers);
+  const onlineUsers = useUsersStore((s) => s.onlineUsers);
   const { data: unreadByChat } = useUnreadPerChatQuery();
 
   const isOnlineCurrentU = onlineUsers.has(partnerId);
-  const myId = myProfile?.data.userId;
+  const myId = myProfile?.userId;
   const chatId = [myId, partnerId].sort().join('_');
   const unreadMessageCount = unreadByChat?.[chatId] || 0;
   const currentUserId = myId;

@@ -3,8 +3,8 @@ import { AuthContext } from './useAuth';
 import { useNavigate } from '@tanstack/react-router';
 import Loader from '@/components/Loader';
 import { useMyProfileQuery } from '@/api/me/hooks';
-import { useChatStore } from '@/store/chatStore/useChatStore';
 import { useAuthStore } from '@/store/authStore/useAuthStore';
+import { useMyProfileStore } from '@/store/myProfileStore/useMyProfileStore';
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticatedStore = useAuthStore((s) => s.isAuthenticated);
@@ -15,8 +15,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isReady, setIsReady] = useState(false);
   const navigate = useNavigate();
 
-  const { data: myProfile, isLoading } = useMyProfileQuery();
-  const setMyProfile = useChatStore((s) => s.setMyProfile);
+  const { data: myProfile, isFetched } = useMyProfileQuery();
+  const setMyProfile = useMyProfileStore((s) => s.setMyProfile);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -28,14 +28,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
 
-    if (myProfile?.data) {
+    if (isAuthenticated && myProfile?.data) {
       setMyProfile(myProfile?.data);
     }
 
     setIsReady(true);
-  }, [isAuthenticated, myProfile?.data]);
+  }, [isAuthenticated, myProfile?.data, isReady]);
 
-  if (!isReady || isLoading) return <Loader />; //TODO will check Loader blinking
+  if (!isReady || !isFetched) return <Loader />; //TODO will check Loader blinking
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>

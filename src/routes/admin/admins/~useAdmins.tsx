@@ -12,8 +12,8 @@ import { SortState } from '@/types/common';
 import { useQueryClient } from '@tanstack/react-query';
 import { initialSortProps, updatedAtSortProps } from '@/common/common';
 import { useCreateChatMutation } from '@/api/chats/hooks';
-import { useMyProfileQuery } from '@/api/me/hooks';
 import { useNavigate } from '@tanstack/react-router';
+import { useMyProfileStore } from '@/store/myProfileStore/useMyProfileStore';
 
 export const useAdmins = () => {
   const [page, setPage] = useState(1);
@@ -58,10 +58,10 @@ export const useAdmins = () => {
   const updateAdmin = useUpdateUserMutation();
   const deleteAdmin = useDeleteUserMutation();
   const addChat = useCreateChatMutation();
-  const { data: myProfile } = useMyProfileQuery();
+  const myProfile = useMyProfileStore((s) => s.myProfile);
   const navigate = useNavigate();
 
-  const myId = myProfile?.data.userId;
+  const myId = myProfile?.userId;
 
   const handleAddChat = (recipientId: string) => {
     if (myId) {

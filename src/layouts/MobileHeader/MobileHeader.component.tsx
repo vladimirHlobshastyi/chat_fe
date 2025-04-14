@@ -3,13 +3,13 @@ import { Span } from '@/components/Typography/Typography.component';
 import { getInitials } from '@/utils/typography';
 import { useNavigate } from '@tanstack/react-router';
 import { cn } from '@/utils/styles';
-import { useMyProfileQuery } from '@/api/me/hooks';
 import { useState, useRef, RefObject } from 'react';
 import useOutsideClick from '@/hooks/useOutsideClick';
 import { useLogOutMutation } from '@/api/auth/hooks';
 import Icon from '@/components/Icon';
 import { useQueryClient } from '@tanstack/react-query';
 import { MobileHeaderTypes } from './MobileHeader.types';
+import { useMyProfileStore } from '@/store/myProfileStore/useMyProfileStore';
 
 const MobileHeader = ({ role, className }: MobileHeaderTypes) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -17,7 +17,7 @@ const MobileHeader = ({ role, className }: MobileHeaderTypes) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
-  const myProfileQuery = useMyProfileQuery();
+  const myProfile = useMyProfileStore((s) => s.myProfile);
   const logOutMutation = useLogOutMutation();
   const queryClient = useQueryClient();
 
@@ -25,8 +25,6 @@ const MobileHeader = ({ role, className }: MobileHeaderTypes) => {
     logOutMutation.mutate();
     queryClient.clear();
   };
-
-  const myProfile = myProfileQuery?.data?.data;
 
   useOutsideClick(dropdownRef as RefObject<HTMLDivElement>, () => {
     if (isDropdownOpen) {

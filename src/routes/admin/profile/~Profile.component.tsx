@@ -10,6 +10,7 @@ import { EditAdminData } from '../admins/~Admins.types';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMyProfileQuery } from '@/api/me/hooks';
 import EditMyProfileModal from '@/features/Admin/Admins/EditMyProfileModal';
+import { useMyProfileStore } from '@/store/myProfileStore/useMyProfileStore';
 
 const Profile = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -17,10 +18,8 @@ const Profile = () => {
 
   const queryClient = useQueryClient();
 
-  const myProfileQuery = useMyProfileQuery();
+  const myProfile = useMyProfileStore((s) => s.myProfile);
   const updateAdmin = useUpdateUserMutation();
-
-  const myProfile = myProfileQuery?.data?.data;
 
   const handleUpdateAdmin = (data: EditAdminData) => {
     if (myProfile?.id) {
@@ -45,6 +44,7 @@ const Profile = () => {
     return (
       <ErrorPage label='Error loading your profile, please try again later...' />
     );
+
   if (isLoading) return <Loader />;
 
   return (

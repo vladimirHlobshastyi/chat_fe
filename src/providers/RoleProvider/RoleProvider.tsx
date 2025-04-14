@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from '@tanstack/react-router';
-import { useMyProfileQuery } from '@/api/me/hooks';
 import Loader from '@/components/Loader';
+import { useMyProfileQuery } from '@/api/me/hooks';
 
 const RoleProvider = ({
   requiredRole,
@@ -10,7 +10,7 @@ const RoleProvider = ({
   requiredRole: 'user' | 'admin';
   children: React.ReactNode;
 }) => {
-  const { data: myProfile, isLoading } = useMyProfileQuery();
+  const { data: myProfile } = useMyProfileQuery();
   const navigate = useNavigate();
   const myRole = myProfile?.data.role;
 
@@ -20,7 +20,7 @@ const RoleProvider = ({
     }
   }, [myRole, requiredRole, navigate]);
 
-  if (isLoading) return <Loader />;
+  if (!myProfile) return <Loader />;
 
   return children;
 };

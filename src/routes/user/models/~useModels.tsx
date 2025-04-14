@@ -8,8 +8,8 @@ import {
 import { Model } from '@/types/model';
 import { SortState } from '@/types/common';
 import { CreateModelParams, UpdateModelParams } from '@/api/models/types';
-import { useMyProfileQuery } from '@/api/me/hooks';
 import { initialSortProps, updatedAtSortProps } from '@/common/common';
+import { useMyProfileStore } from '@/store/myProfileStore/useMyProfileStore';
 
 export const useModels = () => {
   const [page, setPage] = useState(1);
@@ -32,8 +32,8 @@ export const useModels = () => {
     sortOrder: sort.direction,
   });
 
-  const { data: myProfile } = useMyProfileQuery();
-  const myId = Number(myProfile?.data?.id);
+  const myProfile = useMyProfileStore((s) => s.myProfile);
+  const myId = Number(myProfile?.id);
 
   const models = data?.data || [];
   const { total, totalPages } = data?.pagination || {};
