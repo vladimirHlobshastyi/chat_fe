@@ -49,7 +49,6 @@ export const MessageGroup = ({
                 <div className='w-10 flex-shrink-0'>
                   {showAvatar ? (
                     <Avatar
-                      size='md'
                       src={partnerAvatar}
                       initials={getInitials(partnerName || 'avatar')}
                     />
@@ -60,7 +59,7 @@ export const MessageGroup = ({
               )}
               <div
                 className={cn(
-                  'inline-block max-w-[70%] px-3 py-2 rounded-md',
+                  'inline-block max-w-[70%] h-full px-3 py-2 rounded-md',
                   isPartnerMessage
                     ? 'ml-2 bg-gray-150 text-gray-800'
                     : 'bg-primary text-white',
