@@ -42,7 +42,7 @@ const SideBar = ({
         className={cn(
           'hidden md:flex items-center gap-4 cursor-pointer py-4 px-6',
         )}
-        onClick={() => navigate({ to: `/${variant}` })}
+        onClick={() => navigate({ to: `/${variant}/dialogs` })}
       >
         <Avatar size='md' src='/flyChat.svg' alt='FlyChat' initials='FC' />
         <Span className={cn('truncate max-w-28', isHidden && 'md:hidden')}>

@@ -14,6 +14,7 @@ import { USER_ROLE_OPTIONS } from '@/common/options';
 
 const EditMyProfileForm = ({
   data,
+  role,
   errorMessage,
   onSubmit,
   onClose,
@@ -55,7 +56,7 @@ const EditMyProfileForm = ({
         <Select
           onChange={() => {}}
           disabled
-          selectedValue={'admin'}
+          selectedValue={role}
           options={USER_ROLE_OPTIONS}
         />
 

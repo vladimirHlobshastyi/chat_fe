@@ -5,6 +5,7 @@ import EditMeForm from '@/forms/EditMyProfileForm';
 const EditMyProfileModal = ({
   isOpen,
   data,
+  role,
   onSubmit,
   onClose,
   errorMessage,
@@ -12,6 +13,7 @@ const EditMyProfileModal = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <EditMeForm
+        role={role}
         data={data}
         onSubmit={onSubmit}
         onClose={onClose}
