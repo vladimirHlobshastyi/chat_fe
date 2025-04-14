@@ -65,19 +65,18 @@ const SideBar = ({
               )}
               onClick={setIsHidden}
             >
-              {iconName && (
-                <Icon
-                  name={iconName as IconNamesType}
-                  className={cn(
-                    'w-6 h-6',
-                    isActive ? 'text-primary' : 'text-text-icon',
-                  )}
-                />
-              )}
+              <Icon
+                name={iconName as IconNamesType}
+                className={cn(
+                  'w-6 h-6 flex-none',
+                  isActive ? 'text-primary' : 'text-text-icon',
+                )}
+              />
 
               <Span
                 weight='medium'
                 className={cn(
+                  'whitespace-nowrap flex-1',
                   isActive ? 'text-primary' : 'text-text-secondary',
                   isHidden && 'md:hidden',
                 )}
