@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState, ReactNode } from 'react';
+import { useEffect, useRef, useState, ReactNode } from 'react';
 import { useUsersStore } from '@/store/usersStore/useUsersStore';
 import { WebSocketContext } from './useWebSocket';
 import { useAuthStore } from '@/store/authStore/useAuthStore';
@@ -16,17 +16,15 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const queryClient = useQueryClient();
   const playSound = useNotificationSound();
 
-  const connect = useCallback(() => {
-    if (!isAuthenticated || ws) return;
+  const connect = () => {
+    if (!isAuthenticated || ws || !myId) return;
 
     //const socket = new WebSocket('ws://localhost:3000'); //TODO will move it all
-    const socket = new WebSocket('wss://chat-be-d83t.onrender.com'); //TODO will move it all
+    const socket = new WebSocket('wss://chat-be-d83t.onrender.com');
 
     socket.onopen = () => {
       console.log('✅ WebSocket connected');
-      if (myId) {
-        socket.send(JSON.stringify({ type: 'init', userId: myId }));
-      }
+      socket.send(JSON.stringify({ type: 'init', userId: myId }));
     };
 
     socket.onmessage = (event) => {
@@ -42,7 +40,6 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
 
         if (msg.data.recipient_id === myId) playSound();
       }
-
       /*       if (msg.type === 'read_message') {
         //TODO will recheck this key
         queryClient.invalidateQueries({ queryKey: ['unread-total'] });
@@ -69,23 +66,22 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     };
 
     setWs(socket);
-  }, [myId, isAuthenticated, ws]);
+  };
 
   useEffect(() => {
     connect();
-
     return () => {
       if (reconnectTimeout.current) clearTimeout(reconnectTimeout.current);
       ws?.close();
     };
-  }, [connect]);
+  }, [isAuthenticated, myId, ws]);
 
   useEffect(() => {
     if (!isAuthenticated && ws) {
+      console.log('🚪 WebSocket disconnected due to logout');
       ws.close();
       setWs(null);
       setOnlineUsers([]);
-      console.log('🚪 WebSocket disconnected due to logout');
     }
   }, [isAuthenticated, ws]);
 
