@@ -4,12 +4,13 @@ import { WebSocketContext } from './useWebSocket';
 import { useAuthStore } from '@/store/authStore/useAuthStore';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNotificationSound } from '@/hooks/useNotificationsSound';
+import { useMyProfileStore } from '@/store/myProfileStore/useMyProfileStore';
 
 export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const [ws, setWs] = useState<WebSocket | null>(null);
   const reconnectTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const myId = useChatStore((s) => s.myProfile?.userId);
+  const myId = useMyProfileStore((s) => s.myProfile?.userId);
   const setOnlineUsers = useChatStore((s) => s.setOnlineUsers);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const queryClient = useQueryClient();

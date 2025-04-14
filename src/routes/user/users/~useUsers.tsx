@@ -9,8 +9,8 @@ import { User } from '@/types/user';
 import { SortState } from '@/types/common';
 import { CreateUserParams, UpdateUserParams } from '@/api/users/types';
 import { useCreateChatMutation } from '@/api/chats/hooks';
-import { useMyProfileQuery } from '@/api/me/hooks';
 import { useNavigate } from '@tanstack/react-router';
+import { useMyProfileStore } from '@/store/myProfileStore/useMyProfileStore';
 
 export const useUsers = () => {
   const [page, setPage] = useState(1);
@@ -41,10 +41,10 @@ export const useUsers = () => {
   const updateUser = useUpdateUserMutation();
   const deleteUser = useDeleteUserMutation();
   const addChat = useCreateChatMutation();
-  const { data: myProfile } = useMyProfileQuery();
+  const myProfile = useMyProfileStore((s) => s.myProfile);
   const navigate = useNavigate();
 
-  const myId = myProfile?.data.userId;
+  const myId = myProfile?.userId;
 
   const handleAddChat = (recipientId: string) => {
     if (myId) {

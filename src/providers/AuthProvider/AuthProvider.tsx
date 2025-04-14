@@ -3,8 +3,8 @@ import { AuthContext } from './useAuth';
 import { useNavigate } from '@tanstack/react-router';
 import Loader from '@/components/Loader';
 import { useMyProfileQuery } from '@/api/me/hooks';
-import { useChatStore } from '@/store/chatStore/useChatStore';
 import { useAuthStore } from '@/store/authStore/useAuthStore';
+import { useMyProfileStore } from '@/store/myProfileStore/useMyProfileStore';
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticatedStore = useAuthStore((s) => s.isAuthenticated);
@@ -16,7 +16,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   const { data: myProfile, isLoading } = useMyProfileQuery();
-  const setMyProfile = useChatStore((s) => s.setMyProfile);
+  const setMyProfile = useMyProfileStore((s) => s.setMyProfile);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -28,7 +28,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
 
-    if (myProfile?.data) {
+    if (isAuthenticated && myProfile?.data) {
       setMyProfile(myProfile?.data);
     }
 
