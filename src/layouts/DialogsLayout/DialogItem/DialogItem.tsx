@@ -3,7 +3,7 @@ import { getInitials } from '@/utils/typography';
 import { useMatchRoute, useNavigate } from '@tanstack/react-router';
 import ReactTimeAgo from 'react-time-ago';
 import { DialogItemProps } from './DialogItem.types';
-import { useChatStore } from '@/store/chatStore/useChatStore';
+import { useUsersStore } from '@/store/usersStore/useUsersStore';
 import { getUserStatus } from '@/utils/date';
 import { useWebSocket } from '@/providers/WebSocketProvider/useWebSocket';
 import { useEffect, useState } from 'react';
@@ -16,7 +16,7 @@ import MessageCounter from '@/components/MessageCounter';
 const DialogItem = ({ chat, role, className, onSelect }: DialogItemProps) => {
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
   const navigate = useNavigate();
-  const onlineUsers = useChatStore((s) => s.onlineUsers);
+  const onlineUsers = useUsersStore((s) => s.onlineUsers);
   const queryClient = useQueryClient();
   const matchRoute = useMatchRoute();
 

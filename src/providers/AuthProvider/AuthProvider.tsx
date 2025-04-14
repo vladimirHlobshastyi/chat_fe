@@ -15,7 +15,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isReady, setIsReady] = useState(false);
   const navigate = useNavigate();
 
-  const { data: myProfile, isLoading } = useMyProfileQuery();
+  const { data: myProfile, isFetched } = useMyProfileQuery();
   const setMyProfile = useMyProfileStore((s) => s.setMyProfile);
 
   useEffect(() => {
@@ -33,9 +33,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     setIsReady(true);
-  }, [isAuthenticated, myProfile?.data]);
+  }, [isAuthenticated, myProfile?.data, isReady]);
 
-  if (!isReady || isLoading) return <Loader />; //TODO will check Loader blinking
+  if (!isReady || !isFetched) return <Loader />; //TODO will check Loader blinking
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>

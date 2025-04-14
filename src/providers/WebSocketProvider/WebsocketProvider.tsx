@@ -1,5 +1,5 @@
 import { useEffect, useRef, useCallback, useState, ReactNode } from 'react';
-import { useChatStore } from '@/store/chatStore/useChatStore';
+import { useUsersStore } from '@/store/usersStore/useUsersStore';
 import { WebSocketContext } from './useWebSocket';
 import { useAuthStore } from '@/store/authStore/useAuthStore';
 import { useQueryClient } from '@tanstack/react-query';
@@ -11,7 +11,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
   const reconnectTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const myId = useMyProfileStore((s) => s.myProfile?.userId);
-  const setOnlineUsers = useChatStore((s) => s.setOnlineUsers);
+  const setOnlineUsers = useUsersStore((s) => s.setOnlineUsers);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const queryClient = useQueryClient();
   const playSound = useNotificationSound();
@@ -69,7 +69,7 @@ export const WebSocketProvider = ({ children }: { children: ReactNode }) => {
     };
 
     setWs(socket);
-  }, [myId, isAuthenticated, ws, setOnlineUsers]);
+  }, [myId, isAuthenticated, ws]);
 
   useEffect(() => {
     connect();

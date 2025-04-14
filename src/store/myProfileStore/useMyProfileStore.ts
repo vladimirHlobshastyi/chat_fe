@@ -1,10 +1,5 @@
-import { User } from '@/types/user';
 import { create } from 'zustand';
-
-interface myProfile {
-  myProfile: User | null;
-  setMyProfile: (me: User | null) => void;
-}
+import { myProfile } from './myProfile.types';
 
 export const useMyProfileStore = create<myProfile>((set) => ({
   myProfile: null,

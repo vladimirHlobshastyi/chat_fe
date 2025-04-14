@@ -1,10 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-interface AuthState {
-  isAuthenticated: boolean;
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
-}
+import { AuthState } from './authStore';
 
 export const useAuthStore = create<AuthState>()(
   persist(

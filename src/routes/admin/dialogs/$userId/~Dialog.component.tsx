@@ -7,7 +7,7 @@ import { getInitials } from '@/utils/typography';
 import { Span } from '@/components/Typography/Typography.component';
 import MessageGroup from '@/components/MessageGroup';
 import useUniversalKeyboardShortcuts from '@/hooks/useUniversalKeyboardShortcuts';
-import { useChatStore } from '@/store/chatStore/useChatStore';
+import { useUsersStore } from '@/store/usersStore/useUsersStore';
 import { getUserStatus } from '@/utils/date';
 import { useWebSocket } from '@/providers/WebSocketProvider/useWebSocket';
 import Loader from '@/components/Loader';
@@ -36,7 +36,7 @@ function DialogPage() {
   const queryClient = useQueryClient();
   const myProfile = useMyProfileStore((s) => s.myProfile);
   const { mutate: mutateMarkedMessages } = useMarkMessagesAsReadMutation();
-  const onlineUsers = useChatStore((s) => s.onlineUsers);
+  const onlineUsers = useUsersStore((s) => s.onlineUsers);
   const { data: unreadByChat } = useUnreadPerChatQuery();
 
   const isOnlineCurrentU = onlineUsers.has(partnerId);
