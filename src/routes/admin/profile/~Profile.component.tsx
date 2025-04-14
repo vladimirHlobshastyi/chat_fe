@@ -128,6 +128,7 @@ const Profile = () => {
       {isEditModalOpen && myProfile && (
         <EditMyProfileModal
           isOpen={isEditModalOpen}
+          role={myProfile.role}
           data={{ name: myProfile.name, avatar: myProfile.avatar }}
           errorMessage={errorMessage}
           onSubmit={handleUpdateAdmin}
