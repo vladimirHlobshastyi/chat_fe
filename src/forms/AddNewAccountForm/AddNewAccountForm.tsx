@@ -38,7 +38,7 @@ const AddNewAccountForm = ({
       className='overflow-hidden border bg-white border-gray-100 rounded-lg'
     >
       <div className='w-full border-b border-gray-100'>
-        <H3 className='px-6 py-5'>Add new User</H3>
+        <H3 className='px-6 py-5'>Create your Account</H3>
       </div>
 
       <div className='w-full flex flex-col gap-y-6 px-6 pt-6 overflow-auto'>
