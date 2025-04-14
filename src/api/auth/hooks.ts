@@ -11,7 +11,9 @@ export const useLoginMutation = () => {
     onSuccess: (data) => {
       setIsAuthenticated(true);
       console.log('auth data', data);
-      navigate({ to: data.role === 'admin' ? '/admin' : '/user' });
+      navigate({
+        to: data.role === 'admin' ? '/admin/dialogs' : '/user/dialogs',
+      });
     },
     onError: (error) => {
       console.error('Login failed:', error);

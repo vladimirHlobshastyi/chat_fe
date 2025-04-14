@@ -51,7 +51,7 @@ const Login = () => {
 
   return (
     <div className='w-full h-screen flex justify-center items-center bg-gray-100'>
-      <div className='max-w-[400px] w-full'>
+      <div className='p-4 w-full md:p-0 md:max-w-[400px]'>
         {isLoginForm && (
           <LoginForm
             onSignIn={handleOnSignIn}

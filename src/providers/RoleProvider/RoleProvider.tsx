@@ -16,7 +16,7 @@ const RoleProvider = ({
 
   useEffect(() => {
     if (myRole && myRole !== requiredRole) {
-      navigate({ to: `/${myRole}` });
+      navigate({ to: `/${myRole}/dialogs` });
     }
   }, [myRole, requiredRole, navigate]);
 

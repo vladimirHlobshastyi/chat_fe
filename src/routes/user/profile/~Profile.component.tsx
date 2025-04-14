@@ -127,6 +127,7 @@ const Profile = () => {
 
       {isEditModalOpen && myProfile && (
         <EditMyProfileModal
+          role={myProfile.role}
           isOpen={isEditModalOpen}
           data={{ name: myProfile.name, avatar: myProfile.avatar }}
           errorMessage={errorMessage}

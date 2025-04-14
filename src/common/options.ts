@@ -1,5 +1,9 @@
 export const USER_ROLE_OPTIONS = [
   {
+    value: 'user',
+    label: 'User',
+  },
+  {
     value: 'admin',
     label: 'Admin',
   },

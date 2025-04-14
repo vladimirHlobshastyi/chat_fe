@@ -16,7 +16,7 @@ function RouteComponent() {
     <div className='w-full h-screen flex justify-center items-center'>
       <div
         className='flex flex-col items-center cursor-pointer py-14 px-6 hover:rounded-full hover:border-medium hover:border-border-focus'
-        onClick={() => navigate({ to: '/user', from: '/' })}
+        onClick={() => navigate({ to: '/user/dialogs', from: '/' })}
       >
         <Avatar src='flyChat.svg' size='xl' alt='FlyChatLogo' />
         <H1>Welcome to the FlyChat!</H1>
