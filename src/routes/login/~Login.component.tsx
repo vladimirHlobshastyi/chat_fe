@@ -2,7 +2,7 @@ import { useLoginMutation } from '@/api/auth/hooks';
 import { LoginQueryType } from '@/api/auth/types';
 import { useCreateUserMutation } from '@/api/users/hooks';
 import { CreateUserParams } from '@/api/users/types';
-import AddUserForm from '@/forms/AddUserForm';
+import AddNewAccountForm from '@/forms/AddNewAccountForm';
 import LoginForm from '@/forms/LoginForm';
 import { useState } from 'react';
 
@@ -61,7 +61,7 @@ const Login = () => {
         )}
 
         {isAddNewUserOpen && (
-          <AddUserForm
+          <AddNewAccountForm
             errorMessage={addNewUserError}
             onSubmit={handleCreateUser}
             onClose={handleCloseAddUser}
