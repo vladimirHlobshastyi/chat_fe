@@ -309,7 +309,7 @@ function DialogPage() {
               handleSend();
             }
           }}
-          rows={3}
+          rows={2}
           className='border-none focus:ring-0 shadow-none'
         />
 
