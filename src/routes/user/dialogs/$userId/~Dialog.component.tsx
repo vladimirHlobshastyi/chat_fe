@@ -113,11 +113,9 @@ function DialogPage() {
   };
 
   const scrollToBottom = () => {
-    setTimeout(() => {
-      scrollContainerRef.current?.scrollTo({
-        top: scrollContainerRef.current.scrollHeight,
-      });
-    }, 0);
+    scrollContainerRef.current?.scrollTo({
+      top: scrollContainerRef.current.scrollHeight,
+    });
   };
 
   const getPartnerStatus = () => {
@@ -247,6 +245,10 @@ function DialogPage() {
     shortcuts: [{ key: 'Enter', action: handleSend }],
     ref: mainRef as RefObject<HTMLElement>,
   });
+
+  if (currentChat === undefined || lastSeenPartner === undefined) {
+    return <Loader />;
+  }
 
   return (
     <div

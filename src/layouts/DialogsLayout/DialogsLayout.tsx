@@ -1,18 +1,27 @@
 import { useChatsQuery } from '@/api/chats/hooks';
 import InputField from '@/components/Inputs/InputField';
 import { H1, Span } from '@/components/Typography/Typography.component';
-import { Outlet } from '@tanstack/react-router';
-import { useState } from 'react';
+import { Outlet, useMatchRoute } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 import DialogItem from './DialogItem/DialogItem';
 import Icon from '@/components/Icon';
 import { cn } from '@/utils/styles';
+import Loader from '@/components/Loader';
 
 const DialogsLayout = ({ role }: { role: 'admin' | 'user' }) => {
   //TODO WILL move roll to the local storage
   const [searchChat, setSearchChat] = useState(''); //TODO will add debounce
-  const [isDialogsHidden, setIsDialogsHidden] = useState(false);
+  const [isDialogsHidden, setIsDialogsHidden] = useState<boolean | null>(null);
 
   const { data: chats = [] } = useChatsQuery({ search: searchChat });
+  const matchRoute = useMatchRoute();
+  const isDialogsPage = !!matchRoute({ to: `/${role}/dialogs`, fuzzy: false });
+
+  useEffect(() => {
+    setIsDialogsHidden(isDialogsPage ? false : true);
+  }, [isDialogsPage]);
+
+  if (chats.length <= 0 || isDialogsHidden === null) return <Loader />;
 
   return (
     <div className='p-4 w-full h-full gap-4 flex flex-col overflow-hidden md:flex-row'>
