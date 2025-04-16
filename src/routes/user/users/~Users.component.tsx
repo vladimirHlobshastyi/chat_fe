@@ -9,6 +9,7 @@ import ErrorPage from '@/components/ErrorPage';
 import Avatar from '@/components/Avatar';
 import { getInitials } from '@/utils/typography';
 import { getCountryValue } from '@/utils/common';
+import { convertUtcToLocal } from '@/utils/date';
 
 export const Users = () => {
   const {
@@ -80,6 +81,7 @@ export const Users = () => {
                 geo: getCountryValue(user.geo),
                 email: user.email,
                 about: user.about || 'Empty field...',
+                created_at: convertUtcToLocal(user.createdAt),
               };
             })}
             sortProps={sort}

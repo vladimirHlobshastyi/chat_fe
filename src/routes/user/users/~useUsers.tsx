@@ -8,7 +8,7 @@ import {
 import { User } from '@/types/user';
 import { SortState } from '@/types/common';
 import { CreateUserParams, UpdateUserParams } from '@/api/users/types';
-import { useCreateChatMutation } from '@/api/chats/hooks';
+import { useCreateChatMutation, useChatsQuery } from '@/api/chats/hooks';
 import { useNavigate } from '@tanstack/react-router';
 import { useMyProfileStore } from '@/store/myProfileStore/useMyProfileStore';
 
@@ -41,6 +41,7 @@ export const useUsers = () => {
   const updateUser = useUpdateUserMutation();
   const deleteUser = useDeleteUserMutation();
   const addChat = useCreateChatMutation();
+  const { data: getChats } = useChatsQuery({ search: '' });
   const myProfile = useMyProfileStore((s) => s.myProfile);
   const navigate = useNavigate();
 
@@ -48,16 +49,25 @@ export const useUsers = () => {
 
   const handleAddChat = (recipientId: string) => {
     if (myId) {
-      addChat.mutate(
-        { senderId: myId, recipientId },
-        {
-          onSuccess: () => {
-            navigate({ to: `/user/dialogs/${recipientId}` });
-            console.log('success add chat');
-          },
-          onError: () => console.log('Error add chat'),
-        },
+      const isChatExist = !!getChats?.some(
+        (chat) => chat.partner_id === recipientId,
       );
+
+      const addNewChat = () =>
+        addChat.mutate(
+          { senderId: myId, recipientId },
+          {
+            onSuccess: () => {
+              console.log('success add chat');
+            },
+            onError: () => console.log('Error add chat'),
+          },
+        );
+      if (!isChatExist) {
+        addNewChat();
+      }
+
+      navigate({ to: `/user/dialogs/${recipientId}` });
     }
   };
 

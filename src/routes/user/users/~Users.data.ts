@@ -34,4 +34,9 @@ export const USERS_TABLE_HEADER: TableHeader[] = [
     title: 'About',
     width: 'min-w-12',
   },
+  {
+    key: 'created_at',
+    title: 'Created At',
+    width: 'min-w-12',
+  },
 ];
