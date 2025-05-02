@@ -21,7 +21,7 @@ const DialogsLayout = ({ role }: { role: 'admin' | 'user' }) => {
     setIsDialogsHidden(isDialogsPage ? false : true);
   }, [isDialogsPage]);
 
-  if (chats.length <= 0 || isDialogsHidden === null) return <Loader />;
+  if (isDialogsHidden === null) return <Loader />;
 
   return (
     <div className='p-4 w-full h-full gap-4 flex flex-col overflow-hidden md:flex-row'>
@@ -44,6 +44,7 @@ const DialogsLayout = ({ role }: { role: 'admin' | 'user' }) => {
           <InputField
             placeholder='Search...'
             value={searchChat}
+            disabled={chats.length === 0}
             onChange={(e) => setSearchChat(e.currentTarget.value)}
           />
         </div>
