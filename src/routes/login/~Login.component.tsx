@@ -37,7 +37,7 @@ const Login = () => {
 
   const handleCreateUser = (data: CreateUserParams) => {
     createUser.mutate(
-      { ...data, role: 'user' },
+      { ...data, role: 'user', avatar: '' },
       {
         onSuccess: () => {
           setAddNewUserError(undefined);
